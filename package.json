@@ -1,0 +1,20 @@
+{
+    "name": "youtube-node"
+  , "description": "Youtube API for nodeJS"
+  , "version": "0.0.1"
+  , "author": "Paulo McNally <paulomcnally@gmail.com>"
+  , "keywords": ["youtube", "videos", "api"]
+  , "dependencies": {
+        "request": "2.21.0"
+    }
+  , "directories": { "lib": "./lib/youtube" }
+  , "main": "./index.js"
+  , "bugs": {
+        "url":"https://github.com/paulomcnally/youtube-node/issues/new"
+      , "email": "paulomcnally@gmail.com"
+    }
+  , "repository": {
+        "type": "git"
+      , "url": "git://github.com/paulomcnally/youtube-node.git"
+    }
+}
