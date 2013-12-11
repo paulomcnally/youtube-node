@@ -5,7 +5,7 @@
   , "author": "Paulo McNally <paulomcnally@gmail.com>"
   , "keywords": ["youtube", "videos", "api"]
   , "dependencies": {
-        "request": "2.21.0"
+        "request": "2.29.0"
     }
   , "directories": { "lib": "./lib/youtube" }
   , "main": "./index.js"
