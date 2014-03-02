@@ -1,12 +1,12 @@
 var youtube = require('../lib/youtube');
 
-/*
-youtube.search('World War z Trailer', 2, function(resultData) {
-    console.log(resultData);
-});
-*/
 
+youtube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
 youtube.getById('HcwTxRuq-uk', function(resultData) {
-    console.log(resultData);
+    console.log( JSON.stringify( resultData, null, 2 ) );
+});
+
+youtube.search('World War z Trailer', 2, function(resultData) {
+    console.log( JSON.stringify( resultData, null, 2 ) );
 });

@@ -2,248 +2,171 @@
 
 [![NPM](https://nodei.co/npm/youtube-node.png?downloads=true)](https://nodei.co/npm/youtube-node/)
 
+### What's new in version 1.0.0?
+* Youtube API v3
+* Require key ([video](https://www.youtube.com/watch?v=Im69kzhpR3I))
+* CLI
 
-#### Install
+## CLI
+
+For use CLI need install youtube-node using -g param.
+    
+    npm install youtube-node -g
+
+#### CLI Example getById ( require key and video ID )
+
+    $ youtube id
+
+
+#### CLI Example search (require key, query and maxResults)
+    
+    $ youtube search
+
+## Usage
+
+#### Installation
     npm install youtube-node
 
-#### Example search (search term, num results) return array
+#### Example search (search term, num results, results) return object
     var youtube = require('youtube-node');
+
+    youtube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
     youtube.search('World War z Trailer', 2, function(resultData) {
         console.log(resultData);
     });
 
 #### Example search resultData
-    [
+
+    {
+      "kind": "youtube#searchListResponse",
+      "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/0MX1aovXL6JrPZ_tgqxLQ_YhGWI\"",
+      "nextPageToken": "CAIQAA",
+      "pageInfo": {
+        "totalResults": 680321,
+        "resultsPerPage": 2
+      },
+      "items": [
         {
-            "id":"HcwTxRuq-uk",
-            "published":"2012-11-09T00:01:39.000Z",
-            "updated":"2013-07-03T12:46:11.000Z",
-            "title": 'World War Z - Official Trailer (HD)',
-            "content":{
-                "type":"application/x-shockwave-flash",
-                "src":"http://www.youtube.com/v/HcwTxRuq-uk?version=3&f=videos&app=youtube_gdata"
+          "kind": "youtube#searchResult",
+          "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/a-ZTQv003uYyrrI2GTNl4LqjzoA\"",
+          "id": {
+            "kind": "youtube#video",
+            "videoId": "HcwTxRuq-uk"
+          },
+          "snippet": {
+            "publishedAt": "2012-11-09T00:01:39.000Z",
+            "channelId": "UCRX7UEyE8kp35mPrgC2sosA",
+            "title": "World War Z - Official Trailer (HD)",
+            "description": "http://www.joblo.com - \"World War Z\" - Official Trailer Source: http://trailers.apple.com/trailers/paramount/worldwarz/ World War Z Twitter: https://twitter....",
+            "thumbnails": {
+              "default": {
+                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/default.jpg"
+              },
+              "medium": {
+                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/mqdefault.jpg"
+              },
+              "high": {
+                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/hqdefault.jpg"
+              }
             },
-            "link":"http://www.youtube.com/watch?v=HcwTxRuq-uk",
-            "author":{
-                "name":"joblomovienetwork",
-                "url":"http://www.youtube.com/user/joblomovienetwork"
-            },
-            "categories":[
-                "Entertainment"
-            ],
-            "duration":"147",
-            "description":"http://www.joblo.com - \"World War Z\" - Official Trailer Source: http://trailers.apple.com/trailers/paramount/worldwarz/ World War Z Twitter: https://twitter....",
-            "thumbnails":[
-                {
-                    "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/default.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"default"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/mqdefault.jpg",
-                    "width":320,
-                    "height":180,
-                    "name":"mqdefault"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/hqdefault.jpg",
-                    "width":480,
-                    "height":360,
-                    "name":"hqdefault"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/sddefault.jpg",
-                    "width":640,
-                    "height":480,
-                    "name":"sddefault"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/1.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"start"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/2.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"middle"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/3.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"end"
-                }
-            ],
-            "statistics":{
-                "favoriteCount":"0",
-                "viewCount":"24953551"
-            },
-            "rating":{
-                "numDislikes":"11099",
-                "numLikes":"80541"
-            }
+            "channelTitle": "joblomovienetwork",
+            "liveBroadcastContent": "none"
+          }
         },
         {
-            "id":"4EC7P5WdUko",
-            "published":"2013-03-25T07:02:54.000Z",
-            "updated":"2013-07-03T12:25:17.000Z",
-            "title": 'World War Z TRAILER 2 (2013) - Brad Pitt Movie HD',
-            "content":{
-                "type":"application/x-shockwave-flash",
-                "src":"http://www.youtube.com/v/4EC7P5WdUko?version=3&f=videos&app=youtube_gdata"
+          "kind": "youtube#searchResult",
+          "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/zGTXymwvzqbUAYTanZwl0i0aw6g\"",
+          "id": {
+            "kind": "youtube#video",
+            "videoId": "4EC7P5WdUko"
+          },
+          "snippet": {
+            "publishedAt": "2013-03-25T07:02:54.000Z",
+            "channelId": "UCkR0GY0ue02aMyM-oxwgg9g",
+            "title": "World War Z TRAILER 2 (2013) - Brad Pitt Movie HD",
+            "description": "Subscribe to TRAILERS: http://bit.ly/sxaw6h Subscribe to COMING SOON: http://bit.ly/H2vZUn Like us on FACEBOOK:http://goo.gl/dHs73. World War Z TRAILER ...",
+            "thumbnails": {
+              "default": {
+                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/default.jpg"
+              },
+              "medium": {
+                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/mqdefault.jpg"
+              },
+              "high": {
+                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/hqdefault.jpg"
+              }
             },
-            "link":"http://www.youtube.com/watch?v=4EC7P5WdUko",
-            "author":{
-                "name":"MovieclipsCOMINGSOON",
-                "url":"http://www.youtube.com/user/MovieclipsCOMINGSOON"
-            },
-            "categories":[
-                "Film & Animation"
-            ],
-            "duration":"152",
-            "description":"Subscribe to TRAILERS: http://bit.ly/sxaw6h Subscribe to COMING SOON: http://bit.ly/H2vZUn Like us on FACEBOOK:http://goo.gl/dHs73. World War Z TRAILER #2 (2...",
-            "thumbnails":[
-                {
-                    "url":"http://i.ytimg.com/vi/4EC7P5WdUko/default.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"default"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/4EC7P5WdUko/mqdefault.jpg",
-                    "width":320,
-                    "height":180,
-                    "name":"mqdefault"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/4EC7P5WdUko/hqdefault.jpg",
-                    "width":480,
-                    "height":360,
-                    "name":"hqdefault"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/4EC7P5WdUko/sddefault.jpg",
-                    "width":640,
-                    "height":480,
-                    "name":"sddefault"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/4EC7P5WdUko/1.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"start"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/4EC7P5WdUko/2.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"middle"
-                },
-                {
-                    "url":"http://i.ytimg.com/vi/4EC7P5WdUko/3.jpg",
-                    "width":120,
-                    "height":90,
-                    "name":"end"
-                }
-            ],
-            "statistics":{
-                "favoriteCount":"0",
-                "viewCount":"6989548"
-            },
-            "rating":{
-                "numDislikes":"1219",
-                "numLikes":"17238"
-            }
+            "channelTitle": "MovieclipsCOMINGSOON",
+            "liveBroadcastContent": "none"
+          }
         }
-    ]
+      ]
+    }
 
-#### Example getById (youtube id, results) return object
+#### Example getById (youtube id, result) return object
     var youtube = require('youtube-node');
+
+    youtube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
     youtube.getById('HcwTxRuq-uk', function(resultData) {
         console.log(resultData);
     });
 
 #### Example getById resultData
+
     {
-        "id":"HcwTxRuq-uk",
-        "published":"2012-11-09T00:01:39.000Z",
-        "updated":"2013-07-03T12:46:11.000Z",
-        "title": 'World War Z - Official Trailer (HD)',
-        "content":{
-            "type":"application/x-shockwave-flash",
-            "src":"http://www.youtube.com/v/HcwTxRuq-uk?version=3&f=videos&app=youtube_gdata"
+      "kind": "youtube#video",
+      "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/301XkUzcSqfJxZpqiffqf_pbSuM\"",
+      "id": "HcwTxRuq-uk",
+      "snippet": {
+        "publishedAt": "2012-11-09T00:01:39.000Z",
+        "channelId": "UCRX7UEyE8kp35mPrgC2sosA",
+        "title": "World War Z - Official Trailer (HD)",
+        "description": "http://www.joblo.com - \"World War Z\" - Official Trailer\n\nSource: http://trailers.apple.com/trailers/paramount/worldwarz/\n\nWorld War Z Twitter: https://twitter.com/WorldWarZMovie\n\nA U.N. employee is racing against time and fate, as he travels the world trying to stop the outbreak of a deadly Zombie pandemic.\n\nOfficial Site: http://www.WorldWarZMovie.com\n\nDirector: Marc Forster\n\nCast: Brad Pitt, Mireille Enos , Daniella Kertesz , James Badge Dale, Matthew Fox\n\nWriters: Matthew Michael Carnahan",
+        "thumbnails": {
+          "default": {
+            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/default.jpg"
+          },
+          "medium": {
+            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/mqdefault.jpg"
+          },
+          "high": {
+            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/hqdefault.jpg"
+          },
+          "standard": {
+            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/sddefault.jpg"
+          }
         },
-        "link":"http://www.youtube.com/watch?v=HcwTxRuq-uk",
-        "author":{
-            "name":"joblomovienetwork",
-            "url":"http://www.youtube.com/user/joblomovienetwork"
-        },
-        "categories":[
-            "Entertainment"
-        ],
-        "duration":"147",
-        "description":"http://www.joblo.com - \"World War Z\" - Official Trailer Source: http://trailers.apple.com/trailers/paramount/worldwarz/ World War Z Twitter: https://twitter....",
-        "thumbnails":[
-            {
-                   "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/default.jpg",
-                "width":120,
-                "height":90,
-                "name":"default"
-            },
-            {
-                "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/mqdefault.jpg",
-                "width":320,
-                "height":180,
-                "name":"mqdefault"
-            },
-            {
-                "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/hqdefault.jpg",
-                "width":480,
-                "height":360,
-                "name":"hqdefault"
-            },
-            {
-                "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/sddefault.jpg",
-                "width":640,
-                "height":480,
-                "name":"sddefault"
-            },
-            {
-                "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/1.jpg",
-                "width":120,
-                "height":90,
-                "name":"start"
-            },
-            {
-                "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/2.jpg",
-                "width":120,
-                "height":90,
-                "name":"middle"
-            },
-            {
-                "url":"http://i.ytimg.com/vi/HcwTxRuq-uk/3.jpg",
-                "width":120,
-                "height":90,
-                "name":"end"
-            }
-        ],
-        "statistics":{
-            "favoriteCount":"0",
-            "viewCount":"24953551"
-        },
-        "rating":{
-            "numDislikes":"11099",
-            "numLikes":"80541"
-        }
+        "channelTitle": "JoBlo Movie Trailers",
+        "categoryId": "24",
+        "liveBroadcastContent": "none"
+      },
+      "contentDetails": {
+        "duration": "PT2M27S",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true
+      },
+      "statistics": {
+        "viewCount": "29491223",
+        "likeCount": "87750",
+        "dislikeCount": "11873",
+        "favoriteCount": "0",
+        "commentCount": "60487"
+      }
     }
 
-#### version 0.0.1
-- getById function
-- search function
+### For older version use:
 
-Last update: 2013-07-03
+    npm install youtube-node@0.0.4
+
+**Older version use API v2 and is not recommended**
