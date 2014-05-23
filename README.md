@@ -170,3 +170,6 @@ For use CLI need install youtube-node using -g param.
     npm install youtube-node@0.0.4
 
 **Older version use API v2 and is not recommended**
+
+## Those who use it?
+* [http://sync.club/](http://sync.club/#dev-session)
