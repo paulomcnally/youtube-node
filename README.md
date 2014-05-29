@@ -7,6 +7,11 @@
 * Require key ([video](https://www.youtube.com/watch?v=Im69kzhpR3I))
 * CLI
 
+### What's new in version 1.0.1?
+* You can use all [Optional parameters](https://developers.google.com/youtube/v3/docs/search/list)
+
+
+
 ## CLI
 
 For use CLI need install youtube-node using -g param.
@@ -164,7 +169,94 @@ For use CLI need install youtube-node using -g param.
         "commentCount": "60487"
       }
     }
+    
+    
 
+#### Example searchWithParams (Optional parameters, result) return object
+
+```
+
+// example for get only the channel results
+var _params = {
+    type: 'channel',
+    maxResults: 2
+}
+youtube.searchWithParams('World War z Trailer', _params, function (resultData) {
+    console.log(JSON.stringify(resultData, null, 2));
+});
+
+``` 
+
+#### Example searchWithParams resultData
+
+```
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "\"bvxF-DWHx1toJotsdJBeCm43SLs/JblunK_nqB4vAhdAOU2VZQC6FsU\"",
+  "nextPageToken": "CAIQAA",
+  "pageInfo": {
+    "totalResults": 5951,
+    "resultsPerPage": 2
+  },
+  "items": [
+    {
+      "kind": "youtube#searchResult",
+      "etag": "\"bvxF-DWHx1toJotsdJBeCm43SLs/QUebYBs9o3WskzMh1tgCbgTgZNE\"",
+      "id": {
+        "kind": "youtube#channel",
+        "channelId": "UCLNcDDCNr34B8JKarQElnbA"
+      },
+      "snippet": {
+        "publishedAt": "2013-12-18T04:38:38.000Z",
+        "channelId": "UCLNcDDCNr34B8JKarQElnbA",
+        "title": "World War Z Full Movie Watch",
+        "description": "World War Z full movie part 1 online stream and download World War Z Part 1 World War Z (2013) Full 1/12 2013 01 watch World War Z free part 1 World War Z ...",
+        "thumbnails": {
+          "default": {
+            "url": "https://lh3.googleusercontent.com/-2Uctb2UAu8U/AAAAAAAAAAI/AAAAAAAAAAA/68hcLjXdDnU/photo.jpg"
+          },
+          "medium": {
+            "url": "https://lh3.googleusercontent.com/-2Uctb2UAu8U/AAAAAAAAAAI/AAAAAAAAAAA/68hcLjXdDnU/photo.jpg"
+          },
+          "high": {
+            "url": "https://lh3.googleusercontent.com/-2Uctb2UAu8U/AAAAAAAAAAI/AAAAAAAAAAA/68hcLjXdDnU/photo.jpg"
+          }
+        },
+        "channelTitle": "",
+        "liveBroadcastContent": "none"
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "\"bvxF-DWHx1toJotsdJBeCm43SLs/FhtUC4IFgLOTh21jHjHYJyiLFmo\"",
+      "id": {
+        "kind": "youtube#channel",
+        "channelId": "UCUA-Swslsl9MjbEvfPOs3xg"
+      },
+      "snippet": {
+        "publishedAt": "2013-12-20T08:29:50.000Z",
+        "channelId": "UCUA-Swslsl9MjbEvfPOs3xg",
+        "title": "World War Z - Topic",
+        "description": "World War Z is a 2013 British-American apocalyptic horror film directed by Marc Forster. The screenplay by Matthew Michael Carnahan, Drew Goddard and ...",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/i/UA-Swslsl9MjbEvfPOs3xg/1.jpg"
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/i/UA-Swslsl9MjbEvfPOs3xg/mq1.jpg"
+          },
+          "high": {
+            "url": "https://i.ytimg.com/i/UA-Swslsl9MjbEvfPOs3xg/hq1.jpg"
+          }
+        },
+        "channelTitle": "",
+        "liveBroadcastContent": "none"
+      }
+    }
+  ]
+}
+```
+    
 ### For older version use:
 
     npm install youtube-node@0.0.4

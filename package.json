@@ -1,32 +1,36 @@
 {
-  "name": "youtube-node",
-  "description": "Youtube API v3 client for nodeJS",
-  "version": "1.0.1",
-  "author": "Paulo McNally <paulomcnally@gmail.com>",
-  "keywords": [
+    "name": "youtube-node",
+    "description": "Youtube API v3 client for nodeJS",
+    "version": "1.0.2",
+    "author": "Paulo McNally <paulomcnally@gmail.com>",
+    "contributors": [{
+        "name": "Andrea Giglio",
+        "email": "andrea-giglio@live.it"
+}],
+    "keywords": [
     "youtube",
     "videos",
     "api"
   ],
-  "dependencies": {
-    "request": "~2.34.0",
-    "qs": "~0.6.6",
-    "prompt": "~0.2.12",
-    "colors": "~0.6.2"
-  },
-  "directories": {
-    "lib": "./lib/youtube"
-  },
-  "main": "./index.js",
-  "bin" : {
-    "youtube" : "./bin/youtube"
-  },
-  "bugs": {
-    "url": "https://github.com/paulomcnally/youtube-node/issues/new",
-    "email": "paulomcnally@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/paulomcnally/youtube-node.git"
-  }
+    "dependencies": {
+        "request": "~2.34.0",
+        "qs": "~0.6.6",
+        "prompt": "~0.2.12",
+        "colors": "~0.6.2"
+    },
+    "directories": {
+        "lib": "./lib/youtube"
+    },
+    "main": "./index.js",
+    "bin": {
+        "youtube": "./bin/youtube"
+    },
+    "bugs": {
+        "url": "https://github.com/paulomcnally/youtube-node/issues/new",
+        "email": "paulomcnally@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/paulomcnally/youtube-node.git"
+    }
 }
