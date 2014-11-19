@@ -37,14 +37,6 @@ For use CLI need install youtube-node using -g param.
         maxResults: 2
     };
 
-    // More optional query params
-    // `pageToken` where get it from search result for next and previouse page
-    //results
-    // `type` where get only specified type results. Acceptable values are:
-    //`channel`, `playlist`, `video`
-    // For more params find optional params from below link
-    // https://developers.google.com/youtube/v3/docs/search/list#optional-parameters
-
     youtube.search(query function(resultData) {
         console.log(resultData);
     });
