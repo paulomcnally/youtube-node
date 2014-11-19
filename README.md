@@ -37,7 +37,7 @@ For use CLI need install youtube-node using -g param.
         maxResults: 2
     };
 
-    youtube.search(query function(resultData) {
+    youtube.search(query, function(resultData) {
         console.log(resultData);
     });
 
@@ -125,7 +125,7 @@ For use CLI need install youtube-node using -g param.
     // For more params find optional params from below link
     // https://developers.google.com/youtube/v3/docs/search/list#optional-parameters
 
-    youtube.search(query function(resultData) {
+    youtube.search(query, function(resultData) {
         console.log(resultData);
     });
 
