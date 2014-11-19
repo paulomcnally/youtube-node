@@ -27,12 +27,25 @@ For use CLI need install youtube-node using -g param.
 #### Installation
     npm install youtube-node
 
-#### Example search (search term, num results, results) return object
+#### Example search (query,git results, results) return object
     var youtube = require('youtube-node');
 
     youtube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
-    youtube.search('World War z Trailer', 2, function(resultData) {
+    var query = {
+        q: 'World War z Trailer',
+        maxResults: 5
+    };
+
+    // More optional query params
+    // `pageToken` where get it from search result for next and previouse page
+    //results
+    // `type` where get only specified type results. Acceptable values are:
+    //`channel`, `playlist`, `video`
+    // For more params find optional params from below link
+    // https://developers.google.com/youtube/v3/docs/search/list#pageToken
+
+    youtube.search(query function(resultData) {
         console.log(resultData);
     });
 
