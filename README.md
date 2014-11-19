@@ -27,12 +27,17 @@ For use CLI need install youtube-node using -g param.
 #### Installation
     npm install youtube-node
 
-#### Example search (search term, num results, results) return object
+#### Example search (query, results, results) return object
     var youtube = require('youtube-node');
 
     youtube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
-    youtube.search('World War z Trailer', 2, function(resultData) {
+    var query = {
+        q: 'World War z Trailer',
+        maxResults: 2
+    };
+
+    youtube.search(query, function(resultData) {
         console.log(resultData);
     });
 
@@ -40,64 +45,153 @@ For use CLI need install youtube-node using -g param.
 
     {
       "kind": "youtube#searchListResponse",
-      "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/0MX1aovXL6JrPZ_tgqxLQ_YhGWI\"",
+      "etag": "\"yHwg34KvgIlW9-uBcSEkgasDbzI/KhbRqsWUkwixPIUeycbUY5k60fI\"",
       "nextPageToken": "CAIQAA",
       "pageInfo": {
-        "totalResults": 680321,
+        "totalResults": 697,
         "resultsPerPage": 2
       },
       "items": [
         {
           "kind": "youtube#searchResult",
-          "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/a-ZTQv003uYyrrI2GTNl4LqjzoA\"",
+          "etag": "\"yHwg34KvgIlW9-uBcSEkgasDbzI/NWQjLmsZ3K_HY-N2cqBp8qllHec\"",
           "id": {
             "kind": "youtube#video",
-            "videoId": "HcwTxRuq-uk"
+            "videoId": "RRTDXRZil5I"
           },
           "snippet": {
-            "publishedAt": "2012-11-09T00:01:39.000Z",
-            "channelId": "UCRX7UEyE8kp35mPrgC2sosA",
-            "title": "World War Z - Official Trailer (HD)",
-            "description": "http://www.joblo.com - \"World War Z\" - Official Trailer Source: http://trailers.apple.com/trailers/paramount/worldwarz/ World War Z Twitter: https://twitter....",
+            "publishedAt": "2014-11-05T05:50:46.000Z",
+            "channelId": "UC1lhH7Pgf-MXf8slhfahXbA",
+            "title": "Selfi pulla full hd video song",
+            "description": "Katthi video song.",
             "thumbnails": {
               "default": {
-                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/default.jpg"
+                "url": "https://i.ytimg.com/vi/RRTDXRZil5I/default.jpg"
               },
               "medium": {
-                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/mqdefault.jpg"
+                "url": "https://i.ytimg.com/vi/RRTDXRZil5I/mqdefault.jpg"
               },
               "high": {
-                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/hqdefault.jpg"
+                "url": "https://i.ytimg.com/vi/RRTDXRZil5I/hqdefault.jpg"
               }
             },
-            "channelTitle": "joblomovienetwork",
+            "channelTitle": "gkummi88",
             "liveBroadcastContent": "none"
           }
         },
         {
           "kind": "youtube#searchResult",
-          "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/zGTXymwvzqbUAYTanZwl0i0aw6g\"",
+          "etag": "\"yHwg34KvgIlW9-uBcSEkgasDbzI/nNWLu7fMw_C6vHgoNBn3l2kl2eo\"",
           "id": {
             "kind": "youtube#video",
-            "videoId": "4EC7P5WdUko"
+            "videoId": "XG7yz4vdrug"
           },
           "snippet": {
-            "publishedAt": "2013-03-25T07:02:54.000Z",
-            "channelId": "UCkR0GY0ue02aMyM-oxwgg9g",
-            "title": "World War Z TRAILER 2 (2013) - Brad Pitt Movie HD",
-            "description": "Subscribe to TRAILERS: http://bit.ly/sxaw6h Subscribe to COMING SOON: http://bit.ly/H2vZUn Like us on FACEBOOK:http://goo.gl/dHs73. World War Z TRAILER ...",
+            "publishedAt": "2014-10-28T02:55:12.000Z",
+            "channelId": "UCBbYkWqV5sNhqyXUZSEEm8Q",
+            "title": "Selfi pulla full video song hd",
+            "description": "Selfi pulla full video song hd.",
             "thumbnails": {
               "default": {
-                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/default.jpg"
+                "url": "https://i.ytimg.com/vi/XG7yz4vdrug/default.jpg"
               },
               "medium": {
-                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/mqdefault.jpg"
+                "url": "https://i.ytimg.com/vi/XG7yz4vdrug/mqdefault.jpg"
               },
               "high": {
-                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/hqdefault.jpg"
+                "url": "https://i.ytimg.com/vi/XG7yz4vdrug/hqdefault.jpg"
               }
             },
-            "channelTitle": "MovieclipsCOMINGSOON",
+            "channelTitle": "arunkumararun2786",
+            "liveBroadcastContent": "none"
+          }
+        }
+      ]
+    }
+
+#### Example search with pageToken
+
+    var query = {
+        q: 'World War z Trailer',
+        maxResults: 2,
+        pageToken: 'CAIQAA'
+    };
+
+    // More optional query params
+    // `pageToken` where get it from search result for next and previouse page
+    //results
+    // `type` where get only specified type results. Acceptable values are:
+    //`channel`, `playlist`, `video`
+    // For more params find optional params from below link
+    // https://developers.google.com/youtube/v3/docs/search/list#optional-parameters
+
+    youtube.search(query, function(resultData) {
+        console.log(resultData);
+    });
+
+#### Example search resultData
+
+    {
+      "kind": "youtube#searchListResponse",
+      "etag": "\"yHwg34KvgIlW9-uBcSEkgasDbzI/Ru6tLkM1HM0FyVslY7Ca2WBwANg\"",
+      "nextPageToken": "CAQQAA",
+      "prevPageToken": "CAIQAQ",
+      "pageInfo": {
+        "totalResults": 1000000,
+        "resultsPerPage": 2
+      },
+      "items": [
+        {
+          "kind": "youtube#searchResult",
+          "etag": "\"yHwg34KvgIlW9-uBcSEkgasDbzI/2hLQ_eyfOtvG1G26EaQ88nN--qI\"",
+          "id": {
+            "kind": "youtube#video",
+            "videoId": "cXuC_v0KWaU"
+          },
+          "snippet": {
+            "publishedAt": "2012-11-09T04:37:33.000Z",
+            "channelId": "UCA1tk_Wa3Lm4hMZ4ssPEuLw",
+            "title": "World War Z - Trailer 1 - Official [HD]",
+            "description": "World War Z Trailer Our first look at the new movie World War Z, based off the Max Brooks Novel \"World War Z\". The movie is to take on a different approach f...",
+            "thumbnails": {
+              "default": {
+                "url": "https://i.ytimg.com/vi/cXuC_v0KWaU/default.jpg"
+              },
+              "medium": {
+                "url": "https://i.ytimg.com/vi/cXuC_v0KWaU/mqdefault.jpg"
+              },
+              "high": {
+                "url": "https://i.ytimg.com/vi/cXuC_v0KWaU/hqdefault.jpg"
+              }
+            },
+            "channelTitle": "TheMediaCows",
+            "liveBroadcastContent": "none"
+          }
+        },
+        {
+          "kind": "youtube#searchResult",
+          "etag": "\"yHwg34KvgIlW9-uBcSEkgasDbzI/pfxjahIdKXm8iGG4Vq1dXxfFhZQ\"",
+          "id": {
+            "kind": "youtube#video",
+            "videoId": "OIao7wurFbQ"
+          },
+          "snippet": {
+            "publishedAt": "2012-11-09T09:24:42.000Z",
+            "channelId": "UCwKG44S4aQjptecj40-ItRQ",
+            "title": "Exklusiv: World War Z - Trailer (Deutsch | German) | HD",
+            "description": "Exklusiver, Offizieller Deutscher HD-Trailer zu World War Z mit Brad Pitt Abonniere uns! : http://www.youtube.com/subscription_center?add_user=moviepilottrai...",
+            "thumbnails": {
+              "default": {
+                "url": "https://i.ytimg.com/vi/OIao7wurFbQ/default.jpg"
+              },
+              "medium": {
+                "url": "https://i.ytimg.com/vi/OIao7wurFbQ/mqdefault.jpg"
+              },
+              "high": {
+                "url": "https://i.ytimg.com/vi/OIao7wurFbQ/hqdefault.jpg"
+              }
+            },
+            "channelTitle": "MoviepilotTrailer",
             "liveBroadcastContent": "none"
           }
         }
