@@ -17,8 +17,8 @@
     "lib": "./lib/youtube"
   },
   "main": "./index.js",
-  "bin" : {
-    "youtube" : "./bin/youtube"
+  "bin": {
+    "youtube": "./bin/youtube"
   },
   "bugs": {
     "url": "https://github.com/paulomcnally/youtube-node/issues/new",
@@ -27,5 +27,8 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/paulomcnally/youtube-node.git"
+  },
+  "devDependencies": {
+    "should": "^4.3.0"
   }
 }
