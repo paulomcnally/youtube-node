@@ -2,16 +2,15 @@
 
 [![NPM](https://nodei.co/npm/youtube-node.png?downloads=true)](https://nodei.co/npm/youtube-node/)
 
-### What's new in version 1.0.0?
-* Youtube API v3
-* Require key ([video](https://www.youtube.com/watch?v=Im69kzhpR3I))
+### What's new in version 1.x.x?
+* YouTube API v3 - Require key ([video](https://www.youtube.com/watch?v=Im69kzhpR3I))
 * CLI
 
 ## CLI
 
 For use CLI need install youtube-node using -g param.
-    
-    npm install youtube-node -g
+
+    $ npm install youtube-node -g
 
 #### CLI Example getById ( require key and video ID )
 
@@ -19,155 +18,66 @@ For use CLI need install youtube-node using -g param.
 
 
 #### CLI Example search (require key, query and maxResults)
-    
+
     $ youtube search
 
 ## Usage
 
 #### Installation
-    npm install youtube-node
+    $ npm install youtube-node
 
 #### Example search (search term, num results, results) return object
-    var youtube = require('youtube-node');
+    var YouTube = require('youtube-node');
 
-    youtube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+    var youTube = new YouTube();
 
-    youtube.search('World War z Trailer', 2, function(resultData) {
-        console.log(resultData);
+    youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+
+    youTube.search('World War z Trailer', 2, function(resultData) {
+      console.log(resultData);
     });
 
-#### Example search resultData
-
-    {
-      "kind": "youtube#searchListResponse",
-      "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/0MX1aovXL6JrPZ_tgqxLQ_YhGWI\"",
-      "nextPageToken": "CAIQAA",
-      "pageInfo": {
-        "totalResults": 680321,
-        "resultsPerPage": 2
-      },
-      "items": [
-        {
-          "kind": "youtube#searchResult",
-          "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/a-ZTQv003uYyrrI2GTNl4LqjzoA\"",
-          "id": {
-            "kind": "youtube#video",
-            "videoId": "HcwTxRuq-uk"
-          },
-          "snippet": {
-            "publishedAt": "2012-11-09T00:01:39.000Z",
-            "channelId": "UCRX7UEyE8kp35mPrgC2sosA",
-            "title": "World War Z - Official Trailer (HD)",
-            "description": "http://www.joblo.com - \"World War Z\" - Official Trailer Source: http://trailers.apple.com/trailers/paramount/worldwarz/ World War Z Twitter: https://twitter....",
-            "thumbnails": {
-              "default": {
-                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/default.jpg"
-              },
-              "medium": {
-                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/mqdefault.jpg"
-              },
-              "high": {
-                "url": "https://i.ytimg.com/vi/HcwTxRuq-uk/hqdefault.jpg"
-              }
-            },
-            "channelTitle": "joblomovienetwork",
-            "liveBroadcastContent": "none"
-          }
-        },
-        {
-          "kind": "youtube#searchResult",
-          "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/zGTXymwvzqbUAYTanZwl0i0aw6g\"",
-          "id": {
-            "kind": "youtube#video",
-            "videoId": "4EC7P5WdUko"
-          },
-          "snippet": {
-            "publishedAt": "2013-03-25T07:02:54.000Z",
-            "channelId": "UCkR0GY0ue02aMyM-oxwgg9g",
-            "title": "World War Z TRAILER 2 (2013) - Brad Pitt Movie HD",
-            "description": "Subscribe to TRAILERS: http://bit.ly/sxaw6h Subscribe to COMING SOON: http://bit.ly/H2vZUn Like us on FACEBOOK:http://goo.gl/dHs73. World War Z TRAILER ...",
-            "thumbnails": {
-              "default": {
-                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/default.jpg"
-              },
-              "medium": {
-                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/mqdefault.jpg"
-              },
-              "high": {
-                "url": "https://i.ytimg.com/vi/4EC7P5WdUko/hqdefault.jpg"
-              }
-            },
-            "channelTitle": "MovieclipsCOMINGSOON",
-            "liveBroadcastContent": "none"
-          }
-        }
-      ]
-    }
+See output: [https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9](https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9)
 
 #### Example getById (youtube id, result) return object
-    var youtube = require('youtube-node');
+    var YouTube = require('youtube-node');
 
-    youtube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+    var youTube = new YouTube();
 
-    youtube.getById('HcwTxRuq-uk', function(resultData) {
-        console.log(resultData);
+    youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+
+    youTube.getById('HcwTxRuq-uk', function(resultData) {
+      console.log(resultData);
     });
 
-#### Example getById resultData
+See output: [https://gist.github.com/paulomcnally/50e0b96291c82b87009b](https://gist.github.com/paulomcnally/50e0b96291c82b87009b)
 
-    {
-      "kind": "youtube#video",
-      "etag": "\"BDC7VThyM9nfoSQm1_kOyhtJTEw/301XkUzcSqfJxZpqiffqf_pbSuM\"",
-      "id": "HcwTxRuq-uk",
-      "snippet": {
-        "publishedAt": "2012-11-09T00:01:39.000Z",
-        "channelId": "UCRX7UEyE8kp35mPrgC2sosA",
-        "title": "World War Z - Official Trailer (HD)",
-        "description": "http://www.joblo.com - \"World War Z\" - Official Trailer\n\nSource: http://trailers.apple.com/trailers/paramount/worldwarz/\n\nWorld War Z Twitter: https://twitter.com/WorldWarZMovie\n\nA U.N. employee is racing against time and fate, as he travels the world trying to stop the outbreak of a deadly Zombie pandemic.\n\nOfficial Site: http://www.WorldWarZMovie.com\n\nDirector: Marc Forster\n\nCast: Brad Pitt, Mireille Enos , Daniella Kertesz , James Badge Dale, Matthew Fox\n\nWriters: Matthew Michael Carnahan",
-        "thumbnails": {
-          "default": {
-            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/default.jpg"
-          },
-          "medium": {
-            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/mqdefault.jpg"
-          },
-          "high": {
-            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/hqdefault.jpg"
-          },
-          "standard": {
-            "url": "https://i1.ytimg.com/vi/HcwTxRuq-uk/sddefault.jpg"
-          }
-        },
-        "channelTitle": "JoBlo Movie Trailers",
-        "categoryId": "24",
-        "liveBroadcastContent": "none"
-      },
-      "contentDetails": {
-        "duration": "PT2M27S",
-        "dimension": "2d",
-        "definition": "hd",
-        "caption": "false",
-        "licensedContent": true
-      },
-      "status": {
-        "uploadStatus": "processed",
-        "privacyStatus": "public",
-        "license": "youtube",
-        "embeddable": true,
-        "publicStatsViewable": true
-      },
-      "statistics": {
-        "viewCount": "29491223",
-        "likeCount": "87750",
-        "dislikeCount": "11873",
-        "favoriteCount": "0",
-        "commentCount": "60487"
-      }
-    }
+#### Example related (youtube id, maxResults, result) return object
+
+    var YouTube = require('youtube-node');
+
+    var youTube = new YouTube();
+
+    youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+
+    youTube.related('hafhSaP_Nh4', 2, function(resultData) {
+      console.log(resultData);
+    });
+
+See output:
+[https://gist.github.com/paulomcnally/ebab23c68c374723f28a](https://gist.github.com/paulomcnally/ebab23c68c374723f28a)
+
+#### Optional Parameters
+
+[https://developers.google.com/youtube/v3/docs/search/list#optional-parameters](https://developers.google.com/youtube/v3/docs/search/list#optional-parameters)
+
+To set an optional parameter use:
+
+    youTube.addParam('order', 'title');
 
 ### For older version use:
 
-    npm install youtube-node@0.0.4
+    $ npm install youtube-node@0.0.4
 
 **Older version use API v2 and is not recommended**
 
