@@ -27,4 +27,12 @@ describe('Youtube', function() {
       done();
     });
   })
+  it('related', function(done) {
+    var youTube = new YouTube();
+    youTube.setKey(config.key);
+    youTube.related(config.id, 1, function(response) {
+      response.should.have.property('kind', 'youtube#searchListResponse');
+      done();
+    });
+  })
 })
