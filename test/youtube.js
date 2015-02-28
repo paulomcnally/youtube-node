@@ -6,15 +6,16 @@ describe('Youtube', function() {
   this.timeout(10000);
   it('Require key', function(done) {
     var youTube = new YouTube();
-    youTube.search(config.query, 1, function(response) {
-      response.should.have.property('error', {message: 'Please set a key using setKey method. Get an key in https://console.developers.google.com'});
+    youTube.search(config.query, 1, function(err, response) {
+      err.should.have.property('error', {message: 'Please set a key using setKey method. Get an key in https://console.developers.google.com'});
       done();
     });
   })
+
   it('getById', function(done) {
     var youTube = new YouTube();
     youTube.setKey(config.key);
-    youTube.getById(config.id, function(response) {
+    youTube.getById(config.id, function(err, response) {
       response.should.have.property('kind', 'youtube#videoListResponse');
       done();
     });
@@ -22,7 +23,7 @@ describe('Youtube', function() {
   it('search', function(done) {
     var youTube = new YouTube();
     youTube.setKey(config.key);
-    youTube.search(config.query, 1, function(response) {
+    youTube.search(config.query, 1, function(err, response) {
       response.should.have.property('kind', 'youtube#searchListResponse');
       done();
     });
@@ -30,7 +31,7 @@ describe('Youtube', function() {
   it('related', function(done) {
     var youTube = new YouTube();
     youTube.setKey(config.key);
-    youTube.related(config.id, 1, function(response) {
+    youTube.related(config.id, 1, function(err, response) {
       response.should.have.property('kind', 'youtube#searchListResponse');
       done();
     });
