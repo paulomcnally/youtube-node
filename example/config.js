@@ -3,4 +3,4 @@ module.exports = {
   id: 'IkmHStAWXis',
   max: 2,
   query: 'nodejs song'
-}
+};
