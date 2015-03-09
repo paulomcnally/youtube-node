@@ -2,7 +2,6 @@
 
 [![NPM](https://nodei.co/npm/youtube-node.png?downloads=true)](https://nodei.co/npm/youtube-node/)
 
-### What's new in version 1.x.x?
 * YouTube API v3 - Require key ([video](https://www.youtube.com/watch?v=Im69kzhpR3I))
 * CLI
 
@@ -33,8 +32,13 @@ For use CLI need install youtube-node using -g param.
 
     youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
-    youTube.search('World War z Trailer', 2, function(resultData) {
-      console.log(resultData);
+    youTube.search('World War z Trailer', 2, function(error, result) {
+      if (error) {
+        console.log(error);
+      }
+      else {
+        console.log(JSON.stringify(result, null, 2));
+      }
     });
 
 See output: [https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9](https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9)
@@ -43,11 +47,15 @@ See output: [https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9](https://
     var YouTube = require('youtube-node');
 
     var youTube = new YouTube();
-
     youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
-    youTube.getById('HcwTxRuq-uk', function(resultData) {
-      console.log(resultData);
+    youTube.getById('HcwTxRuq-uk', function(error, result) {
+      if (error) {
+        console.log(error);
+      }
+      else {
+        console.log(JSON.stringify(result, null, 2));
+      }
     });
 
 See output: [https://gist.github.com/paulomcnally/50e0b96291c82b87009b](https://gist.github.com/paulomcnally/50e0b96291c82b87009b)
@@ -60,8 +68,13 @@ See output: [https://gist.github.com/paulomcnally/50e0b96291c82b87009b](https://
 
     youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
 
-    youTube.related('hafhSaP_Nh4', 2, function(resultData) {
-      console.log(resultData);
+    youTube.related('hafhSaP_Nh4', 2, function(error, result) {
+      if (error) {
+        console.log(error);
+      }
+      else {
+        console.log(JSON.stringify(result, null, 2));
+      }
     });
 
 See output:
