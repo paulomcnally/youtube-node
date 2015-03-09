@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var command = (process.argv[2]) ? process.argv[2] : null;
-var commands = ['id', 'search'];
+var commands = ['id', 'search', 'related'];
 
 var cli = require('../lib/cli');
 
