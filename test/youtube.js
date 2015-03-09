@@ -10,7 +10,7 @@ describe('Youtube', function() {
       err.should.have.property('error', {message: 'Please set a key using setKey method. Get an key in https://console.developers.google.com'});
       done();
     });
-  })
+  });
 
   it('getById', function(done) {
     var youTube = new YouTube();
@@ -19,7 +19,8 @@ describe('Youtube', function() {
       response.should.have.property('kind', 'youtube#videoListResponse');
       done();
     });
-  })
+  });
+
   it('search', function(done) {
     var youTube = new YouTube();
     youTube.setKey(config.key);
@@ -27,7 +28,8 @@ describe('Youtube', function() {
       response.should.have.property('kind', 'youtube#searchListResponse');
       done();
     });
-  })
+  });
+
   it('related', function(done) {
     var youTube = new YouTube();
     youTube.setKey(config.key);
@@ -35,5 +37,6 @@ describe('Youtube', function() {
       response.should.have.property('kind', 'youtube#searchListResponse');
       done();
     });
-  })
-})
+  });
+
+});
