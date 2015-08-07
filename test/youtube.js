@@ -39,4 +39,22 @@ describe('Youtube', function() {
     });
   });
 
+  it('getPlayListsById', function(done) {
+    var youTube = new YouTube();
+    youTube.setKey(config.key);
+    youTube.getPlayListsById(config.playlistId, function(err, response) {
+      response.should.have.property('kind', 'youtube#playlistListResponse');
+      done();
+    });
+  });
+
+  it('getPlayListsItemsById', function(done) {
+    var youTube = new YouTube();
+    youTube.setKey(config.key);
+    youTube.getPlayListsItemsById(config.playlistId, function(err, response) {
+      response.should.have.property('kind', 'youtube#playlistItemListResponse');
+      done();
+    });
+  });
+
 });
