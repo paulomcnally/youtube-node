@@ -29,6 +29,10 @@
     "url": "git://github.com/paulomcnally/youtube-node.git"
   },
   "devDependencies": {
+    "mocha": "^2.4.5",
     "should": "^4.3.0"
+  },
+  "scripts": {
+    "test": "mocha test"
   }
 }
