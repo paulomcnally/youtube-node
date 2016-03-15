@@ -4,7 +4,7 @@ var config = require('./config');
 var youTube = new YouTube();
 
 youTube.setKey(config.key);
-youTube.getPlayListsItemsById('PLpOqH6AE0tNhInmRTSNf9f6OQsdaSJS8F', function(error, result) {
+youTube.getPlayListsItemsById('PLpOqH6AE0tNhInmRTSNf9f6OQsdaSJS8F', 8, function(error, result) {
   if (error) {
     console.log(error);
   }
