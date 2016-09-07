@@ -25,7 +25,7 @@ For use CLI need install youtube-node using -g param.
 #### Installation
     $ npm install youtube-node
 
-#### Example search (search term, num results, results) return object
+#### Example search (search term, num results, callback) return object
     var YouTube = require('youtube-node');
 
     var youTube = new YouTube();
