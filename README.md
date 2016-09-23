@@ -25,7 +25,7 @@ For use CLI need install youtube-node using -g param.
 #### Installation
     $ npm install youtube-node
 
-#### Example search (search term, num results, results) return object
+#### Example search (search term, num results, <optional>params, callback) return object
     var YouTube = require('youtube-node');
 
     var youTube = new YouTube();
@@ -42,6 +42,14 @@ For use CLI need install youtube-node using -g param.
     });
 
 See output: [https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9](https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9)
+
+You can also pass in an optional params object. This is useful for paging:
+
+    youTube.search('World War z Trailer', 2, {pageToken: 'XxXxX'}, function(error, result) {
+      //as above example
+    });
+
+Page token is a property on the response - `nextPageToken` or `previousPageToken`  
 
 #### Example getById (youtube id, result) return object
     var YouTube = require('youtube-node');
