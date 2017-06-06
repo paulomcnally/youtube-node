@@ -66,4 +66,13 @@ describe('Youtube', function() {
     });
   });
 
+    it('getMostPopularByCategory', function(done) {
+        var youTube = new YouTube();
+        youTube.setKey(config.key);
+        youTube.getMostPopularByCategory(2, 1, function(err, response) {
+            response.should.have.property('kind', 'youtube#videoListResponse');
+            done();
+        });
+    });
+
 });
