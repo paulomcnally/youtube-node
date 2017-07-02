@@ -9,9 +9,9 @@
     "api"
   ],
   "dependencies": {
-    "request": "2.53.0",
+    "colors": "1.0.3",
     "prompt": "0.2.14",
-    "colors": "1.0.3"
+    "request": "2.53.0"
   },
   "directories": {
     "lib": "./lib/youtube"
