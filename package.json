@@ -9,7 +9,7 @@
     "api"
   ],
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
     "colors": "1.0.3",
