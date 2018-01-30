@@ -1,5 +1,5 @@
 module.exports = {
-  key: 'AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU',
+  key: process.env.YOUTUBE_API,
   id: 'IkmHStAWXis',
   query: 'nodejs song',
   playlistId: 'PLpOqH6AE0tNhInmRTSNf9f6OQsdaSJS8F'
