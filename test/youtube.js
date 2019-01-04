@@ -20,6 +20,15 @@ describe('Youtube', function() {
       done();
     });
   });
+  
+  it('getChannelById', function(done) {
+    var youTube = new YouTube();
+    youTube.setKey(config.key);
+    youTube.getById(config.channelId, function(err, response) {
+      response.should.have.property('kind', 'youtube#channelListResponse');
+      done();
+    });
+  });
 
   it('search', function(done) {
     var youTube = new YouTube();
