@@ -2,5 +2,6 @@ module.exports = {
   key: 'AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU',
   id: 'IkmHStAWXis',
   max: 2,
-  query: 'nodejs song'
+  query: 'nodejs song',
+  channelId: 'UCvC4D8onUfXzvjTOM-dBfEA'
 };

@@ -1,3 +1,5 @@
+import {YtResult} from "youtube-node";
+
 declare module "youtube-node" {
   export class YouTube {
     public constructor();
@@ -10,6 +12,7 @@ declare module "youtube-node" {
     public addPart(name: string): void;
     public clearParams(): void;
     public getById(id: string, callback: (validate?: Error, data?: YtResult) => void): void;
+    public getChannelById(id: string, callback: (validate?: Error, data?: YtResult) => void): void;
     public getPlaylistById(id: string, callback: (validate?: Error, data?: YtResult) => void): void;
     public getPlaylistItemsById(id: string, maxResults: number, callback: (validate?: Error) => void, data?: YtResult): void;
     public getParts(): string;
