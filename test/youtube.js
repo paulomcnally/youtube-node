@@ -25,7 +25,7 @@ describe('Youtube', function() {
     var youTube = new YouTube();
     youTube.setKey(config.key);
     youTube.getById(config.channelId, function(err, response) {
-      response.should.have.property('kind', 'youtube#channelListResponse');
+      response.should.have.property('kind', 'youtube#videoListResponse');
       done();
     });
   });
