@@ -13,9 +13,9 @@
     "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
-    "colors": "1.0.3",
-    "prompt": "0.2.14",
-    "request": "2.53.0"
+    "colors": "^1.3.3",
+    "prompt": "^1.0.0",
+    "request": "^2.88.0"
   },
   "directories": {
     "lib": "./lib/youtube"
