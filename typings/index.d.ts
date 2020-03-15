@@ -22,6 +22,7 @@ declare module "youtube-node" {
     private newError(message: string): Error;
     public related(id: string, maxResults: number, callback: Callback): void;
     public request(url: string, callback: Callback): void;
+    public search(id: string, maxResults: number, callback: Callback): void;
     public search(id: string, maxResults: number, params: Object, callback: Callback): void;
     public setKey(key: string): void;
     public validate(): Error | null;
