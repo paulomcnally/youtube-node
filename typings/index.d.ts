@@ -1,6 +1,8 @@
 import {YtResult} from "youtube-node";
 
 declare module "youtube-node" {
+  type Callback = (error?: Error, data?: YtResult) => void;
+
   export class YouTube {
     public constructor();
 
@@ -11,16 +13,16 @@ declare module "youtube-node" {
     public addParam(key: string, value: string): void;
     public addPart(name: string): void;
     public clearParams(): void;
-    public getById(id: string, callback: (validate?: Error, data?: YtResult) => void): void;
-    public getChannelById(id: string, callback: (validate?: Error, data?: YtResult) => void): void;
-    public getPlaylistById(id: string, callback: (validate?: Error, data?: YtResult) => void): void;
-    public getPlaylistItemsById(id: string, maxResults: number, callback: (validate?: Error) => void, data?: YtResult): void;
+    public getById(id: string, callback: Callback): void;
+    public getChannelById(id: string, callback: Callback): void;
+    public getPlaylistById(id: string, callback: Callback): void;
+    public getPlaylistItemsById(id: string, maxResults: number, callback: Callback): void;
     public getParts(): string;
     public getUrl(path: string): string;
     private newError(message: string): Error;
-    public related(id: string, maxResults: number, callback: (validate?: Error) => void, data?: YtResult): void;
-    public request(url: string, callback: (error?: Error, data?: YtResult) => void): void;
-    public search(id: string, maxResults: number, params: Object, callback: (validate?: Error) => void, data?: YtResult): void;
+    public related(id: string, maxResults: number, callback: Callback): void;
+    public request(url: string, callback: Callback): void;
+    public search(id: string, maxResults: number, params: Object, callback: Callback): void;
     public setKey(key: string): void;
     public validate(): Error | null;
   }
