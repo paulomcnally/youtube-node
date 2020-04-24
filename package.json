@@ -10,6 +10,7 @@
     "api"
   ],
   "scripts": {
+		"eslint": "./node_modules/eslint/bin/eslint.js . --ext .js",
     "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
@@ -33,6 +34,9 @@
     "url": "git://github.com/paulomcnally/youtube-node.git"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
     "mocha": "^3.4.2",
     "should": "^4.3.0"
   }
