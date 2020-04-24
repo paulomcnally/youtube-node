@@ -3,5 +3,5 @@ module.exports = {
   id: 'IkmHStAWXis',
   max: 2,
   query: 'nodejs song',
-  channelId: 'UCvC4D8onUfXzvjTOM-dBfEA'
+  channelId: 'UCvC4D8onUfXzvjTOM-dBfEA',
 };

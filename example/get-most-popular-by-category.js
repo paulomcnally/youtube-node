@@ -1,14 +1,13 @@
-var YouTube = require('../lib/youtube');
-var config = require('./config');
+const YouTube = require('../lib/youtube');
+const config = require('./config');
 
-var youTube = new YouTube();
+const youTube = new YouTube();
 
 youTube.setKey(config.key);
-youTube.getMostPopularByCategory(2, 1, function (error, result) {
-    if (error) {
-        console.log(error);
-    }
-    else {
-        console.log(JSON.stringify(result, null, 2));
-    }
+youTube.getMostPopularByCategory(2, 1, (error, result) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(JSON.stringify(result, null, 2));
+  }
 });

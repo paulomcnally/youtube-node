@@ -1,14 +1,13 @@
-var YouTube = require('../lib/youtube');
-var config = require('./config');
+const YouTube = require('../lib/youtube');
+const config = require('./config');
 
-var youTube = new YouTube();
+const youTube = new YouTube();
 
 youTube.setKey(config.key);
-youTube.search('World War z Trailer', 2, function(error, result) {
+youTube.search('World War z Trailer', 2, (error, result) => {
   if (error) {
     console.log(error);
-  }
-  else {
+  } else {
     console.log(JSON.stringify(result, null, 2));
   }
 });
