@@ -10,7 +10,7 @@
     "api"
   ],
   "scripts": {
-		"eslint": "./node_modules/eslint/bin/eslint.js . --ext .js --fix",
+    "eslint": "./node_modules/eslint/bin/eslint.js . --ext .js --fix",
     "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
