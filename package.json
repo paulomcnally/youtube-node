@@ -14,7 +14,7 @@
     "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
-    "colors": "^1.3.3",
+    "@dabh/colors": "1.4.0",
     "prompt": "^1.0.0",
     "request": "^2.88.0"
   },
