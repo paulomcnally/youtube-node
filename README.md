@@ -4,103 +4,297 @@
 
 * YouTube API v3 - Require key ([video](https://www.youtube.com/watch?v=Im69kzhpR3I))
 * CLI
+* **Written in TypeScript with full type support**
+
+## Installation
+
+```bash
+npm install youtube-node
+```
+
+## TypeScript Usage
+
+```typescript
+import YouTube from 'youtube-node';
+// or import { YouTube } from 'youtube-node';
+
+const youTube = new YouTube();
+
+youTube.setKey('YOUR_API_KEY');
+
+// Using callbacks
+youTube.search('World War z Trailer', 2, (error, result) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(JSON.stringify(result, null, 2));
+  }
+});
+
+// Using Promises (async/await)
+async function searchVideos() {
+  try {
+    const result = await youTube.searchAsync('World War z Trailer', 2);
+    console.log(JSON.stringify(result, null, 2));
+  } catch (error) {
+    console.log(error);
+  }
+}
+```
+
+## JavaScript Usage
+
+```javascript
+const YouTube = require('youtube-node');
+
+const youTube = new YouTube();
+
+youTube.setKey('YOUR_API_KEY');
+
+youTube.search('World War z Trailer', 2, function(error, result) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(JSON.stringify(result, null, 2));
+  }
+});
+```
+
+## Error Handling
+
+The library provides specific error classes for different types of errors:
+
+```typescript
+import { YouTube, YouTubeError, QuotaExceededError, RateLimitError } from 'youtube-node';
+
+const youTube = new YouTube();
+youTube.setKey('YOUR_API_KEY');
+
+try {
+  const result = await youTube.getByIdAsync('VIDEO_ID');
+} catch (error) {
+  if (error instanceof QuotaExceededError) {
+    console.log('API quota exceeded');
+  } else if (error instanceof RateLimitError) {
+    console.log('Rate limit exceeded - will retry automatically');
+  } else if (error instanceof YouTubeError) {
+    console.log('YouTube API error:', error.message);
+  }
+}
+```
+
+### Available Error Classes
+
+- `YouTubeError` - Base error class
+- `QuotaExceededError` - API quota exceeded (403)
+- `InvalidKeyError` - Invalid API key (400)
+- `ResourceNotFoundError` - Resource not found (404)
+- `RateLimitError` - Rate limit exceeded (429)
+- `ValidationError` - Parameter validation error
+- `NetworkError` - Network/connection error
+
+## Retry Configuration
+
+You can configure automatic retry with exponential backoff:
+
+```typescript
+const youTube = new YouTube({
+  retryOptions: {
+    retries: 3,              // Number of retry attempts
+    retryDelay: 1000,        // Base delay in ms
+    maxRetryDelay: 30000,    // Maximum delay in ms
+    retryCondition: (error) => {
+      // Custom retry logic
+      return error instanceof RateLimitError;
+    },
+    onRetry: (error, attempt) => {
+      console.log(`Retry attempt ${attempt} due to: ${error.message}`);
+    }
+  }
+});
+```
 
 ## CLI
 
 For use CLI need install youtube-node using -g param.
 
-    $ npm install youtube-node -g
+```bash
+npm install youtube-node -g
+```
 
-#### CLI Example getById ( require key and video ID )
+### CLI Example getById ( require key and video ID )
 
-    $ youtube id
+```bash
+youtube id
+```
 
+### CLI Example search (require key, query and maxResults)
 
-#### CLI Example search (require key, query and maxResults)
+```bash
+youtube search
+```
 
-    $ youtube search
+## API Methods
 
-## Usage
+### search(query, maxResults, [params], callback)
+Search for videos on YouTube.
 
-#### Installation
-    $ npm install youtube-node
+```typescript
+youTube.search('nodejs tutorial', 10, (error, result) => {
+  // handle result
+});
 
-#### Example search (search term, num results, <optional>params, callback) return object
-    var YouTube = require('youtube-node');
+// With optional parameters (pagination)
+youTube.search('nodejs tutorial', 10, { pageToken: 'NEXT_PAGE_TOKEN' }, (error, result) => {
+  // handle result
+});
+```
 
-    var youTube = new YouTube();
+### searchAsync(query, maxResults, [params])
+Promise-based version of search.
 
-    youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+```typescript
+const result = await youTube.searchAsync('nodejs tutorial', 10);
+```
 
-    youTube.search('World War z Trailer', 2, function(error, result) {
-      if (error) {
-        console.log(error);
-      }
-      else {
-        console.log(JSON.stringify(result, null, 2));
-      }
-    });
+### getById(id, callback)
+Get video details by ID.
 
-See output: [https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9](https://gist.github.com/paulomcnally/620b76a9afe81f56e8c9)
+```typescript
+youTube.getById('VIDEO_ID', (error, result) => {
+  // handle result
+});
+```
 
-You can also pass in an optional params object. This is useful for paging:
+### getByIdAsync(id)
+Promise-based version of getById.
 
-    youTube.search('World War z Trailer', 2, {pageToken: 'XxXxX'}, function(error, result) {
-      //as above example
-    });
+```typescript
+const result = await youTube.getByIdAsync('VIDEO_ID');
+```
 
-Page token is a property on the response - `nextPageToken` or `previousPageToken`  
+### getChannelById(id, callback)
+Get channel details by ID.
 
-#### Example getById (youtube id, result) return object
-    var YouTube = require('youtube-node');
+```typescript
+youTube.getChannelById('CHANNEL_ID', (error, result) => {
+  // handle result
+});
+```
 
-    var youTube = new YouTube();
-    youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+### getChannelByIdAsync(id)
+Promise-based version of getChannelById.
 
-    youTube.getById('HcwTxRuq-uk', function(error, result) {
-      if (error) {
-        console.log(error);
-      }
-      else {
-        console.log(JSON.stringify(result, null, 2));
-      }
-    });
+```typescript
+const result = await youTube.getChannelByIdAsync('CHANNEL_ID');
+```
 
-See output: [https://gist.github.com/paulomcnally/50e0b96291c82b87009b](https://gist.github.com/paulomcnally/50e0b96291c82b87009b)
+### getPlayListsById(id, callback)
+Get playlist details by ID.
 
-#### Example related (youtube id, maxResults, result) return object
+```typescript
+youTube.getPlayListsById('PLAYLIST_ID', (error, result) => {
+  // handle result
+});
+```
 
-    var YouTube = require('youtube-node');
+### getPlayListsByIdAsync(id)
+Promise-based version of getPlayListsById.
 
-    var youTube = new YouTube();
+```typescript
+const result = await youTube.getPlayListsByIdAsync('PLAYLIST_ID');
+```
 
-    youTube.setKey('AIzaSyB1OOSpTREs85WUMvIgJvLTZKye4BVsoFU');
+### getPlayListsItemsById(id, [maxResults], callback)
+Get playlist items by playlist ID.
 
-    youTube.related('hafhSaP_Nh4', 2, function(error, result) {
-      if (error) {
-        console.log(error);
-      }
-      else {
-        console.log(JSON.stringify(result, null, 2));
-      }
-    });
+```typescript
+youTube.getPlayListsItemsById('PLAYLIST_ID', 50, (error, result) => {
+  // handle result
+});
+```
 
-See output:
-[https://gist.github.com/paulomcnally/ebab23c68c374723f28a](https://gist.github.com/paulomcnally/ebab23c68c374723f28a)
+### getPlayListsItemsByIdAsync(id, [maxResults])
+Promise-based version of getPlayListsItemsById.
 
-#### Optional Parameters
+```typescript
+const result = await youTube.getPlayListsItemsByIdAsync('PLAYLIST_ID', 50);
+```
 
-[https://developers.google.com/youtube/v3/docs/search/list#optional-parameters](https://developers.google.com/youtube/v3/docs/search/list#optional-parameters)
+### related(id, maxResults, callback)
+Get related videos.
 
-To set an optional parameter use:
+```typescript
+youTube.related('VIDEO_ID', 5, (error, result) => {
+  // handle result
+});
+```
 
-    youTube.addParam('order', 'title');
+### relatedAsync(id, maxResults)
+Promise-based version of related.
 
-### For older version use:
+```typescript
+const result = await youTube.relatedAsync('VIDEO_ID', 5);
+```
 
-    $ npm install youtube-node@0.0.4
+### getMostPopular(maxResults, callback)
+Get most popular videos.
 
-**Older version use API v2 and is not recommended**
+```typescript
+youTube.getMostPopular(10, (error, result) => {
+  // handle result
+});
+```
+
+### getMostPopularAsync(maxResults)
+Promise-based version of getMostPopular.
+
+```typescript
+const result = await youTube.getMostPopularAsync(10);
+```
+
+### getMostPopularByCategory(maxResults, videoCategoryId, callback)
+Get most popular videos by category.
+
+```typescript
+youTube.getMostPopularByCategory(10, 'CATEGORY_ID', (error, result) => {
+  // handle result
+});
+```
+
+### getMostPopularByCategoryAsync(maxResults, videoCategoryId)
+Promise-based version of getMostPopularByCategory.
+
+```typescript
+const result = await youTube.getMostPopularByCategoryAsync(10, 'CATEGORY_ID');
+```
+
+## Building from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/paulomcnally/youtube-node.git
+cd youtube-node
+
+# Install dependencies
+npm install
+
+# Build TypeScript
+npm run build
+
+# Run tests
+npm test
+```
+
+## Development
+
+```bash
+# Watch mode compilation
+npm run typecheck -- --watch
+
+# Lint code
+npm run eslint
+```
 
 ## Those who use it?
 * [http://sync.club/](http://sync.club/#dev-session)

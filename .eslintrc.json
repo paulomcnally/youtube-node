@@ -5,17 +5,25 @@
         "mocha": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "airbnb-typescript/base"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2020,
-        "sourceType": "script"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "rules": {
-        "max-classes-per-file": ["error", 10]
+        "max-classes-per-file": ["error", 10],
+        "no-console": "off",
+        "import/no-import-module-exports": "off"
     }
 }

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
-const should = require('should');
-const {
+import * as should from 'should';
+import {
   YouTubeError,
   QuotaExceededError,
   InvalidKeyError,
@@ -8,7 +8,14 @@ const {
   RateLimitError,
   ValidationError,
   NetworkError,
-} = require('../lib/errors');
+} from '../src/lib/errors';
+
+// Type declarations for mocha
+declare function describe(name: string, fn: () => void): void;
+declare function it(name: string, fn: (done?: (err?: Error) => void) => void): void;
+
+// Extend timeout for API tests
+const TEST_TIMEOUT = 30000;
 
 describe('Error Classes', () => {
   describe('YouTubeError', () => {
@@ -18,8 +25,8 @@ describe('Error Classes', () => {
       error.should.be.an.instanceOf(Error);
       error.should.be.an.instanceOf(YouTubeError);
       error.message.should.equal('Test error');
-      error.code.should.equal('testCode');
-      error.status.should.equal(400);
+      error.code!.should.equal('testCode');
+      error.status!.should.equal(400);
       error.errors.should.be.an.Array();
       error.errors.length.should.equal(1);
       error.name.should.equal('YouTubeError');
@@ -95,16 +102,16 @@ describe('Error Classes', () => {
       error.should.be.an.instanceOf(YouTubeError);
       error.name.should.equal('QuotaExceededError');
       error.message.should.equal('YouTube API quota exceeded');
-      error.code.should.equal('quotaExceeded');
-      error.status.should.equal(403);
+      error.code!.should.equal('quotaExceeded');
+      error.status!.should.equal(403);
     });
 
     it('should create with custom values', () => {
       const error = new QuotaExceededError('Custom quota message', 'customCode', 400);
 
       error.message.should.equal('Custom quota message');
-      error.code.should.equal('customCode');
-      error.status.should.equal(400);
+      error.code!.should.equal('customCode');
+      error.status!.should.equal(400);
     });
   });
 
@@ -115,8 +122,8 @@ describe('Error Classes', () => {
       error.should.be.an.instanceOf(YouTubeError);
       error.name.should.equal('InvalidKeyError');
       error.message.should.equal('Invalid YouTube API key');
-      error.code.should.equal('keyInvalid');
-      error.status.should.equal(400);
+      error.code!.should.equal('keyInvalid');
+      error.status!.should.equal(400);
     });
   });
 
@@ -127,8 +134,8 @@ describe('Error Classes', () => {
       error.should.be.an.instanceOf(YouTubeError);
       error.name.should.equal('ResourceNotFoundError');
       error.message.should.equal('Resource not found');
-      error.code.should.equal('notFound');
-      error.status.should.equal(404);
+      error.code!.should.equal('notFound');
+      error.status!.should.equal(404);
     });
   });
 
@@ -139,8 +146,8 @@ describe('Error Classes', () => {
       error.should.be.an.instanceOf(YouTubeError);
       error.name.should.equal('RateLimitError');
       error.message.should.equal('Rate limit exceeded');
-      error.code.should.equal('rateLimitExceeded');
-      error.status.should.equal(429);
+      error.code!.should.equal('rateLimitExceeded');
+      error.status!.should.equal(429);
     });
   });
 
@@ -151,8 +158,8 @@ describe('Error Classes', () => {
       error.should.be.an.instanceOf(YouTubeError);
       error.name.should.equal('ValidationError');
       error.message.should.equal('Validation error');
-      error.code.should.equal('validationError');
-      error.status.should.equal(400);
+      error.code!.should.equal('validationError');
+      error.status!.should.equal(400);
     });
 
     it('should create with custom message and errors', () => {
@@ -171,7 +178,7 @@ describe('Error Classes', () => {
       error.should.be.an.instanceOf(YouTubeError);
       error.name.should.equal('NetworkError');
       error.message.should.equal('Network error');
-      error.code.should.equal('networkError');
+      error.code!.should.equal('networkError');
       should.not.exist(error.status);
     });
 
@@ -180,7 +187,7 @@ describe('Error Classes', () => {
       const error = new NetworkError('Request failed', originalError);
 
       error.message.should.equal('Request failed');
-      error.originalError.should.equal(originalError);
+      error.originalError!.should.equal(originalError);
     });
   });
 });

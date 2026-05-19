@@ -1,20 +1,35 @@
-lib-cov
-*.seed
+# Compiled output
+dist/
+
+# Dependencies
+node_modules/
+
+# Logs
 *.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-pids
-logs
-results
-build
+# Environment variables
+.env
+.env.local
+.env.*.local
 
-node_modules
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# Only use pnpm
-package-lock.json
-yarn.lock
-yarn-error.log
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# Temporary files
+tmp/
+temp/

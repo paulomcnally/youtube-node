@@ -1,9 +1,34 @@
 /* eslint-env mocha */
-const should = require('should');
-const config = require('./config.conf');
-const YouTube = require('../lib/youtube');
+import * as should from 'should';
+import YouTube from '../src/lib/youtube';
 
-describe('Youtube', function () {
+// Type declarations for mocha
+declare namespace Mocha {
+  interface Suite {
+    timeout(ms: number): void;
+  }
+}
+declare function describe(name: string, fn: (this: Mocha.Suite) => void): void;
+declare function it(name: string, fn: (done: (err?: Error) => void) => void): void;
+
+interface Config {
+  key: string;
+  id: string;
+  channelId: string;
+  query: string;
+  playlistId: string;
+}
+
+const config: Config = {
+  key: process.env.YOUTUBE_API || 'test_key',
+  id: 'IkmHStAWXis',
+  channelId: 'UC_x5XG1OV2P6uZZ5FSM9Ttw', // Google Developers channel
+  query: 'nodejs song',
+  playlistId: 'PLpOqH6AE0tNhInmRTSNf9f6OQsdaSJS8F',
+};
+
+describe('Youtube', function (this: Mocha.Suite) {
+  // Extend timeout for API tests
   this.timeout(30000);
 
   it('Require key', (done) => {
@@ -11,10 +36,10 @@ describe('Youtube', function () {
     youTube.search(config.query, 1, (err, response) => {
       should.exist(err);
       // Ahora los errores son instancias de ValidationError
-      err.should.be.an.instanceOf(Error);
-      err.should.have.property('isYouTubeError', true);
-      err.should.have.property('name', 'ValidationError');
-      err.should.have.property('message', 'Please set a key using setKey method. Get a key at https://console.developers.google.com');
+      err!.should.be.an.instanceOf(Error);
+      err!.should.have.property('isYouTubeError', true);
+      err!.should.have.property('name', 'ValidationError');
+      err!.should.have.property('message', 'Please set a key using setKey method. Get a key at https://console.developers.google.com');
       should.not.exist(response);
       done();
     });
@@ -30,7 +55,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#videoListResponse');
+        response!.should.have.property('kind', 'youtube#videoListResponse');
         done();
       }
     });
@@ -45,7 +70,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#channelListResponse');
+        response!.should.have.property('kind', 'youtube#channelListResponse');
         done();
       }
     });
@@ -60,7 +85,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#searchListResponse');
+        response!.should.have.property('kind', 'youtube#searchListResponse');
         done();
       }
     });
@@ -75,7 +100,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#searchListResponse');
+        response!.should.have.property('kind', 'youtube#searchListResponse');
         done();
       }
     });
@@ -90,7 +115,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#playlistListResponse');
+        response!.should.have.property('kind', 'youtube#playlistListResponse');
         done();
       }
     });
@@ -105,7 +130,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#playlistItemListResponse');
+        response!.should.have.property('kind', 'youtube#playlistItemListResponse');
         done();
       }
     });
@@ -120,7 +145,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#videoListResponse');
+        response!.should.have.property('kind', 'youtube#videoListResponse');
         done();
       }
     });
@@ -135,7 +160,7 @@ describe('Youtube', function () {
         done();
       } else {
         should.exist(response);
-        response.should.have.property('kind', 'youtube#videoListResponse');
+        response!.should.have.property('kind', 'youtube#videoListResponse');
         done();
       }
     });

@@ -1,15 +1,28 @@
-const prompt = require('prompt');
-const colors = require('@colors/colors');
-const YouTube = require('./youtube');
+import prompt from 'prompt';
+import colors from '@colors/colors';
+import YouTube from './youtube';
+import { YtResult } from '../types';
 
 const youTube = new YouTube();
 
+interface PromptResult {
+  key: string;
+  id?: string;
+  query?: string;
+  maxResults?: string;
+}
+
 const cli = {
-  id() {
+  id(): void {
     prompt.start();
     prompt.get(['key', 'id'], (err, result) => {
-      youTube.setKey(result.key);
-      youTube.getById(result.id, (error, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      const res = result as unknown as PromptResult;
+      youTube.setKey(res.key);
+      youTube.getById(res.id!, (error, data) => {
         if (error) {
           console.log(error);
         } else {
@@ -19,11 +32,16 @@ const cli = {
     });
   },
 
-  channelId() {
+  channelId(): void {
     prompt.start();
     prompt.get(['key', 'id'], (err, result) => {
-      youTube.setKey(result.key);
-      youTube.getChannelById(result.id, (error, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      const res = result as unknown as PromptResult;
+      youTube.setKey(res.key);
+      youTube.getChannelById(res.id!, (error, data) => {
         if (error) {
           console.log(error);
         } else {
@@ -33,11 +51,16 @@ const cli = {
     });
   },
 
-  search() {
+  search(): void {
     prompt.start();
     prompt.get(['key', 'query', 'maxResults'], (err, result) => {
-      youTube.setKey(result.key);
-      youTube.search(result.query, result.maxResults, (error, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      const res = result as unknown as PromptResult;
+      youTube.setKey(res.key);
+      youTube.search(res.query!, parseInt(res.maxResults!, 10), (error, data) => {
         if (error) {
           console.log(error);
         } else {
@@ -47,11 +70,16 @@ const cli = {
     });
   },
 
-  related() {
+  related(): void {
     prompt.start();
     prompt.get(['key', 'id', 'maxResults'], (err, result) => {
-      youTube.setKey(result.key);
-      youTube.related(result.id, result.maxResults, (error, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      const res = result as unknown as PromptResult;
+      youTube.setKey(res.key);
+      youTube.related(res.id!, parseInt(res.maxResults!, 10), (error, data) => {
         if (error) {
           console.log(error);
         } else {
@@ -61,7 +89,7 @@ const cli = {
     });
   },
 
-  error(param) {
+  error(param: number): void {
     let message = '';
     switch (param) {
       case 0:
@@ -78,4 +106,5 @@ const cli = {
   },
 };
 
-module.exports = cli;
+export default cli;
+export { cli };

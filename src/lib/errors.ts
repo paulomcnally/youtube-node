@@ -5,22 +5,32 @@
 
 /**
  * Error base para todas las excepciones de YouTube API
- * @class YouTubeError
- * @extends Error
  */
-class YouTubeError extends Error {
+export class YouTubeError extends Error {
+  public readonly code: string | null;
+  public readonly status: number | null;
+  public readonly errors: Array<Record<string, unknown>>;
+  public readonly response: unknown;
+  public readonly isYouTubeError: boolean;
+
   /**
    * Crea una instancia de YouTubeError
-   * @param {string} message - Mensaje de error
-   * @param {string} code - Código de error de YouTube
-   * @param {number} status - Código HTTP de estado
-   * @param {Array} errors - Array de errores detallados
-   * @param {Object} response - Respuesta completa del servidor
+   * @param message - Mensaje de error
+   * @param code - Código de error de YouTube
+   * @param status - Código HTTP de estado
+   * @param errors - Array de errores detallados
+   * @param response - Respuesta completa del servidor
    */
-  constructor(message, code = null, status = null, errors = [], response = null) {
+  constructor(
+    message: string,
+    code: string | null | undefined = null,
+    status: number | null = null,
+    errors: Array<Record<string, unknown>> = [],
+    response: unknown = null
+  ) {
     super(message);
     this.name = 'YouTubeError';
-    this.code = code;
+    this.code = code ?? null;
     this.status = status;
     this.errors = errors;
     this.response = response;
@@ -34,9 +44,14 @@ class YouTubeError extends Error {
 
   /**
    * Retorna el error en formato JSON
-   * @returns {Object}
    */
-  toJSON() {
+  toJSON(): {
+    name: string;
+    message: string;
+    code: string | null;
+    status: number | null;
+    errors: Array<Record<string, unknown>>;
+  } {
     return {
       name: this.name,
       message: this.message,
@@ -48,9 +63,8 @@ class YouTubeError extends Error {
 
   /**
    * Verifica si es un error de cuota excedida
-   * @returns {boolean}
    */
-  isQuotaError() {
+  isQuotaError(): boolean {
     return this.status === 403 && (
       this.code === 'quotaExceeded'
       || this.message.includes('quota')
@@ -60,9 +74,8 @@ class YouTubeError extends Error {
 
   /**
    * Verifica si es un error de rate limit
-   * @returns {boolean}
    */
-  isRateLimitError() {
+  isRateLimitError(): boolean {
     return this.status === 429 || (
       this.status === 403 && this.code === 'rateLimitExceeded'
     );
@@ -70,17 +83,15 @@ class YouTubeError extends Error {
 
   /**
    * Verifica si es un error de recurso no encontrado
-   * @returns {boolean}
    */
-  isNotFoundError() {
+  isNotFoundError(): boolean {
     return this.status === 404 || this.code === 'notFound';
   }
 
   /**
    * Verifica si es un error de clave inválida
-   * @returns {boolean}
    */
-  isInvalidKeyError() {
+  isInvalidKeyError(): boolean {
     return this.status === 400 && (
       this.code === 'keyInvalid'
       || this.message.includes('API key')
@@ -90,11 +101,10 @@ class YouTubeError extends Error {
 
   /**
    * Verifica si el error es recuperable (para retry)
-   * @returns {boolean}
    */
-  isRetriable() {
+  isRetriable(): boolean {
     // Errores 5xx son recuperables
-    if (this.status >= 500 && this.status < 600) {
+    if (this.status && this.status >= 500 && this.status < 600) {
       return true;
     }
     // Rate limits son recuperables con backoff
@@ -115,11 +125,15 @@ class YouTubeError extends Error {
 
 /**
  * Error cuando se excede la cuota de la API
- * @class QuotaExceededError
- * @extends YouTubeError
  */
-class QuotaExceededError extends YouTubeError {
-  constructor(message = 'YouTube API quota exceeded', code = 'quotaExceeded', status = 403, errors = [], response = null) {
+export class QuotaExceededError extends YouTubeError {
+  constructor(
+    message: string = 'YouTube API quota exceeded',
+    code: string | null | undefined = 'quotaExceeded',
+    status: number | null = 403,
+    errors: Array<Record<string, unknown>> = [],
+    response: unknown = null
+  ) {
     super(message, code, status, errors, response);
     this.name = 'QuotaExceededError';
   }
@@ -127,11 +141,15 @@ class QuotaExceededError extends YouTubeError {
 
 /**
  * Error cuando la clave API es inválida
- * @class InvalidKeyError
- * @extends YouTubeError
  */
-class InvalidKeyError extends YouTubeError {
-  constructor(message = 'Invalid YouTube API key', code = 'keyInvalid', status = 400, errors = [], response = null) {
+export class InvalidKeyError extends YouTubeError {
+  constructor(
+    message: string = 'Invalid YouTube API key',
+    code: string | null | undefined = 'keyInvalid',
+    status: number | null = 400,
+    errors: Array<Record<string, unknown>> = [],
+    response: unknown = null
+  ) {
     super(message, code, status, errors, response);
     this.name = 'InvalidKeyError';
   }
@@ -139,11 +157,15 @@ class InvalidKeyError extends YouTubeError {
 
 /**
  * Error cuando no se encuentra un recurso
- * @class ResourceNotFoundError
- * @extends YouTubeError
  */
-class ResourceNotFoundError extends YouTubeError {
-  constructor(message = 'Resource not found', code = 'notFound', status = 404, errors = [], response = null) {
+export class ResourceNotFoundError extends YouTubeError {
+  constructor(
+    message: string = 'Resource not found',
+    code: string | null | undefined = 'notFound',
+    status: number | null = 404,
+    errors: Array<Record<string, unknown>> = [],
+    response: unknown = null
+  ) {
     super(message, code, status, errors, response);
     this.name = 'ResourceNotFoundError';
   }
@@ -151,11 +173,15 @@ class ResourceNotFoundError extends YouTubeError {
 
 /**
  * Error cuando se excede el rate limit
- * @class RateLimitError
- * @extends YouTubeError
  */
-class RateLimitError extends YouTubeError {
-  constructor(message = 'Rate limit exceeded', code = 'rateLimitExceeded', status = 429, errors = [], response = null) {
+export class RateLimitError extends YouTubeError {
+  constructor(
+    message: string = 'Rate limit exceeded',
+    code: string | null | undefined = 'rateLimitExceeded',
+    status: number | null = 429,
+    errors: Array<Record<string, unknown>> = [],
+    response: unknown = null
+  ) {
     super(message, code, status, errors, response);
     this.name = 'RateLimitError';
   }
@@ -163,11 +189,12 @@ class RateLimitError extends YouTubeError {
 
 /**
  * Error de validación de parámetros
- * @class ValidationError
- * @extends YouTubeError
  */
-class ValidationError extends YouTubeError {
-  constructor(message = 'Validation error', errors = []) {
+export class ValidationError extends YouTubeError {
+  constructor(
+    message: string = 'Validation error',
+    errors: Array<Record<string, unknown>> = []
+  ) {
     super(message, 'validationError', 400, errors);
     this.name = 'ValidationError';
   }
@@ -175,23 +202,16 @@ class ValidationError extends YouTubeError {
 
 /**
  * Error de red o conexión
- * @class NetworkError
- * @extends YouTubeError
  */
-class NetworkError extends YouTubeError {
-  constructor(message = 'Network error', originalError = null) {
+export class NetworkError extends YouTubeError {
+  public readonly originalError: Error | null;
+
+  constructor(
+    message: string = 'Network error',
+    originalError: Error | null = null
+  ) {
     super(message, 'networkError', null, [], null);
     this.name = 'NetworkError';
     this.originalError = originalError;
   }
 }
-
-module.exports = {
-  YouTubeError,
-  QuotaExceededError,
-  InvalidKeyError,
-  ResourceNotFoundError,
-  RateLimitError,
-  ValidationError,
-  NetworkError,
-};
