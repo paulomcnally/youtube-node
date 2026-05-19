@@ -1,14 +1,33 @@
 language: node_js
+
 node_js:
-  - 'stable'
-  - 'lts/*'
+  - '22'     # Latest/Current
+  - '20'     # Active LTS  
+  - '18'     # Maintenance LTS
+
+# Cache pnpm modules for faster builds
+cache:
+  npm: false
+  directories:
+    - ~/.local/share/pnpm/store
 
 before_install:
+  # Install pnpm
   - npm install -g pnpm
+  # Show versions
+  - node --version
+  - pnpm --version
 
 install:
-  - pnpm install
+  - pnpm install --frozen-lockfile
 
 script:
   - pnpm test
   - pnpm run typecheck
+  - pnpm run eslint
+
+branches:
+  only:
+    - master
+    - main
+    - v2.0.0
