@@ -1,0 +1,116 @@
+/**
+ * CSS personalizado para youtube-node docs
+ */
+
+/* Paleta de colores de YouTube */
+:root {
+  --youtube-red: #FF0000;
+  --youtube-dark-red: #CC0000;
+  --youtube-black: #282828;
+  --youtube-gray: #606060;
+  --youtube-light-gray: #F1F1F1;
+}
+
+/* Colores del tema */
+[data-theme='light'] {
+  --ifm-color-primary: #FF0000;
+  --ifm-color-primary-dark: #CC0000;
+  --ifm-color-primary-darker: #990000;
+  --ifm-color-primary-darkest: #660000;
+  --ifm-color-primary-light: #FF3333;
+  --ifm-color-primary-lighter: #FF6666;
+  --ifm-color-primary-lightest: #FF9999;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #FF4444;
+  --ifm-color-primary-dark: #FF0000;
+  --ifm-color-primary-darker: #CC0000;
+  --ifm-color-primary-darkest: #990000;
+  --ifm-color-primary-light: #FF6666;
+  --ifm-color-primary-lighter: #FF8888;
+  --ifm-color-primary-lightest: #FFAAAA;
+}
+
+/* Estilos personalizados */
+.hero {
+  background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+}
+
+.hero__title,
+.hero__subtitle {
+  color: white;
+}
+
+/* Mejoras en tablas */
+table {
+  font-size: 0.9rem;
+}
+
+/* Estilos de código */
+.codeBlockLines_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
+  font-size: 0.85rem;
+}
+
+/* Links */
+a {
+  transition: color 0.2s ease;
+}
+
+/* Navbar */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--youtube-black);
+}
+
+/* Cards */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Emojis en headers */
+h2::before,
+h3::before {
+  margin-right: 0.5rem;
+}
+
+/* Botones */
+.button--primary {
+  background-color: var(--youtube-red);
+  border-color: var(--youtube-red);
+}
+
+.button--primary:hover {
+  background-color: var(--youtube-dark-red);
+  border-color: var(--youtube-dark-red);
+}
+
+/* Alertas personalizadas */
+.alert--info {
+  --ifm-alert-background-color: rgba(0, 100, 255, 0.1);
+  --ifm-alert-border-color: #0064FF;
+}
+
+.alert--success {
+  --ifm-alert-background-color: rgba(0, 200, 0, 0.1);
+  --ifm-alert-border-color: #00C800;
+}
+
+.alert--warning {
+  --ifm-alert-background-color: rgba(255, 170, 0, 0.1);
+  --ifm-alert-border-color: #FFAA00;
+}
+
+.alert--danger {
+  --ifm-alert-background-color: rgba(255, 0, 0, 0.1);
+  --ifm-alert-border-color: #FF0000;
+}
