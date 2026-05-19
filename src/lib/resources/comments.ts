@@ -500,4 +500,112 @@ export class CommentsResource extends YouTubeResource {
   markAsSpamAsync(commentId: string): Promise<YtResult> {
     return this.markAsSpam(commentId) as Promise<YtResult>;
   }
+
+  /**
+   * Get comments (individual comments or replies)
+   * @param options - Comment options
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/comments/list
+   */
+  getComments(
+    options: {
+      id?: string | string[];
+      parentId?: string;
+      maxResults?: number;
+      pageToken?: string;
+    } = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.clearParts();
+
+        this.addPart('snippet');
+        this.addPart('id');
+
+        this.addParam('part', this.getParts());
+
+        if (options.id) {
+          const ids = Array.isArray(options.id) ? options.id : [options.id];
+          this.addParam('id', ids.join(','));
+        }
+        if (options.parentId) {
+          this.addParam('parentId', options.parentId);
+        }
+        if (options.maxResults) {
+          this.addParam('maxResults', options.maxResults);
+        }
+        if (options.pageToken) {
+          this.addParam('pageToken', options.pageToken);
+        }
+
+        this.request(this.getUrl('comments'), (err, data) => {
+          this.clearParams();
+          this.clearParts();
+          callback(err, data);
+        });
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.clearParts();
+
+      this.addPart('snippet');
+      this.addPart('id');
+
+      this.addParam('part', this.getParts());
+
+      if (options.id) {
+        const ids = Array.isArray(options.id) ? options.id : [options.id];
+        this.addParam('id', ids.join(','));
+      }
+      if (options.parentId) {
+        this.addParam('parentId', options.parentId);
+      }
+      if (options.maxResults) {
+        this.addParam('maxResults', options.maxResults);
+      }
+      if (options.pageToken) {
+        this.addParam('pageToken', options.pageToken);
+      }
+
+      this.request(this.getUrl('comments'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get comments (Promise)
+   * @param options - Comment options
+   * @returns Promise with result
+   */
+  getCommentsAsync(options: {
+    id?: string | string[];
+    parentId?: string;
+    maxResults?: number;
+    pageToken?: string;
+  } = {}): Promise<YtResult> {
+    return this.getComments(options) as Promise<YtResult>;
+  }
 }

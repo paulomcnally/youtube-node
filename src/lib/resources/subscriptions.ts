@@ -346,4 +346,136 @@ export class SubscriptionsResource extends YouTubeResource {
   } = {}): Promise<YtResult> {
     return this.list(options) as Promise<YtResult>;
   }
+
+  /**
+   * Get subscriptions (alias for list with enhanced options)
+   * @param options - Get options
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/subscriptions/list
+   */
+  getSubscriptions(
+    options: {
+      channelId?: string;
+      mine?: boolean;
+      mySubscribers?: boolean;
+      forChannelId?: string;
+      maxResults?: number;
+      pageToken?: string;
+      order?: 'alphabetical' | 'relevance' | 'unread';
+    } = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.clearParts();
+
+        this.addPart('snippet');
+        this.addPart('contentDetails');
+        this.addPart('subscriberSnippet');
+
+        this.addParam('part', this.getParts());
+
+        if (options.channelId) {
+          this.addParam('channelId', options.channelId);
+        }
+        if (options.mine) {
+          this.addParam('mine', true);
+        }
+        if (options.mySubscribers) {
+          this.addParam('mySubscribers', true);
+        }
+        if (options.forChannelId) {
+          this.addParam('forChannelId', options.forChannelId);
+        }
+        if (options.maxResults) {
+          this.addParam('maxResults', options.maxResults);
+        }
+        if (options.pageToken) {
+          this.addParam('pageToken', options.pageToken);
+        }
+        if (options.order) {
+          this.addParam('order', options.order);
+        }
+
+        this.request(this.getUrl('subscriptions'), (err, data) => {
+          this.clearParams();
+          this.clearParts();
+          callback(err, data);
+        });
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.clearParts();
+
+      this.addPart('snippet');
+      this.addPart('contentDetails');
+      this.addPart('subscriberSnippet');
+
+      this.addParam('part', this.getParts());
+
+      if (options.channelId) {
+        this.addParam('channelId', options.channelId);
+      }
+      if (options.mine) {
+        this.addParam('mine', true);
+      }
+      if (options.mySubscribers) {
+        this.addParam('mySubscribers', true);
+      }
+      if (options.forChannelId) {
+        this.addParam('forChannelId', options.forChannelId);
+      }
+      if (options.maxResults) {
+        this.addParam('maxResults', options.maxResults);
+      }
+      if (options.pageToken) {
+        this.addParam('pageToken', options.pageToken);
+      }
+      if (options.order) {
+        this.addParam('order', options.order);
+      }
+
+      this.request(this.getUrl('subscriptions'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get subscriptions (Promise)
+   * @param options - Get options
+   * @returns Promise with result
+   */
+  getSubscriptionsAsync(options: {
+    channelId?: string;
+    mine?: boolean;
+    mySubscribers?: boolean;
+    forChannelId?: string;
+    maxResults?: number;
+    pageToken?: string;
+    order?: 'alphabetical' | 'relevance' | 'unread';
+  } = {}): Promise<YtResult> {
+    return this.getSubscriptions(options) as Promise<YtResult>;
+  }
 }

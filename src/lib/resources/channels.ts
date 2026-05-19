@@ -271,4 +271,151 @@ export class ChannelsResource extends YouTubeResource {
   updateBannerAsync(channelId: string, bannerUrl: string): Promise<YtResult> {
     return this.updateBanner(channelId, bannerUrl) as Promise<YtResult>;
   }
+
+  /**
+   * Get channel by username (legacy) or handle
+   * @param username - Username (e.g., 'GoogleDevelopers') or handle (e.g., '@YouTube')
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/channels/list
+   */
+  getByUsername(username: string, callback?: Callback): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    // Remove @ prefix if present (handle format)
+    const cleanUsername = username.startsWith('@') ? username.substring(1) : username;
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.clearParts();
+
+        this.addPart('snippet');
+        this.addPart('contentDetails');
+        this.addPart('statistics');
+        this.addPart('status');
+
+        this.addParam('part', this.getParts());
+        this.addParam('forUsername', cleanUsername);
+
+        this.request(this.getUrl('channels'), callback);
+
+        this.clearParams();
+        this.clearParts();
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.clearParts();
+
+      this.addPart('snippet');
+      this.addPart('contentDetails');
+      this.addPart('statistics');
+      this.addPart('status');
+
+      this.addParam('part', this.getParts());
+      this.addParam('forUsername', cleanUsername);
+
+      this.request(this.getUrl('channels'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get channel by username (Promise)
+   * @param username - Username or handle
+   * @returns Promise with result
+   */
+  getByUsernameAsync(username: string): Promise<YtResult> {
+    return this.getByUsername(username) as Promise<YtResult>;
+  }
+
+  /**
+   * Get the authenticated user's channel (OAuth required)
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/channels/list
+   */
+  getMyChannel(callback?: Callback): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.clearParts();
+
+        this.addPart('snippet');
+        this.addPart('contentDetails');
+        this.addPart('statistics');
+        this.addPart('status');
+        this.addPart('brandingSettings');
+
+        this.addParam('part', this.getParts());
+        this.addParam('mine', true);
+
+        this.request(this.getUrl('channels'), callback);
+
+        this.clearParams();
+        this.clearParts();
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.clearParts();
+
+      this.addPart('snippet');
+      this.addPart('contentDetails');
+      this.addPart('statistics');
+      this.addPart('status');
+      this.addPart('brandingSettings');
+
+      this.addParam('part', this.getParts());
+      this.addParam('mine', true);
+
+      this.request(this.getUrl('channels'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get the authenticated user's channel (Promise)
+   * @returns Promise with result
+   */
+  getMyChannelAsync(): Promise<YtResult> {
+    return this.getMyChannel() as Promise<YtResult>;
+  }
 }

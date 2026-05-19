@@ -38,6 +38,12 @@ export {
   CaptionsResource,
   CommentsResource,
   ThumbnailsResource,
+  ActivitiesResource,
+  CommentThreadsResource,
+  I18nLanguagesResource,
+  I18nRegionsResource,
+  PlaylistItemsResource,
+  VideoCategoriesResource,
 } from './lib/resources';
 
 // Exportar autenticación OAuth

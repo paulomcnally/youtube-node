@@ -11,6 +11,12 @@ import {
   CaptionsResource,
   CommentsResource,
   ThumbnailsResource,
+  ActivitiesResource,
+  CommentThreadsResource,
+  I18nLanguagesResource,
+  I18nRegionsResource,
+  PlaylistItemsResource,
+  VideoCategoriesResource,
 } from './resources';
 import {
   YouTubeError,
@@ -78,6 +84,18 @@ class YouTube extends YouTubeResource {
   private readonly _comments: CommentsResource;
 
   private readonly _thumbnails: ThumbnailsResource;
+
+  private readonly _activities: ActivitiesResource;
+
+  private readonly _commentThreads: CommentThreadsResource;
+
+  private readonly _i18nLanguages: I18nLanguagesResource;
+
+  private readonly _i18nRegions: I18nRegionsResource;
+
+  private readonly _playlistItems: PlaylistItemsResource;
+
+  private readonly _videoCategories: VideoCategoriesResource;
 
   /**
    * Recurso de Videos
@@ -157,6 +175,48 @@ class YouTube extends YouTubeResource {
   }
 
   /**
+   * Recurso de Activities
+   */
+  public get activities(): ActivitiesResource {
+    return this._activities;
+  }
+
+  /**
+   * Recurso de CommentThreads
+   */
+  public get commentThreads(): CommentThreadsResource {
+    return this._commentThreads;
+  }
+
+  /**
+   * Recurso de I18nLanguages
+   */
+  public get i18nLanguages(): I18nLanguagesResource {
+    return this._i18nLanguages;
+  }
+
+  /**
+   * Recurso de I18nRegions
+   */
+  public get i18nRegions(): I18nRegionsResource {
+    return this._i18nRegions;
+  }
+
+  /**
+   * Recurso de PlaylistItems
+   */
+  public get playlistItems(): PlaylistItemsResource {
+    return this._playlistItems;
+  }
+
+  /**
+   * Recurso de VideoCategories
+   */
+  public get videoCategories(): VideoCategoriesResource {
+    return this._videoCategories;
+  }
+
+  /**
    * Crea una instancia de YouTube
    * @param options - Opciones de configuración
    */
@@ -175,6 +235,12 @@ class YouTube extends YouTubeResource {
     this._captions = new CaptionsResource(options);
     this._comments = new CommentsResource(options);
     this._thumbnails = new ThumbnailsResource(options);
+    this._activities = new ActivitiesResource(options);
+    this._commentThreads = new CommentThreadsResource(options);
+    this._i18nLanguages = new I18nLanguagesResource(options);
+    this._i18nRegions = new I18nRegionsResource(options);
+    this._playlistItems = new PlaylistItemsResource(options);
+    this._videoCategories = new VideoCategoriesResource(options);
   }
 
   /**
@@ -194,6 +260,12 @@ class YouTube extends YouTubeResource {
     this._captions.setKey(key);
     this._comments.setKey(key);
     this._thumbnails.setKey(key);
+    this._activities.setKey(key);
+    this._commentThreads.setKey(key);
+    this._i18nLanguages.setKey(key);
+    this._i18nRegions.setKey(key);
+    this._playlistItems.setKey(key);
+    this._videoCategories.setKey(key);
   }
 
   /**
@@ -213,6 +285,12 @@ class YouTube extends YouTubeResource {
     this._captions.setRetryOptions(newOptions);
     this._comments.setRetryOptions(newOptions);
     this._thumbnails.setRetryOptions(newOptions);
+    this._activities.setRetryOptions(newOptions);
+    this._commentThreads.setRetryOptions(newOptions);
+    this._i18nLanguages.setRetryOptions(newOptions);
+    this._i18nRegions.setRetryOptions(newOptions);
+    this._playlistItems.setRetryOptions(newOptions);
+    this._videoCategories.setRetryOptions(newOptions);
   }
 
   // ============================================================
@@ -1241,6 +1319,12 @@ export {
   CaptionsResource,
   CommentsResource,
   ThumbnailsResource,
+  ActivitiesResource,
+  CommentThreadsResource,
+  I18nLanguagesResource,
+  I18nRegionsResource,
+  PlaylistItemsResource,
+  VideoCategoriesResource,
 } from './resources';
 
 // Exportar autenticación OAuth
