@@ -358,8 +358,11 @@ describe('YouTube Promises', function (this: Mocha.Suite) {
 
       try {
         await youTube.videos.getById(config.id);
-        should.fail('Should have thrown an error');
+        throw new Error('Should have thrown an error');
       } catch (err) {
+        if ((err as Error).message === 'Should have thrown an error') {
+          throw err;
+        }
         should.exist(err);
         (err as Error).should.have.property('isYouTubeError', true);
       }
@@ -371,8 +374,11 @@ describe('YouTube Promises', function (this: Mocha.Suite) {
 
       try {
         await youTube.search.query(config.query, 1);
-        should.fail('Should have thrown an error');
+        throw new Error('Should have thrown an error');
       } catch (err) {
+        if ((err as Error).message === 'Should have thrown an error') {
+          throw err;
+        }
         should.exist(err);
         (err as Error).should.have.property('isYouTubeError', true);
       }

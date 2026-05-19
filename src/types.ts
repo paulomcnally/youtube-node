@@ -114,3 +114,130 @@ export interface YouTubeOptions {
 export interface SearchParams {
   [key: string]: string | number | boolean | undefined;
 }
+
+// Tipos para Video Resource (update)
+export interface VideoSnippet {
+  title?: string;
+  description?: string;
+  tags?: string[];
+  categoryId?: string;
+  defaultLanguage?: string;
+}
+
+export interface VideoStatus {
+  privacyStatus?: 'public' | 'private' | 'unlisted';
+  license?: 'youtube' | 'creativeCommon';
+  embeddable?: boolean;
+  publicStatsViewable?: boolean;
+}
+
+export interface RecordingDetails {
+  recordingDate?: string;
+  location?: {
+    latitude?: number;
+    longitude?: number;
+    altitude?: number;
+  };
+  locationDescription?: string;
+}
+
+export interface Localization {
+  title?: string;
+  description?: string;
+}
+
+export interface VideoResource {
+  id?: string;
+  snippet?: VideoSnippet;
+  status?: VideoStatus;
+  recordingDetails?: RecordingDetails;
+  localizations?: Record<string, Localization>;
+}
+
+// Tipos para ChannelSections
+export type ChannelSectionType =
+  | 'allPlaylists'
+  | 'completedEvents'
+  | 'likedPlaylists'
+  | 'likes'
+  | 'liveEvents'
+  | 'multipleChannels'
+  | 'multiplePlaylists'
+  | 'popularUploads'
+  | 'postedPlaylists'
+  | 'postedVideos'
+  | 'recentActivity'
+  | 'recentPosts'
+  | 'recentUploads'
+  | 'singlePlaylist'
+  | 'subscriptions'
+  | 'upcomingEvents';
+
+export interface ChannelSectionSnippet {
+  type: ChannelSectionType;
+  title?: string;
+  position?: number;
+}
+
+export interface ChannelSectionContentDetails {
+  playlists?: string[];
+  channels?: string[];
+}
+
+export interface ChannelSectionResource {
+  id?: string;
+  snippet?: ChannelSectionSnippet;
+  contentDetails?: ChannelSectionContentDetails;
+}
+
+// Tipos para Watermarks
+export interface WatermarkTiming {
+  type?: 'fromStart' | 'fromEnd' | 'custom';
+  offsetMs?: number;
+  durationMs?: number;
+}
+
+export interface WatermarkResource {
+  timing?: WatermarkTiming;
+  position?: {
+    type?: 'corner' | 'center';
+    cornerPosition?: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
+  };
+}
+
+// Tipos para VideoAbuseReportReasons
+export interface VideoAbuseReportReason {
+  id?: string;
+  snippet?: {
+    label?: string;
+    secondaryReasons?: Array<{
+      id?: string;
+      label?: string;
+    }>;
+  };
+}
+
+export interface VideoReport {
+  videoId?: string;
+  reasonId?: string;
+  secondaryReasonId?: string;
+  comments?: string;
+  language?: string;
+}
+
+// Tipos para paginación
+export interface PaginatedResult extends YtResult {
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  nextPage: (callback?: Callback) => Promise<YtResult> | void;
+  prevPage: (callback?: Callback) => Promise<YtResult> | void;
+}
+
+export interface PaginationOptions {
+  maxResults?: number;
+  pageToken?: string;
+  q?: string;
+  id?: string;
+  playlistId?: string;
+  [key: string]: string | number | boolean | undefined;
+}

@@ -3,3 +3,6 @@ export { VideosResource } from './videos';
 export { ChannelsResource } from './channels';
 export { PlaylistsResource } from './playlists';
 export { SearchResource } from './search';
+export { ChannelSectionsResource } from './channelSections';
+export { WatermarksResource } from './watermarks';
+export { VideoAbuseReportReasonsResource } from './videoAbuseReportReasons';

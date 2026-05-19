@@ -4,6 +4,9 @@ import {
   ChannelsResource,
   PlaylistsResource,
   SearchResource,
+  ChannelSectionsResource,
+  WatermarksResource,
+  VideoAbuseReportReasonsResource,
 } from './resources';
 import {
   YouTubeError,
@@ -20,6 +23,12 @@ import {
   YouTubeOptions,
   SearchParams,
   YtResult,
+  VideoResource,
+  VideoStatus,
+  PaginatedResult,
+  PaginationOptions,
+  ChannelSectionResource,
+  WatermarkTiming,
 } from '../types';
 
 /**
@@ -44,6 +53,9 @@ class YouTube extends YouTubeResource {
   private readonly _channels: ChannelsResource;
   private readonly _playlists: PlaylistsResource;
   private readonly _search: SearchResource;
+  private readonly _channelSections: ChannelSectionsResource;
+  private readonly _watermarks: WatermarksResource;
+  private readonly _videoAbuseReportReasons: VideoAbuseReportReasonsResource;
 
   /**
    * Recurso de Videos
@@ -74,6 +86,27 @@ class YouTube extends YouTubeResource {
   }
 
   /**
+   * Recurso de ChannelSections
+   */
+  public get channelSections(): ChannelSectionsResource {
+    return this._channelSections;
+  }
+
+  /**
+   * Recurso de Watermarks
+   */
+  public get watermarks(): WatermarksResource {
+    return this._watermarks;
+  }
+
+  /**
+   * Recurso de VideoAbuseReportReasons
+   */
+  public get videoAbuseReportReasons(): VideoAbuseReportReasonsResource {
+    return this._videoAbuseReportReasons;
+  }
+
+  /**
    * Crea una instancia de YouTube
    * @param options - Opciones de configuración
    */
@@ -85,6 +118,9 @@ class YouTube extends YouTubeResource {
     this._channels = new ChannelsResource(options);
     this._playlists = new PlaylistsResource(options);
     this._search = new SearchResource(options);
+    this._channelSections = new ChannelSectionsResource(options);
+    this._watermarks = new WatermarksResource(options);
+    this._videoAbuseReportReasons = new VideoAbuseReportReasonsResource(options);
   }
 
   /**
@@ -97,6 +133,9 @@ class YouTube extends YouTubeResource {
     this._channels.setKey(key);
     this._playlists.setKey(key);
     this._search.setKey(key);
+    this._channelSections.setKey(key);
+    this._watermarks.setKey(key);
+    this._videoAbuseReportReasons.setKey(key);
   }
 
   /**
@@ -109,6 +148,358 @@ class YouTube extends YouTubeResource {
     this._channels.setRetryOptions(newOptions);
     this._playlists.setRetryOptions(newOptions);
     this._search.setRetryOptions(newOptions);
+    this._channelSections.setRetryOptions(newOptions);
+    this._watermarks.setRetryOptions(newOptions);
+    this._videoAbuseReportReasons.setRetryOptions(newOptions);
+  }
+
+  // ============================================================
+  // Métodos de Paginación (Issue #92)
+  // ============================================================
+
+  /**
+   * Get all results from paginated endpoint
+   * @param endpoint - Endpoint to query ('search', 'videos', etc.)
+   * @param options - Query options
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult[]> if no callback, void otherwise
+   */
+  getAllResults(
+    endpoint: 'search' | 'videos' | 'channels' | 'playlists' | 'playlistItems',
+    options: PaginationOptions = {},
+    callback?: Callback,
+  ): Promise<YtResult[]> | void {
+    const allItems: YtResult[] = [];
+
+    const fetchAll = async (): Promise<YtResult[]> => {
+      let pageToken: string | undefined;
+
+      do {
+        const params: PaginationOptions = { ...options, pageToken };
+        let result: YtResult;
+
+        switch (endpoint) {
+          case 'search':
+            result = await this.search.query(params.q || '', params.maxResults || 50, params) as YtResult;
+            break;
+          case 'videos':
+            result = await this.videos.getById(params.id || '') as YtResult;
+            break;
+          case 'channels':
+            result = await this.channels.getById(params.id || '') as YtResult;
+            break;
+          case 'playlists':
+            result = await this.playlists.getById(params.id || '') as YtResult;
+            break;
+          case 'playlistItems':
+            result = await this.playlists.getItemsById(params.playlistId || '', params.maxResults || 50) as YtResult;
+            break;
+          default:
+            throw new Error(`Unknown endpoint: ${endpoint}`);
+        }
+
+        allItems.push(result);
+        pageToken = result.nextPageToken;
+      } while (pageToken);
+
+      return allItems;
+    };
+
+    if (callback) {
+      fetchAll()
+        .then((results) => callback(null, { items: results.flatMap(r => r.items || []) } as YtResult))
+        .catch((err) => callback(err as Error));
+      return undefined;
+    }
+
+    return fetchAll();
+  }
+
+  /**
+   * Async generator for pagination
+   * @param endpoint - Endpoint to query
+   * @param options - Query options
+   */
+  async *paginate(
+    endpoint: 'search' | 'videos' | 'channels' | 'playlists' | 'playlistItems',
+    options: PaginationOptions = {},
+  ): AsyncGenerator<YtResult, void, unknown> {
+    let pageToken: string | undefined;
+
+    do {
+      const params: PaginationOptions = { ...options, pageToken };
+      let result: YtResult;
+
+      switch (endpoint) {
+        case 'search':
+          result = await this.search.query(params.q || '', params.maxResults || 50, params) as YtResult;
+          break;
+        case 'videos':
+          result = await this.videos.getById(params.id || '') as YtResult;
+          break;
+        case 'channels':
+          result = await this.channels.getById(params.id || '') as YtResult;
+          break;
+        case 'playlists':
+          result = await this.playlists.getById(params.id || '') as YtResult;
+          break;
+        case 'playlistItems':
+          result = await this.playlists.getItemsById(params.playlistId || '', params.maxResults || 50) as YtResult;
+          break;
+        default:
+          throw new Error(`Unknown endpoint: ${endpoint}`);
+      }
+
+      yield result;
+      pageToken = result.nextPageToken;
+    } while (pageToken);
+  }
+
+  /**
+   * Enhanced search with advanced filters (Issue #92)
+   * @param query - Search query
+   * @param maxResults - Maximum results
+   * @param filters - Advanced search filters
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   */
+  searchWithFilters(
+    query: string,
+    maxResults: number,
+    filters: {
+      type?: 'video' | 'channel' | 'playlist';
+      videoDuration?: 'short' | 'medium' | 'long' | 'any';
+      videoDefinition?: 'high' | 'standard' | 'any';
+      videoLicense?: 'creativeCommon' | 'youtube';
+      videoSyndicated?: boolean;
+      videoEmbeddable?: boolean;
+      safeSearch?: 'none' | 'moderate' | 'strict';
+      order?: 'date' | 'rating' | 'relevance' | 'title' | 'videoCount' | 'viewCount';
+      publishedAfter?: string;
+      publishedBefore?: string;
+      regionCode?: string;
+      relevanceLanguage?: string;
+      channelId?: string;
+    } = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const searchParams: SearchParams = {
+      type: filters.type,
+      videoDuration: filters.videoDuration,
+      videoDefinition: filters.videoDefinition,
+      videoLicense: filters.videoLicense,
+      videoSyndicated: filters.videoSyndicated,
+      videoEmbeddable: filters.videoEmbeddable,
+      safeSearch: filters.safeSearch,
+      order: filters.order,
+      publishedAfter: filters.publishedAfter,
+      publishedBefore: filters.publishedBefore,
+      regionCode: filters.regionCode,
+      relevanceLanguage: filters.relevanceLanguage,
+      channelId: filters.channelId,
+    };
+
+    // Remove undefined values
+    Object.keys(searchParams).forEach((key) => {
+      if (searchParams[key] === undefined) {
+        delete searchParams[key];
+      }
+    });
+
+    return this.search.query(query, maxResults, searchParams, callback);
+  }
+
+  // ============================================================
+  // Métodos de Videos (OAuth) - Issue #88
+  // ============================================================
+
+  /**
+   * Update video metadata (OAuth required)
+   * @param videoResource - Video resource
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videos.update() instead
+   */
+  updateVideo(videoResource: VideoResource, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.videos.update(videoResource, callback);
+      return undefined;
+    }
+    return this.videos.update(videoResource) as Promise<YtResult>;
+  }
+
+  /**
+   * Update video privacy status (OAuth required)
+   * @param videoId - Video ID
+   * @param status - Privacy status
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videos.updateStatus() instead
+   */
+  updateVideoStatus(
+    videoId: string,
+    status: VideoStatus | 'public' | 'private' | 'unlisted',
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.videos.updateStatus(videoId, status, callback);
+      return undefined;
+    }
+    return this.videos.updateStatus(videoId, status) as Promise<YtResult>;
+  }
+
+  // ============================================================
+  // Métodos de ChannelSections (OAuth) - Issue #89
+  // ============================================================
+
+  /**
+   * Get channel sections
+   * @param channelId - Channel ID
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.channelSections.list() instead
+   */
+  getChannelSections(channelId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.channelSections.list(channelId, callback);
+      return undefined;
+    }
+    return this.channelSections.list(channelId) as Promise<YtResult>;
+  }
+
+  /**
+   * Create channel section (OAuth required)
+   * @param sectionResource - Channel section resource
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.channelSections.create() instead
+   */
+  createChannelSection(sectionResource: ChannelSectionResource, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.channelSections.create(sectionResource, callback);
+      return undefined;
+    }
+    return this.channelSections.create(sectionResource) as Promise<YtResult>;
+  }
+
+  /**
+   * Update channel section (OAuth required)
+   * @param sectionId - Section ID
+   * @param sectionResource - Channel section resource
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.channelSections.update() instead
+   */
+  updateChannelSection(
+    sectionId: string,
+    sectionResource: ChannelSectionResource,
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.channelSections.update(sectionId, sectionResource, callback);
+      return undefined;
+    }
+    return this.channelSections.update(sectionId, sectionResource) as Promise<YtResult>;
+  }
+
+  /**
+   * Delete channel section (OAuth required)
+   * @param sectionId - Section ID
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.channelSections.delete() instead
+   */
+  deleteChannelSection(sectionId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.channelSections.delete(sectionId, callback);
+      return undefined;
+    }
+    return this.channelSections.delete(sectionId) as Promise<YtResult>;
+  }
+
+  // ============================================================
+  // Métodos de Watermarks (OAuth) - Issue #90
+  // ============================================================
+
+  /**
+   * Set watermark for channel (OAuth required)
+   * @param channelId - Channel ID
+   * @param imageData - Image data (Buffer or file path)
+   * @param timing - Watermark timing configuration
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.watermarks.set() instead
+   */
+  setWatermark(
+    channelId: string,
+    imageData: Buffer | string,
+    timing: WatermarkTiming,
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.watermarks.set(channelId, imageData, timing, callback);
+      return undefined;
+    }
+    return this.watermarks.set(channelId, imageData, timing) as Promise<YtResult>;
+  }
+
+  /**
+   * Unset watermark from channel (OAuth required)
+   * @param channelId - Channel ID
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.watermarks.unset() instead
+   */
+  unsetWatermark(channelId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.watermarks.unset(channelId, callback);
+      return undefined;
+    }
+    return this.watermarks.unset(channelId) as Promise<YtResult>;
+  }
+
+  // ============================================================
+  // Métodos de VideoAbuseReportReasons - Issue #91
+  // ============================================================
+
+  /**
+   * Get video abuse report reasons
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videoAbuseReportReasons.list() instead
+   */
+  getVideoAbuseReportReasons(callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.videoAbuseReportReasons.list(callback);
+      return undefined;
+    }
+    return this.videoAbuseReportReasons.list() as Promise<YtResult>;
+  }
+
+  /**
+   * Report abusive video (OAuth required)
+   * @param videoId - Video ID
+   * @param reasonId - Reason ID
+   * @param options - Optional report details
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videoAbuseReportReasons.report() instead
+   */
+  reportAbusiveVideo(
+    videoId: string,
+    reasonId: string,
+    options?: {
+      secondaryReasonId?: string;
+      comments?: string;
+      language?: string;
+    },
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.videoAbuseReportReasons.report(videoId, reasonId, options, callback);
+      return undefined;
+    }
+    return this.videoAbuseReportReasons.report(videoId, reasonId, options) as Promise<YtResult>;
   }
 
   // ============================================================
@@ -329,4 +720,7 @@ export {
   ChannelsResource,
   PlaylistsResource,
   SearchResource,
+  ChannelSectionsResource,
+  WatermarksResource,
+  VideoAbuseReportReasonsResource,
 } from './resources';

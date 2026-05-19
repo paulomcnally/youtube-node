@@ -1,5 +1,5 @@
 import { YouTubeResource } from './base';
-import { Callback, YtResult } from '../../types';
+import { Callback, YtResult, VideoResource, VideoStatus } from '../../types';
 
 /**
  * Recurso de Videos de YouTube API
@@ -208,5 +208,105 @@ export class VideosResource extends YouTubeResource {
    */
   getMostPopularByCategoryAsync(maxResults: number, videoCategoryId: string | number): Promise<YtResult> {
     return this.getMostPopularByCategory(maxResults, videoCategoryId) as Promise<YtResult>;
+  }
+
+  /**
+   * Update video metadata (requires OAuth)
+   * @param videoResource - Video resource with updated data
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/videos/update
+   */
+  update(videoResource: VideoResource, callback?: Callback): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.addPart('snippet');
+        this.addPart('status');
+        this.addPart('contentDetails');
+        this.addPart('recordingDetails');
+        this.addPart('localizations');
+
+        this.addParam('part', this.getParts());
+
+        this.requestPut(this.getUrl('videos'), videoResource, callback);
+
+        this.clearParams();
+        this.clearParts();
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.addPart('snippet');
+      this.addPart('status');
+      this.addPart('contentDetails');
+      this.addPart('recordingDetails');
+      this.addPart('localizations');
+
+      this.addParam('part', this.getParts());
+
+      this.requestPut(this.getUrl('videos'), videoResource, (err, data) => {
+        this.clearParams();
+        this.clearParts();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Update video metadata (Promise)
+   * @param videoResource - Video resource with updated data
+   * @returns Promise with result
+   */
+  updateAsync(videoResource: VideoResource): Promise<YtResult> {
+    return this.update(videoResource) as Promise<YtResult>;
+  }
+
+  /**
+   * Update video status/privacy (helper method)
+   * @param videoId - Video ID
+   * @param status - Status object or privacy status string
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   */
+  updateStatus(
+    videoId: string,
+    status: VideoStatus | 'public' | 'private' | 'unlisted',
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const statusObj: VideoStatus = typeof status === 'string'
+      ? { privacyStatus: status }
+      : status;
+
+    const videoResource: VideoResource = {
+      id: videoId,
+      status: statusObj,
+    };
+
+    return this.update(videoResource, callback);
+  }
+
+  /**
+   * Update video status/privacy (Promise)
+   * @param videoId - Video ID
+   * @param status - Status object or privacy status string
+   * @returns Promise with result
+   */
+  updateStatusAsync(videoId: string, status: VideoStatus | 'public' | 'private' | 'unlisted'): Promise<YtResult> {
+    return this.updateStatus(videoId, status) as Promise<YtResult>;
   }
 }

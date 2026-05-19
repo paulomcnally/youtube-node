@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import * as queryString from 'querystring';
 import {
   YouTubeError,
@@ -335,6 +335,284 @@ export abstract class YouTubeResource {
       };
 
       method(...args, callback);
+    });
+  }
+
+  /**
+   * Realiza una petición POST HTTP con soporte de retry
+   * @param url - URL a solicitar
+   * @param data - Datos a enviar
+   * @param callback - Callback (error, data)
+   * @param attempt - Número de intento actual (uso interno)
+   */
+  requestPost(
+    url: string,
+    data: unknown,
+    callback: Callback,
+    attempt = 0,
+  ): void {
+    const config: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    axios
+      .post<YtResult>(url, data, config)
+      .then((response) => {
+        callback(null, response.data);
+      })
+      .catch((axiosError: AxiosError) => {
+        const error = parseError(axiosError);
+
+        const shouldRetry = attempt < this.retryOptions.retries
+                           && this.retryOptions.retryCondition(error);
+
+        if (shouldRetry) {
+          const delay = calculateBackoff(
+            attempt,
+            this.retryOptions.retryDelay,
+            this.retryOptions.maxRetryDelay,
+          );
+
+          if (typeof this.retryOptions.onRetry === 'function') {
+            this.retryOptions.onRetry(error, attempt + 1);
+          }
+
+          setTimeout(() => {
+            this.requestPost(url, data, callback, attempt + 1);
+          }, delay);
+        } else {
+          callback(error);
+        }
+      });
+  }
+
+  /**
+   * Realiza una petición POST HTTP y retorna una Promise
+   * @param url - URL a solicitar
+   * @param data - Datos a enviar
+   * @param attempt - Número de intento actual (uso interno)
+   * @returns Promise with result
+   */
+  requestPostPromise(url: string, data: unknown, attempt = 0): Promise<YtResult> {
+    return new Promise((resolve, reject) => {
+      const config: AxiosRequestConfig = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      axios
+        .post<YtResult>(url, data, config)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((axiosError: AxiosError) => {
+          const error = parseError(axiosError);
+
+          const shouldRetry = attempt < this.retryOptions.retries
+                             && this.retryOptions.retryCondition(error);
+
+          if (shouldRetry) {
+            const delay = calculateBackoff(
+              attempt,
+              this.retryOptions.retryDelay,
+              this.retryOptions.maxRetryDelay,
+            );
+
+            if (typeof this.retryOptions.onRetry === 'function') {
+              this.retryOptions.onRetry(error, attempt + 1);
+            }
+
+            setTimeout(() => {
+              this.requestPostPromise(url, data, attempt + 1)
+                .then(resolve)
+                .catch(reject);
+            }, delay);
+          } else {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  /**
+   * Realiza una petición PUT HTTP con soporte de retry
+   * @param url - URL a solicitar
+   * @param data - Datos a enviar
+   * @param callback - Callback (error, data)
+   * @param attempt - Número de intento actual (uso interno)
+   */
+  requestPut(
+    url: string,
+    data: unknown,
+    callback: Callback,
+    attempt = 0,
+  ): void {
+    const config: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    axios
+      .put<YtResult>(url, data, config)
+      .then((response) => {
+        callback(null, response.data);
+      })
+      .catch((axiosError: AxiosError) => {
+        const error = parseError(axiosError);
+
+        const shouldRetry = attempt < this.retryOptions.retries
+                           && this.retryOptions.retryCondition(error);
+
+        if (shouldRetry) {
+          const delay = calculateBackoff(
+            attempt,
+            this.retryOptions.retryDelay,
+            this.retryOptions.maxRetryDelay,
+          );
+
+          if (typeof this.retryOptions.onRetry === 'function') {
+            this.retryOptions.onRetry(error, attempt + 1);
+          }
+
+          setTimeout(() => {
+            this.requestPut(url, data, callback, attempt + 1);
+          }, delay);
+        } else {
+          callback(error);
+        }
+      });
+  }
+
+  /**
+   * Realiza una petición PUT HTTP y retorna una Promise
+   * @param url - URL a solicitar
+   * @param data - Datos a enviar
+   * @param attempt - Número de intento actual (uso interno)
+   * @returns Promise with result
+   */
+  requestPutPromise(url: string, data: unknown, attempt = 0): Promise<YtResult> {
+    return new Promise((resolve, reject) => {
+      const config: AxiosRequestConfig = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      axios
+        .put<YtResult>(url, data, config)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((axiosError: AxiosError) => {
+          const error = parseError(axiosError);
+
+          const shouldRetry = attempt < this.retryOptions.retries
+                             && this.retryOptions.retryCondition(error);
+
+          if (shouldRetry) {
+            const delay = calculateBackoff(
+              attempt,
+              this.retryOptions.retryDelay,
+              this.retryOptions.maxRetryDelay,
+            );
+
+            if (typeof this.retryOptions.onRetry === 'function') {
+              this.retryOptions.onRetry(error, attempt + 1);
+            }
+
+            setTimeout(() => {
+              this.requestPutPromise(url, data, attempt + 1)
+                .then(resolve)
+                .catch(reject);
+            }, delay);
+          } else {
+            reject(error);
+          }
+        });
+    });
+  }
+
+  /**
+   * Realiza una petición DELETE HTTP con soporte de retry
+   * @param url - URL a solicitar
+   * @param callback - Callback (error, data)
+   * @param attempt - Número de intento actual (uso interno)
+   */
+  requestDelete(url: string, callback: Callback, attempt = 0): void {
+    axios
+      .delete<YtResult>(url)
+      .then((response) => {
+        callback(null, response.data);
+      })
+      .catch((axiosError: AxiosError) => {
+        const error = parseError(axiosError);
+
+        const shouldRetry = attempt < this.retryOptions.retries
+                           && this.retryOptions.retryCondition(error);
+
+        if (shouldRetry) {
+          const delay = calculateBackoff(
+            attempt,
+            this.retryOptions.retryDelay,
+            this.retryOptions.maxRetryDelay,
+          );
+
+          if (typeof this.retryOptions.onRetry === 'function') {
+            this.retryOptions.onRetry(error, attempt + 1);
+          }
+
+          setTimeout(() => {
+            this.requestDelete(url, callback, attempt + 1);
+          }, delay);
+        } else {
+          callback(error);
+        }
+      });
+  }
+
+  /**
+   * Realiza una petición DELETE HTTP y retorna una Promise
+   * @param url - URL a solicitar
+   * @param attempt - Número de intento actual (uso interno)
+   * @returns Promise with result
+   */
+  requestDeletePromise(url: string, attempt = 0): Promise<YtResult> {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete<YtResult>(url)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((axiosError: AxiosError) => {
+          const error = parseError(axiosError);
+
+          const shouldRetry = attempt < this.retryOptions.retries
+                             && this.retryOptions.retryCondition(error);
+
+          if (shouldRetry) {
+            const delay = calculateBackoff(
+              attempt,
+              this.retryOptions.retryDelay,
+              this.retryOptions.maxRetryDelay,
+            );
+
+            if (typeof this.retryOptions.onRetry === 'function') {
+              this.retryOptions.onRetry(error, attempt + 1);
+            }
+
+            setTimeout(() => {
+              this.requestDeletePromise(url, attempt + 1)
+                .then(resolve)
+                .catch(reject);
+            }, delay);
+          } else {
+            reject(error);
+          }
+        });
     });
   }
 }
