@@ -9,6 +9,8 @@ import {
   VideoAbuseReportReasonsResource,
   SubscriptionsResource,
   CaptionsResource,
+  CommentsResource,
+  ThumbnailsResource,
 } from './resources';
 import {
   YouTubeError,
@@ -72,6 +74,10 @@ class YouTube extends YouTubeResource {
   private readonly _subscriptions: SubscriptionsResource;
 
   private readonly _captions: CaptionsResource;
+
+  private readonly _comments: CommentsResource;
+
+  private readonly _thumbnails: ThumbnailsResource;
 
   /**
    * Recurso de Videos
@@ -137,6 +143,20 @@ class YouTube extends YouTubeResource {
   }
 
   /**
+   * Recurso de Comments
+   */
+  public get comments(): CommentsResource {
+    return this._comments;
+  }
+
+  /**
+   * Recurso de Thumbnails
+   */
+  public get thumbnails(): ThumbnailsResource {
+    return this._thumbnails;
+  }
+
+  /**
    * Crea una instancia de YouTube
    * @param options - Opciones de configuración
    */
@@ -153,6 +173,8 @@ class YouTube extends YouTubeResource {
     this._videoAbuseReportReasons = new VideoAbuseReportReasonsResource(options);
     this._subscriptions = new SubscriptionsResource(options);
     this._captions = new CaptionsResource(options);
+    this._comments = new CommentsResource(options);
+    this._thumbnails = new ThumbnailsResource(options);
   }
 
   /**
@@ -170,6 +192,8 @@ class YouTube extends YouTubeResource {
     this._videoAbuseReportReasons.setKey(key);
     this._subscriptions.setKey(key);
     this._captions.setKey(key);
+    this._comments.setKey(key);
+    this._thumbnails.setKey(key);
   }
 
   /**
@@ -187,6 +211,8 @@ class YouTube extends YouTubeResource {
     this._videoAbuseReportReasons.setRetryOptions(newOptions);
     this._subscriptions.setRetryOptions(newOptions);
     this._captions.setRetryOptions(newOptions);
+    this._comments.setRetryOptions(newOptions);
+    this._thumbnails.setRetryOptions(newOptions);
   }
 
   // ============================================================
@@ -783,6 +809,214 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
+  // Métodos de Video Rating (Issue #80)
+  // ============================================================
+
+  /**
+   * Rate a video (OAuth required)
+   * @param videoId - Video ID
+   * @param rating - Rating: 'like', 'dislike', or 'none'
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videos.rate() instead
+   */
+  rateVideo(
+    videoId: string,
+    rating: 'like' | 'dislike' | 'none',
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.videos.rate(videoId, rating, callback);
+      return undefined;
+    }
+    return this.videos.rate(videoId, rating) as Promise<YtResult>;
+  }
+
+  /**
+   * Get video rating given by user (OAuth required)
+   * @param videoIds - Video ID(s)
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videos.getRating() instead
+   */
+  getVideoRating(
+    videoIds: string | string[],
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.videos.getRating(videoIds, callback);
+      return undefined;
+    }
+    return this.videos.getRating(videoIds) as Promise<YtResult>;
+  }
+
+  // ============================================================
+  // Métodos de Thumbnails (Issue #79)
+  // ============================================================
+
+  /**
+   * Set custom thumbnail for video (OAuth required)
+   * @param videoId - Video ID
+   * @param imageData - Image Buffer or file path
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.thumbnails.set() instead
+   */
+  setThumbnail(
+    videoId: string,
+    imageData: Buffer | string,
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.thumbnails.set(videoId, imageData, callback);
+      return undefined;
+    }
+    return this.thumbnails.set(videoId, imageData) as Promise<YtResult>;
+  }
+
+  // ============================================================
+  // Métodos de Captions (Issue #78)
+  // ============================================================
+
+  /**
+   * Get captions for a video
+   * @param videoId - Video ID
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.captions.list() instead
+   */
+  getCaptions(videoId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.captions.list(videoId, callback);
+      return undefined;
+    }
+    return this.captions.list(videoId) as Promise<YtResult>;
+  }
+
+  /**
+   * Download caption content
+   * @param captionId - Caption ID
+   * @param format - Format (srt, sbv, scc, ttml, vtt)
+   * @param options - Optional parameters (tfmt, tlang)
+   * @param callback - Optional callback function
+   * @returns Promise<string> if no callback, void otherwise
+   * @deprecated Use youtube.captions.download() instead
+   */
+  downloadCaption(
+    captionId: string,
+    format: 'srt' | 'sbv' | 'scc' | 'ttml' | 'vtt' | null = null,
+    options: {
+      tlang?: string;
+    } = {},
+    callback?: Callback,
+  ): Promise<string> | void {
+    if (callback) {
+      this.captions.download(captionId, format, options, callback);
+      return undefined;
+    }
+    return this.captions.download(captionId, format, options) as Promise<string>;
+  }
+
+  // ============================================================
+  // Métodos de Comments (Issue #82)
+  // ============================================================
+
+  /**
+   * Add comment to video (OAuth required)
+   * @param videoId - Video ID
+   * @param text - Comment text
+   * @param options - Optional parameters
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.comments.add() instead
+   */
+  addComment(
+    videoId: string,
+    text: string,
+    options: {
+      channelId?: string;
+    } = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.comments.add(videoId, text, options, callback);
+      return undefined;
+    }
+    return this.comments.add(videoId, text, options) as Promise<YtResult>;
+  }
+
+  /**
+   * Reply to comment (OAuth required)
+   * @param parentCommentId - Parent comment ID
+   * @param text - Reply text
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.comments.reply() instead
+   */
+  addReply(parentCommentId: string, text: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.comments.reply(parentCommentId, text, callback);
+      return undefined;
+    }
+    return this.comments.reply(parentCommentId, text) as Promise<YtResult>;
+  }
+
+  /**
+   * Update comment (OAuth required)
+   * @param commentId - Comment ID
+   * @param text - New comment text
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.comments.update() instead
+   */
+  updateComment(commentId: string, text: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.comments.update(commentId, text, callback);
+      return undefined;
+    }
+    return this.comments.update(commentId, text) as Promise<YtResult>;
+  }
+
+  /**
+   * Delete comment (OAuth required)
+   * @param commentId - Comment ID
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.comments.delete() instead
+   */
+  deleteComment(commentId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.comments.delete(commentId, callback);
+      return undefined;
+    }
+    return this.comments.delete(commentId) as Promise<YtResult>;
+  }
+
+  /**
+   * Set comment moderation status (OAuth required, channel owner only)
+   * @param commentIds - Comment ID(s)
+   * @param status - Moderation status
+   * @param options - Optional parameters
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.comments.setModerationStatus() instead
+   */
+  setCommentModerationStatus(
+    commentIds: string | string[],
+    status: 'published' | 'heldForReview' | 'rejected',
+    options: {
+      banAuthor?: boolean;
+    } = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.comments.setModerationStatus(commentIds, status, options, callback);
+      return undefined;
+    }
+    return this.comments.setModerationStatus(commentIds, status, options) as Promise<YtResult>;
+  }
+
+  // ============================================================
   // Métodos Legacy para backward compatibility
   // Todos soportan callbacks (legacy) y Promises (nuevo)
   // ============================================================
@@ -1005,4 +1239,14 @@ export {
   VideoAbuseReportReasonsResource,
   SubscriptionsResource,
   CaptionsResource,
+  CommentsResource,
+  ThumbnailsResource,
 } from './resources';
+
+// Exportar autenticación OAuth
+export {
+  YouTubeAuth,
+  OAuthTokens,
+  AuthUrlOptions,
+  YouTubeScopes,
+} from './auth';

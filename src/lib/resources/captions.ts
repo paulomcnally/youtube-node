@@ -448,15 +448,30 @@ export class CaptionsResource extends YouTubeResource {
    * Download caption content
    * @param captionId - Caption ID
    * @param format - Format (srt, sbv, scc, ttml, vtt) or null for default
+   * @param options - Optional parameters
    * @param callback - Optional callback function
    * @returns Promise<string> if no callback, void otherwise
    */
   download(
     captionId: string,
     format: 'srt' | 'sbv' | 'scc' | 'ttml' | 'vtt' | null = null,
-    callback?: Callback,
+    options: {
+      tlang?: string;
+    } | Callback = {},
+    cb?: Callback,
   ): Promise<string> | void {
     const validate = this.validate();
+
+    // Handle case where options is actually the callback
+    let downloadOptions: { tlang?: string } = {};
+    let callback: Callback | undefined = cb;
+
+    if (typeof options === 'function') {
+      callback = options;
+      downloadOptions = {};
+    } else {
+      downloadOptions = options;
+    }
 
     if (callback) {
       if (validate !== null) {
@@ -467,6 +482,10 @@ export class CaptionsResource extends YouTubeResource {
 
         if (format) {
           this.addParam('tfmt', format);
+        }
+
+        if (downloadOptions.tlang) {
+          this.addParam('tlang', downloadOptions.tlang);
         }
 
         const url = `${this.getUrl('captions')}&alt=media`;
@@ -497,6 +516,10 @@ export class CaptionsResource extends YouTubeResource {
         this.addParam('tfmt', format);
       }
 
+      if (downloadOptions.tlang) {
+        this.addParam('tlang', downloadOptions.tlang);
+      }
+
       const url = `${this.getUrl('captions')}&alt=media`;
 
       axios.get<string>(url, { responseType: 'text' })
@@ -515,12 +538,16 @@ export class CaptionsResource extends YouTubeResource {
    * Download caption content (Promise)
    * @param captionId - Caption ID
    * @param format - Format (srt, sbv, scc, ttml, vtt) or null for default
+   * @param options - Optional parameters
    * @returns Promise with caption content
    */
   downloadAsync(
     captionId: string,
     format: 'srt' | 'sbv' | 'scc' | 'ttml' | 'vtt' | null = null,
+    options: {
+      tlang?: string;
+    } = {},
   ): Promise<string> {
-    return this.download(captionId, format) as Promise<string>;
+    return this.download(captionId, format, options, undefined) as Promise<string>;
   }
 }

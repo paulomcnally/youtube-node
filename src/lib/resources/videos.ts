@@ -647,4 +647,142 @@ export class VideosResource extends YouTubeResource {
   checkUploadStatusAsync(videoId: string): Promise<YtResult> {
     return this.checkUploadStatus(videoId) as Promise<YtResult>;
   }
+
+  // ============================================================
+  // Métodos de Rating (Issue #80)
+  // ============================================================
+
+  /**
+   * Rate a video (OAuth required)
+   * @param videoId - Video ID
+   * @param rating - Rating value: 'like', 'dislike', or 'none'
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/videos/rate
+   */
+  rate(
+    videoId: string,
+    rating: 'like' | 'dislike' | 'none',
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    // Validate rating value
+    const validRatings = ['like', 'dislike', 'none'];
+    if (!validRatings.includes(rating)) {
+      const error = new Error(`Invalid rating value. Must be one of: ${validRatings.join(', ')}`);
+      if (callback) {
+        callback(error);
+        return undefined;
+      }
+      return Promise.reject(error);
+    }
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.addParam('id', videoId);
+        this.addParam('rating', rating);
+
+        this.requestPost(this.getUrl('videos/rate'), {}, (err, data) => {
+          this.clearParams();
+          callback(err, data);
+        });
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.addParam('id', videoId);
+      this.addParam('rating', rating);
+
+      this.requestPost(this.getUrl('videos/rate'), {}, (err, data) => {
+        this.clearParams();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Rate a video (Promise)
+   * @param videoId - Video ID
+   * @param rating - Rating value
+   * @returns Promise with result
+   */
+  rateAsync(videoId: string, rating: 'like' | 'dislike' | 'none'): Promise<YtResult> {
+    return this.rate(videoId, rating) as Promise<YtResult>;
+  }
+
+  /**
+   * Get the rating given by the user to videos (OAuth required)
+   * @param videoIds - Video ID(s)
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/videos/getRating
+   */
+  getRating(
+    videoIds: string | string[],
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    const ids = Array.isArray(videoIds) ? videoIds : [videoIds];
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.addParam('id', ids.join(','));
+
+        this.request(this.getUrl('videos/getRating'), (err, data) => {
+          this.clearParams();
+          callback(err, data);
+        });
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.addParam('id', ids.join(','));
+
+      this.request(this.getUrl('videos/getRating'), (err, data) => {
+        this.clearParams();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get video rating (Promise)
+   * @param videoIds - Video ID(s)
+   * @returns Promise with result
+   */
+  getRatingAsync(videoIds: string | string[]): Promise<YtResult> {
+    return this.getRating(videoIds) as Promise<YtResult>;
+  }
 }

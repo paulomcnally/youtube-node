@@ -8,3 +8,5 @@ export { WatermarksResource } from './watermarks';
 export { VideoAbuseReportReasonsResource } from './videoAbuseReportReasons';
 export { SubscriptionsResource } from './subscriptions';
 export { CaptionsResource } from './captions';
+export { CommentsResource } from './comments';
+export { ThumbnailsResource } from './thumbnails';

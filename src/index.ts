@@ -36,7 +36,17 @@ export {
   VideoAbuseReportReasonsResource,
   SubscriptionsResource,
   CaptionsResource,
+  CommentsResource,
+  ThumbnailsResource,
 } from './lib/resources';
+
+// Exportar autenticación OAuth
+export {
+  YouTubeAuth,
+  OAuthTokens,
+  AuthUrlOptions,
+  YouTubeScopes,
+} from './lib/auth';
 
 // Exportar tipos
 export * from './types';
