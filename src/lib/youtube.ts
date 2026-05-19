@@ -269,6 +269,48 @@ class YouTube extends YouTubeResource {
   }
 
   /**
+   * Set a custom header for all requests (Issue #52)
+   * Useful for adding referer or other headers
+   * @param key - Header name
+   * @param value - Header value
+   */
+  setHeader(key: string, value: string): void {
+    super.setHeader(key, value);
+    this._videos.setHeader(key, value);
+    this._channels.setHeader(key, value);
+    this._playlists.setHeader(key, value);
+    this._search.setHeader(key, value);
+    this._channelSections.setHeader(key, value);
+    this._watermarks.setHeader(key, value);
+    this._videoAbuseReportReasons.setHeader(key, value);
+    this._subscriptions.setHeader(key, value);
+    this._captions.setHeader(key, value);
+    this._comments.setHeader(key, value);
+    this._thumbnails.setHeader(key, value);
+    this._activities.setHeader(key, value);
+    this._commentThreads.setHeader(key, value);
+    this._i18nLanguages.setHeader(key, value);
+    this._i18nRegions.setHeader(key, value);
+    this._playlistItems.setHeader(key, value);
+    this._videoCategories.setHeader(key, value);
+  }
+
+  /**
+   * Set the referer header for all requests (Issue #52)
+   * Useful when API key has referer restrictions
+   * @param referer - Referer URL (e.g., 'https://example.com')
+   * @example
+   * ```typescript
+   * const youtube = new YouTube();
+   * youtube.setKey('YOUR_API_KEY');
+   * youtube.setReferer('https://example.com'); // Fix "referer" error
+   * ```
+   */
+  setReferer(referer: string): void {
+    this.setHeader('Referer', referer);
+  }
+
+  /**
    * Actualiza las opciones de retry en todos los recursos
    * @param newOptions - Nuevas opciones de retry
    */

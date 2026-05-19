@@ -119,6 +119,8 @@ export abstract class YouTubeResource {
 
   protected retryOptions: Required<Omit<RetryOptions, 'onRetry'>> & Pick<RetryOptions, 'onRetry'>;
 
+  protected headers: Record<string, string>;
+
   /**
    * Crea una instancia del recurso
    * @param options - Opciones de configuración
@@ -142,6 +144,37 @@ export abstract class YouTubeResource {
     this.params = {};
 
     this.parts = [];
+
+    /**
+     * Custom headers
+     */
+    this.headers = options.headers || {};
+  }
+
+  /**
+   * Set a custom header for requests
+   * @param key - Header name
+   * @param value - Header value
+   */
+  setHeader(key: string, value: string): void {
+    this.headers[key] = value;
+  }
+
+  /**
+   * Set the referer header for requests
+   * Useful when API key has referer restrictions
+   * @param referer - Referer URL (e.g., 'https://example.com')
+   */
+  setReferer(referer: string): void {
+    this.headers.Referer = referer;
+  }
+
+  /**
+   * Get all custom headers
+   * @returns Headers object
+   */
+  getHeaders(): Record<string, string> {
+    return { ...this.headers };
   }
 
   /**
@@ -226,7 +259,11 @@ export abstract class YouTubeResource {
    * @param attempt - Número de intento actual (uso interno)
    */
   request(url: string, callback: Callback, attempt = 0): void {
-    axios.get<YtResult>(url)
+    const config: AxiosRequestConfig = {
+      headers: Object.keys(this.headers).length > 0 ? this.headers : undefined,
+    };
+
+    axios.get<YtResult>(url, config)
       .then((response) => {
         callback(null, response.data);
       })
@@ -268,7 +305,11 @@ export abstract class YouTubeResource {
    */
   requestPromise(url: string, attempt = 0): Promise<YtResult> {
     return new Promise((resolve, reject) => {
-      axios.get<YtResult>(url)
+      const config: AxiosRequestConfig = {
+        headers: Object.keys(this.headers).length > 0 ? this.headers : undefined,
+      };
+
+      axios.get<YtResult>(url, config)
         .then((response) => {
           resolve(response.data);
         })

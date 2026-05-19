@@ -112,6 +112,7 @@ export interface RetryOptions {
 // Tipos para opciones de YouTube
 export interface YouTubeOptions {
   retryOptions?: RetryOptions;
+  headers?: Record<string, string>;
 }
 
 // Tipos para parámetros de búsqueda

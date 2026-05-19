@@ -197,6 +197,123 @@ const results = await youtube.search.query('nodejs tutorial', 10);
 const related = await youtube.search.related('VIDEO_ID', 5);
 ```
 
+## Pagination (Issue #50, #31)
+
+You can paginate through results using `pageToken`:
+
+```typescript
+const youTube = new YouTube();
+youTube.setKey('YOUR_API_KEY');
+
+// Get first page
+const firstPage = await youTube.search.query('nodejs tutorial', 50);
+console.log(`Found ${firstPage.items?.length} items`);
+console.log(`Next page token: ${firstPage.nextPageToken}`);
+
+// Get second page using pageToken
+if (firstPage.nextPageToken) {
+  const secondPage = await youTube.search.query('nodejs tutorial', 50, { 
+    pageToken: firstPage.nextPageToken 
+  });
+  console.log(`Found ${secondPage.items?.length} more items`);
+}
+
+// Playlist items pagination (Issue #31)
+const playlistItems = await youtube.playlistItems.list('PLAYLIST_ID', { 
+  maxResults: 50 
+});
+
+if (playlistItems.nextPageToken) {
+  const moreItems = await youtube.playlistItems.list('PLAYLIST_ID', {
+    maxResults: 50,
+    pageToken: playlistItems.nextPageToken
+  });
+}
+```
+
+## Filtering Search Results (Issue #41)
+
+You can filter search results by type and other parameters:
+
+```typescript
+// Search only videos (filter out channels and playlists)
+const videoResults = await youTube.search.query('nodejs tutorial', 50, { 
+  type: 'video'  // 'video', 'channel', or 'playlist'
+});
+
+// Filter by video duration
+const shortVideos = await youTube.search.query('funny cats', 50, {
+  type: 'video',
+  videoDuration: 'short'  // 'short' (< 4 min), 'medium' (4-20 min), 'long' (> 20 min)
+});
+
+// Filter by HD quality
+const hdVideos = await youTube.search.query('4k nature', 50, {
+  type: 'video',
+  videoDefinition: 'high'  // 'high' or 'standard'
+});
+
+// Combined filters
+const filteredResults = await youTube.search.query('tutorial', 50, {
+  type: 'video',
+  videoDuration: 'medium',
+  videoDefinition: 'high',
+  order: 'viewCount'  // Sort by view count
+});
+```
+
+## Referer Header (Issue #52)
+
+If you get a "referer" error when using an API key with referer restrictions:
+
+```typescript
+const youTube = new YouTube();
+youTube.setKey('YOUR_API_KEY');
+
+// Set referer to fix "The request did not specify any referer" error
+youTube.setReferer('https://example.com');
+
+// Or set custom headers
+youTube.setHeader('Referer', 'https://example.com');
+
+// Now you can make requests
+const results = await youTube.search.query('nodejs tutorial', 10);
+```
+
+## Working with Multiple Video IDs (Issue #67)
+
+You can fetch multiple videos at once:
+
+```typescript
+// Get multiple videos by IDs
+const videos = await youtube.videos.getByIds(['VIDEO_ID_1', 'VIDEO_ID_2', 'VIDEO_ID_3']);
+
+// With custom parts
+const videosWithStats = await youtube.videos.getByIds(
+  ['VIDEO_ID_1', 'VIDEO_ID_2'],
+  { parts: ['snippet', 'statistics'] }
+);
+
+// Get most popular videos by region
+const popularInUS = await youtube.videos.getMostPopularByRegion(10, 'US');
+const popularInSpain = await youtube.videos.getMostPopularByRegion(10, 'ES');
+```
+
+## Advanced Usage: Custom Parameters (Issue #33)
+
+If you need to add custom parameters to requests, use the `params` option in method calls:
+
+```typescript
+// Add custom parameters using the options parameter
+const results = await youTube.search.query('nodejs tutorial', 50, {
+  type: 'video',
+  videoDefinition: 'high',
+  publishedAfter: '2024-01-01T00:00:00Z'
+});
+```
+
+Note: Each method internally clears params and parts before making the request, so custom parameters should be passed through the method's options parameter rather than using `addParam()` directly.
+
 ## CLI
 
 For use CLI need install youtube-node using -g param.
@@ -276,13 +393,22 @@ Get most popular videos by category.
 const result = await youTube.videos.getMostPopularByCategory(10, 10); // 10 = Music
 ```
 
-### Channel Methods
+### Channel Methods (Issue #44)
 
 #### `youtube.channels.getById(id, [callback])`
 Get channel details by ID.
 
 ```typescript
+// Get channel by ID
 const result = await youTube.channels.getById('CHANNEL_ID');
+console.log('Channel:', result.items?.[0]?.snippet?.title);
+
+// Get channel by username (legacy) or handle
+const byUsername = await youTube.channels.getByUsername('GoogleDevelopers');
+const byHandle = await youTube.channels.getByUsername('@YouTube');
+
+// Get your own channel (requires OAuth)
+const myChannel = await youTube.channels.getMyChannel();
 ```
 
 ### Playlist Methods

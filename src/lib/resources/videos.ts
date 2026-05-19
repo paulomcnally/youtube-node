@@ -785,4 +785,185 @@ export class VideosResource extends YouTubeResource {
   getRatingAsync(videoIds: string | string[]): Promise<YtResult> {
     return this.getRating(videoIds) as Promise<YtResult>;
   }
+
+  // ============================================================
+  // Métodos de Videos List (Issue #67)
+  // ============================================================
+
+  /**
+   * Get multiple videos by their IDs
+   * @param ids - Video ID(s) - single ID, comma-separated string, or array
+   * @param options - Optional parameters
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/videos/list
+   */
+  getByIds(
+    ids: string | string[],
+    options: {
+      parts?: string[];
+      regionCode?: string;
+    } = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    // Normalize IDs to comma-separated string
+    const idsString = Array.isArray(ids) ? ids.join(',') : ids;
+
+    // Set default parts
+    const parts = options.parts || ['snippet', 'contentDetails', 'statistics', 'status'];
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.clearParts();
+
+        parts.forEach((part) => this.addPart(part));
+
+        this.addParam('part', this.getParts());
+        this.addParam('id', idsString);
+
+        if (options.regionCode) {
+          this.addParam('regionCode', options.regionCode);
+        }
+
+        this.request(this.getUrl('videos'), (err, data) => {
+          this.clearParams();
+          this.clearParts();
+          callback(err, data);
+        });
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.clearParts();
+
+      parts.forEach((part) => this.addPart(part));
+
+      this.addParam('part', this.getParts());
+      this.addParam('id', idsString);
+
+      if (options.regionCode) {
+        this.addParam('regionCode', options.regionCode);
+      }
+
+      this.request(this.getUrl('videos'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get multiple videos by IDs (Promise)
+   * @param ids - Video ID(s)
+   * @param options - Optional parameters
+   * @returns Promise with result
+   */
+  getByIdsAsync(
+    ids: string | string[],
+    options: {
+      parts?: string[];
+      regionCode?: string;
+    } = {},
+  ): Promise<YtResult> {
+    return this.getByIds(ids, options) as Promise<YtResult>;
+  }
+
+  /**
+   * Get most popular videos by region code
+   * @param maxResults - Maximum results
+   * @param regionCode - Region code (ISO 3166-1 alpha-2, e.g., 'US', 'ES')
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * https://developers.google.com/youtube/v3/docs/videos/list
+   */
+  getMostPopularByRegion(
+    maxResults: number,
+    regionCode: string,
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    const validate = this.validate();
+
+    if (callback) {
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.clearParams();
+        this.clearParts();
+
+        this.addPart('snippet');
+        this.addPart('contentDetails');
+        this.addPart('statistics');
+
+        this.addParam('part', this.getParts());
+        this.addParam('maxResults', maxResults);
+        this.addParam('chart', 'mostPopular');
+        this.addParam('regionCode', regionCode);
+
+        this.request(this.getUrl('videos'), (err, data) => {
+          this.clearParams();
+          this.clearParts();
+          callback(err, data);
+        });
+      }
+      return undefined;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
+      this.clearParams();
+      this.clearParts();
+
+      this.addPart('snippet');
+      this.addPart('contentDetails');
+      this.addPart('statistics');
+
+      this.addParam('part', this.getParts());
+      this.addParam('maxResults', maxResults);
+      this.addParam('chart', 'mostPopular');
+      this.addParam('regionCode', regionCode);
+
+      this.request(this.getUrl('videos'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
+  }
+
+  /**
+   * Get most popular videos by region (Promise)
+   * @param maxResults - Maximum results
+   * @param regionCode - Region code
+   * @returns Promise with result
+   */
+  getMostPopularByRegionAsync(maxResults: number, regionCode: string): Promise<YtResult> {
+    return this.getMostPopularByRegion(maxResults, regionCode) as Promise<YtResult>;
+  }
 }
