@@ -2,6 +2,7 @@
   "name": "youtube-node",
   "description": "Youtube API v3 client for nodeJS",
   "version": "2.0.0",
+  "packageManager": "pnpm@10.33.4",
   "author": "Paulo McNally <paulomcnally@gmail.com>",
   "types": "./typings/index.d.ts",
   "keywords": [
