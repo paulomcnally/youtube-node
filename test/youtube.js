@@ -1,4 +1,4 @@
-/* global it, describe */
+/* eslint-env mocha */
 const should = require('should');
 const config = require('./config.conf');
 const YouTube = require('../lib/youtube');
@@ -10,7 +10,11 @@ describe('Youtube', function () {
     const youTube = new YouTube();
     youTube.search(config.query, 1, (err, response) => {
       should.exist(err);
-      err.should.have.property('error', { message: 'Please set a key using setKey method. Get an key in https://console.developers.google.com' });
+      // Ahora los errores son instancias de ValidationError
+      err.should.be.an.instanceOf(Error);
+      err.should.have.property('isYouTubeError', true);
+      err.should.have.property('name', 'ValidationError');
+      err.should.have.property('message', 'Please set a key using setKey method. Get a key at https://console.developers.google.com');
       should.not.exist(response);
       done();
     });
