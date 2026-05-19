@@ -33,6 +33,10 @@ export interface YtSnippet {
   categoryId?: string;
   liveBroadcastContent?: string;
   localized?: YtLocalized;
+  resourceId?: {
+    kind?: string;
+    channelId?: string;
+  };
 }
 
 export interface YtContentDetails {
@@ -240,4 +244,99 @@ export interface PaginationOptions {
   id?: string;
   playlistId?: string;
   [key: string]: string | number | boolean | undefined;
+}
+
+// Tipos para Subscriptions (Issue #83)
+export interface SubscriptionSnippet {
+  publishedAt?: string;
+  channelTitle?: string;
+  channelId?: string;
+  title?: string;
+  description?: string;
+  resourceId?: {
+    kind?: string;
+    channelId?: string;
+  };
+}
+
+export interface SubscriptionResource {
+  id?: string;
+  snippet?: SubscriptionSnippet;
+  subscriberSnippet?: {
+    title?: string;
+    description?: string;
+    thumbnails?: YtThumbnails;
+  };
+}
+
+// Tipos para Channels Update (Issue #84)
+export interface ChannelBrandingSettings {
+  channel?: {
+    title?: string;
+    description?: string;
+    keywords?: string;
+    defaultLanguage?: string;
+    country?: string;
+  };
+  image?: {
+    bannerExternalUrl?: string;
+  };
+}
+
+export interface ChannelResource {
+  id?: string;
+  brandingSettings?: ChannelBrandingSettings;
+  localizations?: Record<string, Localization>;
+}
+
+export interface ChannelBannerResult {
+  url?: string;
+  etag?: string;
+}
+
+// Tipos para Videos Insert (Issue #85)
+export interface VideoUploadOptions {
+  part?: string[];
+  notifySubscribers?: boolean;
+  onProgress?: (progress: { bytesUploaded: number; bytesTotal: number; percent: number }) => void;
+}
+
+export interface VideoUploadResource {
+  snippet?: {
+    title: string;
+    description?: string;
+    tags?: string[];
+    categoryId?: string;
+    defaultLanguage?: string;
+  };
+  status?: {
+    privacyStatus?: 'public' | 'private' | 'unlisted';
+    embeddable?: boolean;
+    license?: 'youtube' | 'creativeCommon';
+    publicStatsViewable?: boolean;
+  };
+  recordingDetails?: RecordingDetails;
+  localizations?: Record<string, Localization>;
+}
+
+// Tipos para Captions (Issue #86)
+export type CaptionFormat = 'srt' | 'sbv' | 'scc' | 'ttml' | 'vtt';
+
+export interface CaptionSnippet {
+  videoId?: string;
+  language?: string;
+  name?: string;
+  isDraft?: boolean;
+  isAutoSynced?: boolean;
+}
+
+export interface CaptionResource {
+  id?: string;
+  snippet?: CaptionSnippet;
+}
+
+export interface CaptionUploadOptions {
+  name?: string;
+  isDraft?: boolean;
+  isAutoSynced?: boolean;
 }

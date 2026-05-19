@@ -34,6 +34,8 @@ export {
   ChannelSectionsResource,
   WatermarksResource,
   VideoAbuseReportReasonsResource,
+  SubscriptionsResource,
+  CaptionsResource,
 } from './lib/resources';
 
 // Exportar tipos

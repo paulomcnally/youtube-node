@@ -7,6 +7,8 @@ import {
   ChannelSectionsResource,
   WatermarksResource,
   VideoAbuseReportReasonsResource,
+  SubscriptionsResource,
+  CaptionsResource,
 } from './resources';
 import {
   YouTubeError,
@@ -29,6 +31,12 @@ import {
   PaginationOptions,
   ChannelSectionResource,
   WatermarkTiming,
+  VideoUploadResource,
+  VideoUploadOptions,
+  ChannelResource,
+  ChannelBannerResult,
+  SubscriptionResource,
+  CaptionUploadOptions,
 } from '../types';
 
 /**
@@ -56,6 +64,8 @@ class YouTube extends YouTubeResource {
   private readonly _channelSections: ChannelSectionsResource;
   private readonly _watermarks: WatermarksResource;
   private readonly _videoAbuseReportReasons: VideoAbuseReportReasonsResource;
+  private readonly _subscriptions: SubscriptionsResource;
+  private readonly _captions: CaptionsResource;
 
   /**
    * Recurso de Videos
@@ -107,6 +117,20 @@ class YouTube extends YouTubeResource {
   }
 
   /**
+   * Recurso de Subscriptions
+   */
+  public get subscriptions(): SubscriptionsResource {
+    return this._subscriptions;
+  }
+
+  /**
+   * Recurso de Captions
+   */
+  public get captions(): CaptionsResource {
+    return this._captions;
+  }
+
+  /**
    * Crea una instancia de YouTube
    * @param options - Opciones de configuración
    */
@@ -121,6 +145,8 @@ class YouTube extends YouTubeResource {
     this._channelSections = new ChannelSectionsResource(options);
     this._watermarks = new WatermarksResource(options);
     this._videoAbuseReportReasons = new VideoAbuseReportReasonsResource(options);
+    this._subscriptions = new SubscriptionsResource(options);
+    this._captions = new CaptionsResource(options);
   }
 
   /**
@@ -136,6 +162,8 @@ class YouTube extends YouTubeResource {
     this._channelSections.setKey(key);
     this._watermarks.setKey(key);
     this._videoAbuseReportReasons.setKey(key);
+    this._subscriptions.setKey(key);
+    this._captions.setKey(key);
   }
 
   /**
@@ -151,6 +179,8 @@ class YouTube extends YouTubeResource {
     this._channelSections.setRetryOptions(newOptions);
     this._watermarks.setRetryOptions(newOptions);
     this._videoAbuseReportReasons.setRetryOptions(newOptions);
+    this._subscriptions.setRetryOptions(newOptions);
+    this._captions.setRetryOptions(newOptions);
   }
 
   // ============================================================
@@ -503,6 +533,250 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
+  // Métodos de Subscriptions (OAuth) - Issue #83
+  // ============================================================
+
+  /**
+   * Subscribe to a channel (OAuth required)
+   * @param channelId - Channel ID to subscribe to
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.subscriptions.subscribeToChannel() instead
+   */
+  subscribeToChannel(channelId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.subscriptions.subscribeToChannel(channelId, callback);
+      return undefined;
+    }
+    return this.subscriptions.subscribeToChannel(channelId) as Promise<YtResult>;
+  }
+
+  /**
+   * Unsubscribe from a channel (OAuth required)
+   * @param subscriptionId - Subscription ID to cancel
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.subscriptions.unsubscribe() instead
+   */
+  unsubscribe(subscriptionId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.subscriptions.unsubscribe(subscriptionId, callback);
+      return undefined;
+    }
+    return this.subscriptions.unsubscribe(subscriptionId) as Promise<YtResult>;
+  }
+
+  /**
+   * Find and unsubscribe from a channel (OAuth required)
+   * @param channelId - Channel ID to unsubscribe from
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.subscriptions.findAndUnsubscribe() instead
+   */
+  findAndUnsubscribe(channelId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.subscriptions.findAndUnsubscribe(channelId, callback);
+      return undefined;
+    }
+    return this.subscriptions.findAndUnsubscribe(channelId) as Promise<YtResult>;
+  }
+
+  // ============================================================
+  // Métodos de Channels Update (OAuth) - Issue #84
+  // ============================================================
+
+  /**
+   * Update channel metadata (OAuth required)
+   * @param channelResource - Channel resource with updated data
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.channels.update() instead
+   */
+  updateChannel(channelResource: ChannelResource, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.channels.update(channelResource, callback);
+      return undefined;
+    }
+    return this.channels.update(channelResource) as Promise<YtResult>;
+  }
+
+  /**
+   * Upload channel banner image (OAuth required)
+   * @param imageData - Image data (Buffer or file path)
+   * @param callback - Optional callback function
+   * @returns Promise<ChannelBannerResult> if no callback, void otherwise
+   * @deprecated Use youtube.channels.uploadBanner() instead
+   */
+  uploadChannelBanner(imageData: Buffer | string, callback?: Callback): Promise<ChannelBannerResult> | void {
+    if (callback) {
+      this.channels.uploadBanner(imageData, (err, data) => {
+        callback(err, data as unknown as YtResult);
+      });
+      return undefined;
+    }
+    return this.channels.uploadBanner(imageData) as Promise<ChannelBannerResult>;
+  }
+
+  /**
+   * Update channel banner using banner URL (OAuth required)
+   * @param channelId - Channel ID
+   * @param bannerUrl - Banner URL from uploadBanner result
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.channels.updateBanner() instead
+   */
+  updateChannelBanner(channelId: string, bannerUrl: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.channels.updateBanner(channelId, bannerUrl, callback);
+      return undefined;
+    }
+    return this.channels.updateBanner(channelId, bannerUrl) as Promise<YtResult>;
+  }
+
+  // ============================================================
+  // Métodos de Videos Upload/Delete (OAuth) - Issue #85 & #87
+  // ============================================================
+
+  /**
+   * Upload a video (OAuth required)
+   * @param videoResource - Video metadata
+   * @param mediaBody - Path to video file, Buffer, or Stream
+   * @param options - Upload options
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videos.upload() instead
+   */
+  uploadVideo(
+    videoResource: VideoUploadResource,
+    mediaBody: string | Buffer | NodeJS.ReadableStream,
+    options: VideoUploadOptions = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.videos.upload(videoResource, mediaBody, options, callback);
+      return undefined;
+    }
+    return this.videos.upload(videoResource, mediaBody, options) as Promise<YtResult>;
+  }
+
+  /**
+   * Delete a video (OAuth required)
+   * @param videoId - Video ID to delete
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.videos.delete() instead
+   */
+  deleteVideo(videoId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.videos.delete(videoId, callback);
+      return undefined;
+    }
+    return this.videos.delete(videoId) as Promise<YtResult>;
+  }
+
+  /**
+   * Delete multiple videos (OAuth required)
+   * @param videoIds - Array of video IDs to delete
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult[]> if no callback, void otherwise
+   * @deprecated Use youtube.videos.deleteMany() instead
+   */
+  deleteVideos(videoIds: string[], callback?: Callback): Promise<YtResult[]> | void {
+    if (callback) {
+      this.videos.deleteMany(videoIds, (err, data) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, data as unknown as YtResult);
+        }
+      });
+      return undefined;
+    }
+    return this.videos.deleteMany(videoIds) as Promise<YtResult[]>;
+  }
+
+  // ============================================================
+  // Métodos de Captions (OAuth) - Issue #86
+  // ============================================================
+
+  /**
+   * Upload caption to a video (OAuth required)
+   * @param videoId - Video ID
+   * @param language - Language code (e.g., 'es', 'en')
+   * @param captionFile - Path, Buffer, or content of caption file
+   * @param options - Upload options
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.captions.upload() instead
+   */
+  uploadCaption(
+    videoId: string,
+    language: string,
+    captionFile: string | Buffer,
+    options: CaptionUploadOptions = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.captions.upload(videoId, language, captionFile, options, callback);
+      return undefined;
+    }
+    return this.captions.upload(videoId, language, captionFile, options) as Promise<YtResult>;
+  }
+
+  /**
+   * Update caption (OAuth required)
+   * @param captionId - Caption ID
+   * @param captionFile - Path, Buffer, or content of caption file
+   * @param options - Update options
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.captions.update() instead
+   */
+  updateCaption(
+    captionId: string,
+    captionFile: string | Buffer,
+    options: CaptionUploadOptions = {},
+    callback?: Callback,
+  ): Promise<YtResult> | void {
+    if (callback) {
+      this.captions.update(captionId, captionFile, options, callback);
+      return undefined;
+    }
+    return this.captions.update(captionId, captionFile, options) as Promise<YtResult>;
+  }
+
+  /**
+   * Delete caption (OAuth required)
+   * @param captionId - Caption ID
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.captions.delete() instead
+   */
+  deleteCaption(captionId: string, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.captions.delete(captionId, callback);
+      return undefined;
+    }
+    return this.captions.delete(captionId) as Promise<YtResult>;
+  }
+
+  /**
+   * Set caption draft status (OAuth required)
+   * @param captionId - Caption ID
+   * @param isDraft - Draft status
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
+   * @deprecated Use youtube.captions.setDraftStatus() instead
+   */
+  setCaptionDraftStatus(captionId: string, isDraft: boolean, callback?: Callback): Promise<YtResult> | void {
+    if (callback) {
+      this.captions.setDraftStatus(captionId, isDraft, callback);
+      return undefined;
+    }
+    return this.captions.setDraftStatus(captionId, isDraft) as Promise<YtResult>;
+  }
+
+  // ============================================================
   // Métodos Legacy para backward compatibility
   // Todos soportan callbacks (legacy) y Promises (nuevo)
   // ============================================================
@@ -723,4 +997,6 @@ export {
   ChannelSectionsResource,
   WatermarksResource,
   VideoAbuseReportReasonsResource,
+  SubscriptionsResource,
+  CaptionsResource,
 } from './resources';

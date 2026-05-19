@@ -6,3 +6,5 @@ export { SearchResource } from './search';
 export { ChannelSectionsResource } from './channelSections';
 export { WatermarksResource } from './watermarks';
 export { VideoAbuseReportReasonsResource } from './videoAbuseReportReasons';
+export { SubscriptionsResource } from './subscriptions';
+export { CaptionsResource } from './captions';
