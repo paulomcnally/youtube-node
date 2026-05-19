@@ -9,15 +9,42 @@ export class PlaylistsResource extends YouTubeResource {
   /**
    * Playlists data from Playlist Id
    * @param id - Playlist ID
-   * @param callback - Callback function
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
    * https://developers.google.com/youtube/v3/docs/playlists/list
    */
-  getById(id: string, callback: Callback): void {
+  getById(id: string, callback?: Callback): Promise<YtResult> | void {
     const validate = this.validate();
 
-    if (validate !== null) {
-      callback(validate);
-    } else {
+    if (callback) {
+      // Modo callback (backward compatible)
+      if (validate !== null) {
+        callback(validate);
+      } else {
+        this.addPart('snippet');
+        this.addPart('contentDetails');
+        this.addPart('status');
+        this.addPart('player');
+        this.addPart('id');
+
+        this.addParam('part', this.getParts());
+        this.addParam('id', id);
+
+        this.request(this.getUrl('playlists'), callback);
+
+        this.clearParams();
+        this.clearParts();
+      }
+      return undefined;
+    }
+
+    // Modo Promise
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
       this.addPart('snippet');
       this.addPart('contentDetails');
       this.addPart('status');
@@ -27,46 +54,77 @@ export class PlaylistsResource extends YouTubeResource {
       this.addParam('part', this.getParts());
       this.addParam('id', id);
 
-      this.request(this.getUrl('playlists'), callback);
+      this.request(this.getUrl('playlists'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
 
-      this.clearParams();
-      this.clearParts();
-    }
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
   }
 
   /**
    * Playlists data from Playlist Id (Promise)
    * @param id - Playlist ID
    * @returns Promise with result
+   * @deprecated Use getById() without callback instead
    */
   getByIdAsync(id: string): Promise<YtResult> {
-    return this.promisify(this.getById.bind(this), id);
+    return this.getById(id) as Promise<YtResult>;
   }
 
   /**
    * Playlists data from Playlist Id
    * @param id - Playlist ID
-   * @param maxResults - Maximum results
-   * @param callback - Callback function
+   * @param maxResults - Maximum results or callback
+   * @param callback - Optional callback function
+   * @returns Promise<YtResult> if no callback, void otherwise
    * https://developers.google.com/youtube/v3/docs/playlistItems/list
    */
-  getItemsById(id: string, maxResults: number | Callback, callback?: Callback): void {
+  getItemsById(id: string, maxResults?: number | Callback, callback?: Callback): Promise<YtResult> | void {
     const validate = this.validate();
 
-    let cb: Callback;
-    let maxRes: number | null;
+    // Determinar si maxResults es un callback
+    const isCallback = typeof maxResults === 'function';
+    const cb = isCallback ? (maxResults as Callback) : callback;
+    const maxRes = isCallback ? null : (maxResults as number | undefined);
 
-    if (typeof maxResults === 'function') {
-      cb = maxResults;
-      maxRes = null;
-    } else {
-      cb = callback!;
-      maxRes = maxResults;
+    if (cb) {
+      // Modo callback (backward compatible)
+      if (validate !== null) {
+        cb(validate);
+      } else {
+        this.addPart('contentDetails');
+        this.addPart('id');
+        this.addPart('snippet');
+        this.addPart('status');
+
+        this.addParam('part', this.getParts());
+        this.addParam('playlistId', id);
+
+        if (maxRes) {
+          this.addParam('maxResults', maxRes);
+        }
+
+        this.request(this.getUrl('playlistItems'), cb);
+
+        this.clearParams();
+        this.clearParts();
+      }
+      return undefined;
     }
 
-    if (validate !== null) {
-      cb(validate);
-    } else {
+    // Modo Promise
+    return new Promise((resolve, reject) => {
+      if (validate !== null) {
+        reject(validate);
+        return;
+      }
+
       this.addPart('contentDetails');
       this.addPart('id');
       this.addPart('snippet');
@@ -79,11 +137,17 @@ export class PlaylistsResource extends YouTubeResource {
         this.addParam('maxResults', maxRes);
       }
 
-      this.request(this.getUrl('playlistItems'), cb);
+      this.request(this.getUrl('playlistItems'), (err, data) => {
+        this.clearParams();
+        this.clearParts();
 
-      this.clearParams();
-      this.clearParts();
-    }
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data!);
+        }
+      });
+    });
   }
 
   /**
@@ -91,24 +155,9 @@ export class PlaylistsResource extends YouTubeResource {
    * @param id - Playlist ID
    * @param maxResults - Maximum results
    * @returns Promise with result
+   * @deprecated Use getItemsById() without callback instead
    */
   getItemsByIdAsync(id: string, maxResults?: number): Promise<YtResult> {
-    return new Promise((resolve, reject) => {
-      const callback: Callback = (error, data) => {
-        if (error) {
-          reject(error);
-        } else if (data) {
-          resolve(data);
-        } else {
-          reject(new Error('No data received'));
-        }
-      };
-
-      if (maxResults !== undefined) {
-        this.getItemsById(id, maxResults, callback);
-      } else {
-        this.getItemsById(id, callback);
-      }
-    });
+    return this.getItemsById(id, maxResults) as Promise<YtResult>;
   }
 }

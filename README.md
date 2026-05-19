@@ -5,6 +5,7 @@
 * YouTube API v3 - Require key ([video](https://www.youtube.com/watch?v=Im69kzhpR3I))
 * CLI
 * **Written in TypeScript with full type support**
+* **Native Promise/async-await support** (NEW!)
 
 ## Installation
 
@@ -12,46 +13,102 @@
 npm install youtube-node
 ```
 
-## TypeScript Usage
+## Usage with Promises (Recommended)
+
+All methods now support native Promises! Simply omit the callback parameter:
+
+### TypeScript with async/await
 
 ```typescript
 import YouTube from 'youtube-node';
-// or import { YouTube } from 'youtube-node';
 
 const youTube = new YouTube();
-
 youTube.setKey('YOUR_API_KEY');
 
-// Using callbacks
-youTube.search('World War z Trailer', 2, (error, result) => {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log(JSON.stringify(result, null, 2));
-  }
-});
-
-// Using Promises (async/await)
+// Using async/await (recommended)
 async function searchVideos() {
   try {
-    const result = await youTube.searchAsync('World War z Trailer', 2);
+    const result = await youTube.search.query('nodejs tutorial', 10);
     console.log(JSON.stringify(result, null, 2));
   } catch (error) {
-    console.log(error);
+    console.error('Error:', error.message);
+  }
+}
+
+// Get video details
+async function getVideoDetails() {
+  try {
+    const video = await youTube.videos.getById('VIDEO_ID');
+    console.log('Title:', video.items?.[0]?.snippet?.title);
+  } catch (error) {
+    console.error('Error:', error.message);
   }
 }
 ```
 
-## JavaScript Usage
+### JavaScript with async/await
 
 ```javascript
 const YouTube = require('youtube-node');
 
 const youTube = new YouTube();
-
 youTube.setKey('YOUR_API_KEY');
 
-youTube.search('World War z Trailer', 2, function(error, result) {
+async function main() {
+  try {
+    // Search videos
+    const results = await youTube.search.query('nodejs tutorial', 10);
+    console.log(`Found ${results.pageInfo?.totalResults} videos`);
+
+    // Get video details
+    const video = await youTube.videos.getById('VIDEO_ID');
+    console.log('Video:', video.items?.[0]?.snippet?.title);
+
+    // Get related videos
+    const related = await youTube.search.related('VIDEO_ID', 5);
+    console.log('Related videos:', related.items?.length);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+main();
+```
+
+### Using .then()/.catch()
+
+```javascript
+const YouTube = require('youtube-node');
+
+const youTube = new YouTube();
+youTube.setKey('YOUR_API_KEY');
+
+// Using traditional Promise syntax
+youTube.search.query('nodejs tutorial', 10)
+  .then(results => {
+    console.log('Results:', results.items?.length);
+    return youTube.videos.getById('VIDEO_ID');
+  })
+  .then(video => {
+    console.log('Video:', video.items?.[0]?.snippet?.title);
+  })
+  .catch(error => {
+    console.error('Error:', error.message);
+  });
+```
+
+## Legacy Callback Usage (Still Supported)
+
+For backward compatibility, callbacks are still supported:
+
+```typescript
+import YouTube from 'youtube-node';
+
+const youTube = new YouTube();
+youTube.setKey('YOUR_API_KEY');
+
+// Using callbacks (backward compatible)
+youTube.search.query('World War z Trailer', 2, (error, result) => {
   if (error) {
     console.log(error);
   } else {
@@ -71,7 +128,8 @@ const youTube = new YouTube();
 youTube.setKey('YOUR_API_KEY');
 
 try {
-  const result = await youTube.getByIdAsync('VIDEO_ID');
+  // Works with both callback and Promise styles
+  const result = await youTube.videos.getById('VIDEO_ID');
 } catch (error) {
   if (error instanceof QuotaExceededError) {
     console.log('API quota exceeded');
@@ -114,6 +172,31 @@ const youTube = new YouTube({
 });
 ```
 
+## Modular API Resources
+
+The library provides organized resources for different API endpoints:
+
+```typescript
+const youtube = new YouTube();
+youtube.setKey('YOUR_API_KEY');
+
+// Videos resource
+const video = await youtube.videos.getById('VIDEO_ID');
+const popular = await youtube.videos.getMostPopular(10);
+const byCategory = await youtube.videos.getMostPopularByCategory(10, 10); // Music category
+
+// Channels resource
+const channel = await youtube.channels.getById('CHANNEL_ID');
+
+// Playlists resource
+const playlist = await youtube.playlists.getById('PLAYLIST_ID');
+const items = await youtube.playlists.getItemsById('PLAYLIST_ID', 50);
+
+// Search resource
+const results = await youtube.search.query('nodejs tutorial', 10);
+const related = await youtube.search.related('VIDEO_ID', 5);
+```
+
 ## CLI
 
 For use CLI need install youtube-node using -g param.
@@ -136,138 +219,121 @@ youtube search
 
 ## API Methods
 
-### search(query, maxResults, [params], callback)
+All methods support both **callbacks** (legacy) and **Promises** (new). 
+If you pass a callback, the method returns `void`. If you omit the callback, it returns a `Promise<YtResult>`.
+
+### Search Methods
+
+#### `youtube.search.query(query, maxResults, [params], [callback])`
 Search for videos on YouTube.
 
 ```typescript
-youTube.search('nodejs tutorial', 10, (error, result) => {
+// With Promise (new way)
+const result = await youTube.search.query('nodejs tutorial', 10);
+
+// With callback (legacy)
+youTube.search.query('nodejs tutorial', 10, (error, result) => {
   // handle result
 });
 
 // With optional parameters (pagination)
-youTube.search('nodejs tutorial', 10, { pageToken: 'NEXT_PAGE_TOKEN' }, (error, result) => {
-  // handle result
-});
+const result = await youTube.search.query('nodejs tutorial', 10, { pageToken: 'NEXT_PAGE_TOKEN' });
 ```
 
-### searchAsync(query, maxResults, [params])
-Promise-based version of search.
-
-```typescript
-const result = await youTube.searchAsync('nodejs tutorial', 10);
-```
-
-### getById(id, callback)
-Get video details by ID.
-
-```typescript
-youTube.getById('VIDEO_ID', (error, result) => {
-  // handle result
-});
-```
-
-### getByIdAsync(id)
-Promise-based version of getById.
-
-```typescript
-const result = await youTube.getByIdAsync('VIDEO_ID');
-```
-
-### getChannelById(id, callback)
-Get channel details by ID.
-
-```typescript
-youTube.getChannelById('CHANNEL_ID', (error, result) => {
-  // handle result
-});
-```
-
-### getChannelByIdAsync(id)
-Promise-based version of getChannelById.
-
-```typescript
-const result = await youTube.getChannelByIdAsync('CHANNEL_ID');
-```
-
-### getPlayListsById(id, callback)
-Get playlist details by ID.
-
-```typescript
-youTube.getPlayListsById('PLAYLIST_ID', (error, result) => {
-  // handle result
-});
-```
-
-### getPlayListsByIdAsync(id)
-Promise-based version of getPlayListsById.
-
-```typescript
-const result = await youTube.getPlayListsByIdAsync('PLAYLIST_ID');
-```
-
-### getPlayListsItemsById(id, [maxResults], callback)
-Get playlist items by playlist ID.
-
-```typescript
-youTube.getPlayListsItemsById('PLAYLIST_ID', 50, (error, result) => {
-  // handle result
-});
-```
-
-### getPlayListsItemsByIdAsync(id, [maxResults])
-Promise-based version of getPlayListsItemsById.
-
-```typescript
-const result = await youTube.getPlayListsItemsByIdAsync('PLAYLIST_ID', 50);
-```
-
-### related(id, maxResults, callback)
+#### `youtube.search.related(id, maxResults, [callback])`
 Get related videos.
 
 ```typescript
-youTube.related('VIDEO_ID', 5, (error, result) => {
+// With Promise
+const result = await youTube.search.related('VIDEO_ID', 5);
+
+// With callback
+youTube.search.related('VIDEO_ID', 5, (error, result) => {
   // handle result
 });
 ```
 
-### relatedAsync(id, maxResults)
-Promise-based version of related.
+### Video Methods
+
+#### `youtube.videos.getById(id, [callback])`
+Get video details by ID.
 
 ```typescript
-const result = await youTube.relatedAsync('VIDEO_ID', 5);
+const result = await youTube.videos.getById('VIDEO_ID');
 ```
 
-### getMostPopular(maxResults, callback)
+#### `youtube.videos.getMostPopular(maxResults, [callback])`
 Get most popular videos.
 
 ```typescript
-youTube.getMostPopular(10, (error, result) => {
-  // handle result
-});
+const result = await youTube.videos.getMostPopular(10);
 ```
 
-### getMostPopularAsync(maxResults)
-Promise-based version of getMostPopular.
-
-```typescript
-const result = await youTube.getMostPopularAsync(10);
-```
-
-### getMostPopularByCategory(maxResults, videoCategoryId, callback)
+#### `youtube.videos.getMostPopularByCategory(maxResults, videoCategoryId, [callback])`
 Get most popular videos by category.
 
 ```typescript
-youTube.getMostPopularByCategory(10, 'CATEGORY_ID', (error, result) => {
-  // handle result
-});
+const result = await youTube.videos.getMostPopularByCategory(10, 10); // 10 = Music
 ```
 
-### getMostPopularByCategoryAsync(maxResults, videoCategoryId)
-Promise-based version of getMostPopularByCategory.
+### Channel Methods
+
+#### `youtube.channels.getById(id, [callback])`
+Get channel details by ID.
 
 ```typescript
-const result = await youTube.getMostPopularByCategoryAsync(10, 'CATEGORY_ID');
+const result = await youTube.channels.getById('CHANNEL_ID');
 ```
+
+### Playlist Methods
+
+#### `youtube.playlists.getById(id, [callback])`
+Get playlist details by ID.
+
+```typescript
+const result = await youTube.playlists.getById('PLAYLIST_ID');
+```
+
+#### `youtube.playlists.getItemsById(id, [maxResults], [callback])`
+Get playlist items by playlist ID.
+
+```typescript
+const result = await youTube.playlists.getItemsById('PLAYLIST_ID', 50);
+```
+
+## Legacy Methods (Deprecated)
+
+The following methods are kept for backward compatibility but are deprecated:
+
+| Legacy Method | New Method |
+|--------------|------------|
+| `getById(id, callback)` | `videos.getById(id)` |
+| `getByIdAsync(id)` | `videos.getById(id)` |
+| `getChannelById(id, callback)` | `channels.getById(id)` |
+| `getChannelByIdAsync(id)` | `channels.getById(id)` |
+| `getPlayListsById(id, callback)` | `playlists.getById(id)` |
+| `getPlayListsByIdAsync(id)` | `playlists.getById(id)` |
+| `getPlayListsItemsById(id, callback)` | `playlists.getItemsById(id)` |
+| `getPlayListsItemsByIdAsync(id)` | `playlists.getItemsById(id)` |
+| `related(id, maxResults, callback)` | `search.related(id, maxResults)` |
+| `relatedAsync(id, maxResults)` | `search.related(id, maxResults)` |
+| `getMostPopular(maxResults, callback)` | `videos.getMostPopular(maxResults)` |
+| `getMostPopularAsync(maxResults)` | `videos.getMostPopular(maxResults)` |
+| `getMostPopularByCategory(maxResults, categoryId, callback)` | `videos.getMostPopularByCategory(maxResults, categoryId)` |
+| `getMostPopularByCategoryAsync(maxResults, categoryId)` | `videos.getMostPopularByCategory(maxResults, categoryId)` |
+
+## Examples
+
+Check out the `/example/promises/` directory for more examples:
+
+- `basic-async-await.js` - Basic usage with async/await
+- `search.js` - Search with filters
+- `channel.js` - Get channel information
+- `playlist.js` - Work with playlists
+- `related.js` - Get related videos
+- `most-popular.js` - Get most popular videos
+- `error-handling.js` - Error handling examples
+- `comparison.js` - Compare callbacks vs Promises
 
 ## Building from Source
 
