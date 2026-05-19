@@ -1,8 +1,10 @@
-import { YouTubeResource } from './base';
-import { Callback, YtResult, VideoResource, VideoStatus, VideoUploadResource, VideoUploadOptions } from '../../types';
 import * as fs from 'fs';
 import * as path from 'path';
 import axios, { AxiosRequestConfig } from 'axios';
+import {
+  Callback, YtResult, VideoResource, VideoStatus, VideoUploadResource, VideoUploadOptions,
+} from '../../types';
+import { YouTubeResource } from './base';
 
 /**
  * Recurso de Videos de YouTube API
@@ -403,7 +405,7 @@ export class VideosResource extends YouTubeResource {
       return undefined;
     }
 
-    return Promise.all(videoIds.map(id => this.delete(id) as Promise<YtResult>));
+    return Promise.all(videoIds.map((id) => this.delete(id) as Promise<YtResult>));
   }
 
   /**
@@ -486,7 +488,7 @@ export class VideosResource extends YouTubeResource {
 
     // Set parts to include
     const parts = options.part || ['snippet', 'status'];
-    parts.forEach(part => this.addPart(part));
+    parts.forEach((part) => this.addPart(part));
     this.addParam('part', this.getParts());
 
     if (options.notifySubscribers !== undefined) {
@@ -496,11 +498,12 @@ export class VideosResource extends YouTubeResource {
     const url = this.getUrl('videos');
 
     // Build multipart request
-    const boundary = `-------314159265358979323846`;
+    const boundary = '-------314159265358979323846';
     const delimiter = `\r\n--${boundary}\r\n`;
     const closeDelimiter = `\r\n--${boundary}--`;
 
-    const metadataPart = `${delimiter}Content-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(videoResource)}`;
+    const metadataStr = JSON.stringify(videoResource);
+    const metadataPart = `${delimiter}Content-Type: application/json; charset=UTF-8\r\n\r\n${metadataStr}`;
 
     let mediaPart: string;
     let content: Buffer | NodeJS.ReadableStream;

@@ -8,9 +8,13 @@
  */
 export class YouTubeError extends Error {
   public readonly code: string | null;
+
   public readonly status: number | null;
+
   public readonly errors: Array<Record<string, unknown>>;
+
   public readonly response: unknown;
+
   public readonly isYouTubeError: boolean;
 
   /**
@@ -26,7 +30,7 @@ export class YouTubeError extends Error {
     code: string | null | undefined = null,
     status: number | null = null,
     errors: Array<Record<string, unknown>> = [],
-    response: unknown = null
+    response: unknown = null,
   ) {
     super(message);
     this.name = 'YouTubeError';
@@ -132,7 +136,7 @@ export class QuotaExceededError extends YouTubeError {
     code: string | null | undefined = 'quotaExceeded',
     status: number | null = 403,
     errors: Array<Record<string, unknown>> = [],
-    response: unknown = null
+    response: unknown = null,
   ) {
     super(message, code, status, errors, response);
     this.name = 'QuotaExceededError';
@@ -148,7 +152,7 @@ export class InvalidKeyError extends YouTubeError {
     code: string | null | undefined = 'keyInvalid',
     status: number | null = 400,
     errors: Array<Record<string, unknown>> = [],
-    response: unknown = null
+    response: unknown = null,
   ) {
     super(message, code, status, errors, response);
     this.name = 'InvalidKeyError';
@@ -164,7 +168,7 @@ export class ResourceNotFoundError extends YouTubeError {
     code: string | null | undefined = 'notFound',
     status: number | null = 404,
     errors: Array<Record<string, unknown>> = [],
-    response: unknown = null
+    response: unknown = null,
   ) {
     super(message, code, status, errors, response);
     this.name = 'ResourceNotFoundError';
@@ -180,7 +184,7 @@ export class RateLimitError extends YouTubeError {
     code: string | null | undefined = 'rateLimitExceeded',
     status: number | null = 429,
     errors: Array<Record<string, unknown>> = [],
-    response: unknown = null
+    response: unknown = null,
   ) {
     super(message, code, status, errors, response);
     this.name = 'RateLimitError';
@@ -193,7 +197,7 @@ export class RateLimitError extends YouTubeError {
 export class ValidationError extends YouTubeError {
   constructor(
     message: string = 'Validation error',
-    errors: Array<Record<string, unknown>> = []
+    errors: Array<Record<string, unknown>> = [],
   ) {
     super(message, 'validationError', 400, errors);
     this.name = 'ValidationError';
@@ -208,7 +212,7 @@ export class NetworkError extends YouTubeError {
 
   constructor(
     message: string = 'Network error',
-    originalError: Error | null = null
+    originalError: Error | null = null,
   ) {
     super(message, 'networkError', null, [], null);
     this.name = 'NetworkError';

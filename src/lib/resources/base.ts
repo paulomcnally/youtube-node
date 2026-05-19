@@ -112,8 +112,11 @@ const DEFAULT_RETRY_OPTIONS: Required<Omit<RetryOptions, 'onRetry'>> & Pick<Retr
  */
 export abstract class YouTubeResource {
   protected url: string;
+
   protected params: Record<string, string | number | boolean>;
+
   protected parts: string[];
+
   protected retryOptions: Required<Omit<RetryOptions, 'onRetry'>> & Pick<RetryOptions, 'onRetry'>;
 
   /**

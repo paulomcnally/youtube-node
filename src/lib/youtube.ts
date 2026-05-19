@@ -27,7 +27,6 @@ import {
   YtResult,
   VideoResource,
   VideoStatus,
-  PaginatedResult,
   PaginationOptions,
   ChannelSectionResource,
   WatermarkTiming,
@@ -35,7 +34,6 @@ import {
   VideoUploadOptions,
   ChannelResource,
   ChannelBannerResult,
-  SubscriptionResource,
   CaptionUploadOptions,
 } from '../types';
 
@@ -58,13 +56,21 @@ import {
  */
 class YouTube extends YouTubeResource {
   private readonly _videos: VideosResource;
+
   private readonly _channels: ChannelsResource;
+
   private readonly _playlists: PlaylistsResource;
+
   private readonly _search: SearchResource;
+
   private readonly _channelSections: ChannelSectionsResource;
+
   private readonly _watermarks: WatermarksResource;
+
   private readonly _videoAbuseReportReasons: VideoAbuseReportReasonsResource;
+
   private readonly _subscriptions: SubscriptionsResource;
+
   private readonly _captions: CaptionsResource;
 
   /**
@@ -237,7 +243,7 @@ class YouTube extends YouTubeResource {
 
     if (callback) {
       fetchAll()
-        .then((results) => callback(null, { items: results.flatMap(r => r.items || []) } as YtResult))
+        .then((results) => callback(null, { items: results.flatMap((r) => r.items || []) } as YtResult))
         .catch((err) => callback(err as Error));
       return undefined;
     }
@@ -250,7 +256,7 @@ class YouTube extends YouTubeResource {
    * @param endpoint - Endpoint to query
    * @param options - Query options
    */
-  async *paginate(
+  async* paginate(
     endpoint: 'search' | 'videos' | 'channels' | 'playlists' | 'playlistItems',
     options: PaginationOptions = {},
   ): AsyncGenerator<YtResult, void, unknown> {

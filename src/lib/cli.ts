@@ -60,7 +60,8 @@ const cli = {
       }
       const res = result as unknown as PromptResult;
       youTube.setKey(res.key);
-      youTube.search.query(res.query!, parseInt(res.maxResults!, 10), (error: Error | null | undefined, data: YtResult | undefined) => {
+      const maxResults = parseInt(res.maxResults!, 10);
+      youTube.search.query(res.query!, maxResults, (error: Error | null | undefined, data: YtResult | undefined) => {
         if (error) {
           console.log(error);
         } else {

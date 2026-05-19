@@ -1,6 +1,8 @@
-import { YouTubeResource } from './base';
-import { Callback, YtResult, WatermarkResource, WatermarkTiming } from '../../types';
 import * as fs from 'fs';
+import { YouTubeResource } from './base';
+import {
+  Callback, YtResult, WatermarkResource, WatermarkTiming,
+} from '../../types';
 
 /**
  * Recurso de Watermarks de YouTube API

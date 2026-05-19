@@ -204,21 +204,21 @@ export class SubscriptionsResource extends YouTubeResource {
           (item) => item.snippet?.resourceId?.channelId === channelId,
         );
 
-          if (!subscription || !subscription.id) {
-            reject(new Error(`Subscription not found for channel ID: ${channelId}`));
-            return;
-          }
+        if (!subscription || !subscription.id) {
+          reject(new Error(`Subscription not found for channel ID: ${channelId}`));
+          return;
+        }
 
-          // Unsubscribe using the found subscription ID
-          const subscriptionId = typeof subscription.id === 'string' ? subscription.id : subscription.id.videoId;
-          if (!subscriptionId) {
-            reject(new Error(`Invalid subscription ID for channel ID: ${channelId}`));
-            return;
-          }
-          const result = this.unsubscribe(subscriptionId);
-          if (result && typeof (result as Promise<YtResult>).then === 'function') {
-            (result as Promise<YtResult>).then(resolve).catch(reject);
-          }
+        // Unsubscribe using the found subscription ID
+        const subscriptionId = typeof subscription.id === 'string' ? subscription.id : subscription.id.videoId;
+        if (!subscriptionId) {
+          reject(new Error(`Invalid subscription ID for channel ID: ${channelId}`));
+          return;
+        }
+        const result = this.unsubscribe(subscriptionId);
+        if (result && typeof (result as Promise<YtResult>).then === 'function') {
+          (result as Promise<YtResult>).then(resolve).catch(reject);
+        }
       });
     });
   }

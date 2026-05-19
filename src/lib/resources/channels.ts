@@ -1,8 +1,10 @@
-import { YouTubeResource } from './base';
-import { Callback, YtResult, ChannelResource, ChannelBannerResult } from '../../types';
 import * as fs from 'fs';
 import * as queryString from 'querystring';
 import axios, { AxiosRequestConfig } from 'axios';
+import {
+  Callback, YtResult, ChannelResource, ChannelBannerResult,
+} from '../../types';
+import { YouTubeResource } from './base';
 
 /**
  * Recurso de Channels de YouTube API

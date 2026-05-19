@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { YouTubeResource } from './base';
-import { Callback, YtResult, CaptionResource, CaptionUploadOptions } from '../../types';
+import {
+  Callback, YtResult, CaptionResource, CaptionUploadOptions,
+} from '../../types';
 
 /**
  * Recurso de Captions de YouTube API
@@ -152,11 +154,12 @@ export class CaptionsResource extends YouTubeResource {
     const url = this.getUrl('captions');
 
     // Build multipart request
-    const boundary = `-------314159265358979323846`;
+    const boundary = '-------314159265358979323846';
     const delimiter = `\r\n--${boundary}\r\n`;
     const closeDelimiter = `\r\n--${boundary}--`;
 
-    const metadataPart = `${delimiter}Content-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(captionResource)}`;
+    const metadataStr = JSON.stringify(captionResource);
+    const metadataPart = `${delimiter}Content-Type: application/json; charset=UTF-8\r\n\r\n${metadataStr}`;
 
     let content: Buffer;
     let mediaPart: string;
@@ -276,11 +279,12 @@ export class CaptionsResource extends YouTubeResource {
     const url = this.getUrl('captions');
 
     // Build multipart request
-    const boundary = `-------314159265358979323846`;
+    const boundary = '-------314159265358979323846';
     const delimiter = `\r\n--${boundary}\r\n`;
     const closeDelimiter = `\r\n--${boundary}--`;
 
-    const metadataPart = `${delimiter}Content-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(captionResource)}`;
+    const metadataStr = JSON.stringify(captionResource);
+    const metadataPart = `${delimiter}Content-Type: application/json; charset=UTF-8\r\n\r\n${metadataStr}`;
 
     let content: Buffer;
     let mediaPart: string;
@@ -465,7 +469,7 @@ export class CaptionsResource extends YouTubeResource {
           this.addParam('tfmt', format);
         }
 
-        const url = this.getUrl('captions') + '&alt=media';
+        const url = `${this.getUrl('captions')}&alt=media`;
 
         axios.get<string>(url, { responseType: 'text' })
           .then((response) => {
@@ -493,7 +497,7 @@ export class CaptionsResource extends YouTubeResource {
         this.addParam('tfmt', format);
       }
 
-      const url = this.getUrl('captions') + '&alt=media';
+      const url = `${this.getUrl('captions')}&alt=media`;
 
       axios.get<string>(url, { responseType: 'text' })
         .then((response) => {
