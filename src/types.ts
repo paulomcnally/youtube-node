@@ -1,8 +1,8 @@
 /**
- * Tipos para la API de YouTube
+ * Types for the YouTube API
  */
 
-// Tipos básicos de la API de YouTube
+// Basic types for the YouTube API
 export interface YtThumbnail {
   url?: string;
   width?: number;
@@ -97,10 +97,10 @@ export interface YtResult {
   items?: YtItem[];
 }
 
-// Tipos para callbacks
+// Types for callbacks
 export type Callback = (error?: Error | null | undefined, data?: YtResult | undefined) => void;
 
-// Tipos para opciones de retry
+// Types for retry options
 export interface RetryOptions {
   retries?: number;
   retryDelay?: number;
@@ -109,18 +109,18 @@ export interface RetryOptions {
   onRetry?: (error: Error, attempt: number) => void;
 }
 
-// Tipos para opciones de YouTube
+// Types for YouTube options
 export interface YouTubeOptions {
   retryOptions?: RetryOptions;
   headers?: Record<string, string>;
 }
 
-// Tipos para parámetros de búsqueda
+// Types for search parameters
 export interface SearchParams {
   [key: string]: string | number | boolean | undefined;
 }
 
-// Tipos para Video Resource (update)
+// Types for Video Resource (update)
 export interface VideoSnippet {
   title?: string;
   description?: string;
@@ -159,7 +159,7 @@ export interface VideoResource {
   localizations?: Record<string, Localization>;
 }
 
-// Tipos para ChannelSections
+// Types for ChannelSections
 export type ChannelSectionType =
   | 'allPlaylists'
   | 'completedEvents'
@@ -195,7 +195,7 @@ export interface ChannelSectionResource {
   contentDetails?: ChannelSectionContentDetails;
 }
 
-// Tipos para Watermarks
+// Types for Watermarks
 export interface WatermarkTiming {
   type?: 'fromStart' | 'fromEnd' | 'custom';
   offsetMs?: number;
@@ -210,7 +210,7 @@ export interface WatermarkResource {
   };
 }
 
-// Tipos para VideoAbuseReportReasons
+// Types for VideoAbuseReportReasons
 export interface VideoAbuseReportReason {
   id?: string;
   snippet?: {
@@ -230,7 +230,7 @@ export interface VideoReport {
   language?: string;
 }
 
-// Tipos para paginación
+// Types for pagination
 export interface PaginatedResult extends YtResult {
   hasNextPage: boolean;
   hasPrevPage: boolean;
@@ -247,7 +247,7 @@ export interface PaginationOptions {
   [key: string]: string | number | boolean | undefined;
 }
 
-// Tipos para Subscriptions (Issue #83)
+// Types for Subscriptions (Issue #83)
 export interface SubscriptionSnippet {
   publishedAt?: string;
   channelTitle?: string;
@@ -270,7 +270,7 @@ export interface SubscriptionResource {
   };
 }
 
-// Tipos para Channels Update (Issue #84)
+// Types for Channels Update (Issue #84)
 export interface ChannelBrandingSettings {
   channel?: {
     title?: string;
@@ -295,7 +295,7 @@ export interface ChannelBannerResult {
   etag?: string;
 }
 
-// Tipos para Videos Insert (Issue #85)
+// Types for Videos Insert (Issue #85)
 export interface VideoUploadOptions {
   part?: string[];
   notifySubscribers?: boolean;
@@ -320,7 +320,7 @@ export interface VideoUploadResource {
   localizations?: Record<string, Localization>;
 }
 
-// Tipos para Captions (Issue #86)
+// Types for Captions (Issue #86)
 export type CaptionFormat = 'srt' | 'sbv' | 'scc' | 'ttml' | 'vtt';
 
 export interface CaptionSnippet {

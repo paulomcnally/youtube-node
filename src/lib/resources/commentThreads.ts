@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult } from '../../types';
 
 /**
- * Recurso de CommentThreads de YouTube API
+ * CommentThreads Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/commentThreads
  */
 export class CommentThreadsResource extends YouTubeResource {

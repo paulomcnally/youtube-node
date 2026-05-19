@@ -1,8 +1,8 @@
 /**
- * Ejemplo: Uso con .then()/.catch()
+ * Example: Usage with .then()/.catch()
  *
- * Este ejemplo muestra cómo usar la API con la sintaxis
- * de Promises tradicional (.then()/.catch()).
+ * This example shows how to use the API with traditional
+ * Promise syntax (.then()/.catch()).
  */
 
 const YouTube = require('../../dist/index').default;
@@ -12,32 +12,32 @@ youtube.setKey('YOUR_API_KEY');
 
 const VIDEO_ID = 'IkmHStAWXis';
 
-console.log('Ejemplo con .then()/.catch()\n');
+console.log('Example with .then()/.catch()\n');
 console.log('============================\n');
 
-// Obtener información de un video usando .then()
+// Get video information using .then()
 youtube.videos.getById(VIDEO_ID)
   .then((video) => {
-    console.log('Video encontrado:');
-    console.log('Título:', video.items?.[0]?.snippet?.title);
-    console.log('Descripción:', video.items?.[0]?.snippet?.description?.substring(0, 100) + '...');
+    console.log('Video found:');
+    console.log('Title:', video.items?.[0]?.snippet?.title);
+    console.log('Description:', video.items?.[0]?.snippet?.description?.substring(0, 100) + '...');
     console.log('');
 
-    // Encadenar otra búsqueda
+    // Chain another search
     return youtube.search.related(VIDEO_ID, 3);
   })
   .then((related) => {
-    console.log('Videos relacionados:');
+    console.log('Related videos:');
     related.items?.forEach((item, index) => {
       console.log(`${index + 1}. ${item.snippet?.title}`);
     });
     console.log('');
 
-    // Buscar videos
+    // Search videos
     return youtube.search.query('javascript tutorial', 3);
   })
   .then((searchResults) => {
-    console.log('Resultados de búsqueda:');
+    console.log('Search results:');
     searchResults.items?.forEach((item, index) => {
       console.log(`${index + 1}. ${item.snippet?.title}`);
     });

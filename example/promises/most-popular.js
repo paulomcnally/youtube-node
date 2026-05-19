@@ -1,8 +1,8 @@
 /**
- * Ejemplo: Videos más populares con async/await
+ * Example: Most popular videos with async/await
  *
- * Este ejemplo muestra cómo obtener los videos más populares
- * usando Promises.
+ * This example shows how to get the most popular videos
+ * using Promises.
  */
 
 const YouTube = require('../../dist/index').default;
@@ -12,17 +12,17 @@ youtube.setKey('YOUR_API_KEY');
 
 async function getMostPopular() {
   try {
-    console.log('Obteniendo videos más populares...\n');
+    console.log('Getting most popular videos...\n');
 
     const popular = await youtube.videos.getMostPopular(5);
 
-    console.log('Videos más populares:');
+    console.log('Most popular videos:');
     console.log('=====================');
 
     popular.items?.forEach((item, index) => {
       console.log(`${index + 1}. ${item.snippet?.title}`);
-      console.log(`   Canal: ${item.snippet?.channelTitle}`);
-      console.log(`   Vistas: ${item.statistics?.viewCount}`);
+      console.log(`   Channel: ${item.snippet?.channelTitle}`);
+      console.log(`   Views: ${item.statistics?.viewCount}`);
       console.log(`   Likes: ${item.statistics?.likeCount}\n`);
     });
   } catch (error) {
@@ -32,17 +32,17 @@ async function getMostPopular() {
 
 async function getMostPopularByCategory() {
   try {
-    console.log('\nObteniendo videos más populares de música (categoría 10)...\n');
+    console.log('\nGetting most popular music videos (category 10)...\n');
 
-    // Categoría 10 es música
+    // Category 10 is music
     const popular = await youtube.videos.getMostPopularByCategory(5, 10);
 
-    console.log('Videos más populares de música:');
+    console.log('Most popular music videos:');
     console.log('===============================');
 
     popular.items?.forEach((item, index) => {
       console.log(`${index + 1}. ${item.snippet?.title}`);
-      console.log(`   Canal: ${item.snippet?.channelTitle}\n`);
+      console.log(`   Channel: ${item.snippet?.channelTitle}\n`);
     });
   } catch (error) {
     console.error('Error:', error.message);

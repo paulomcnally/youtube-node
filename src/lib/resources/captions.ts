@@ -5,7 +5,7 @@ import {
 } from '../../types';
 
 /**
- * Recurso de Captions de YouTube API
+ * Captions Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/captions
  */
 export class CaptionsResource extends YouTubeResource {

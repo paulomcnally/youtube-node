@@ -1,8 +1,8 @@
 /**
- * Ejemplo: Información de playlists con async/await
+ * Example: Playlist information with async/await
  *
- * Este ejemplo muestra cómo obtener información de playlists
- * y sus items usando Promises.
+ * This example shows how to get playlist information
+ * and its items using Promises.
  */
 
 const YouTube = require('../../dist/index').default;
@@ -10,25 +10,25 @@ const YouTube = require('../../dist/index').default;
 const youtube = new YouTube();
 youtube.setKey('YOUR_API_KEY');
 
-// Playlist ID de ejemplo
+// Example playlist ID
 const PLAYLIST_ID = 'PLpOqH6AE0tNhInmRTSNf9f6OQsdaSJS8F';
 
 async function getPlaylistInfo() {
   try {
-    console.log('Obteniendo información de la playlist...\n');
+    console.log('Getting playlist information...\n');
 
-    // Obtener información de la playlist
+    // Get playlist information
     const playlist = await youtube.playlists.getById(PLAYLIST_ID);
 
     if (playlist.items && playlist.items.length > 0) {
       const info = playlist.items[0];
 
-      console.log('Información de la playlist:');
+      console.log('Playlist information:');
       console.log('==========================');
-      console.log('Título:', info.snippet?.title);
-      console.log('Descripción:', info.snippet?.description?.substring(0, 100) + '...');
+      console.log('Title:', info.snippet?.title);
+      console.log('Description:', info.snippet?.description?.substring(0, 100) + '...');
       console.log('Videos:', info.contentDetails?.itemCount);
-      console.log('Privacidad:', info.status?.privacyStatus);
+      console.log('Privacy:', info.status?.privacyStatus);
       console.log('');
     }
   } catch (error) {
@@ -38,12 +38,12 @@ async function getPlaylistInfo() {
 
 async function getPlaylistItems() {
   try {
-    console.log('Obteniendo videos de la playlist...\n');
+    console.log('Getting playlist videos...\n');
 
-    // Obtener items de la playlist
+    // Get playlist items
     const items = await youtube.playlists.getItemsById(PLAYLIST_ID, 5);
 
-    console.log('Videos en la playlist:');
+    console.log('Videos in playlist:');
     console.log('======================');
 
     items.items?.forEach((item, index) => {

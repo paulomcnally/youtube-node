@@ -1,9 +1,9 @@
 /**
- * Ejemplo de uso del sistema de retry y manejo de errores
+ * Example of retry system and error handling
  */
 const YouTube = require('../lib/youtube');
 
-// Configurar con opciones de retry
+// Configure with retry options
 const youTube = new YouTube({
   retryOptions: {
     retries: 3,
@@ -11,40 +11,40 @@ const youTube = new YouTube({
     maxRetryDelay: 10000,
     retryCondition: (error) => error.isRetriable(),
     onRetry: (error, attempt) => {
-      console.log(`Reintentando (intento ${attempt}): ${error.message}`);
+      console.log(`Retrying (attempt ${attempt}): ${error.message}`);
     },
   },
 });
 
-youTube.setKey(process.env.YOUTUBE_API_KEY || 'TU_API_KEY');
+youTube.setKey(process.env.YOUTUBE_API_KEY || 'YOUR_API_KEY');
 
-// Ejemplo 1: Uso con callback
-console.log('Ejemplo 1: Búsqueda con callback y retry automático');
+// Example 1: Usage with callback
+console.log('Example 1: Search with callback and automatic retry');
 youTube.search('Node.js tutorial', 5, (err, result) => {
   if (err) {
-    // El error será una instancia de YouTubeError o sus subclases
+    // The error will be an instance of YouTubeError or its subclasses
     if (err instanceof YouTube.QuotaExceededError) {
-      console.error('❌ Cuota excedida. Intenta más tarde.');
+      console.error('❌ Quota exceeded. Try again later.');
     } else if (err instanceof YouTube.InvalidKeyError) {
-      console.error('❌ La API key es inválida.');
+      console.error('❌ The API key is invalid.');
     } else if (err instanceof YouTube.RateLimitError) {
-      console.error('❌ Rate limit alcanzado. Espera un momento.');
+      console.error('❌ Rate limit reached. Wait a moment.');
     } else if (err instanceof YouTube.NetworkError) {
-      console.error('❌ Error de red:', err.message);
+      console.error('❌ Network error:', err.message);
     } else {
-      console.error('❌ Error:', err.message, err.code ? `(código: ${err.code})` : '');
+      console.error('❌ Error:', err.message, err.code ? `(code: ${err.code})` : '');
     }
     return;
   }
 
-  console.log(`✅ Encontrados ${result.pageInfo.totalResults} resultados`);
+  console.log(`✅ Found ${result.pageInfo.totalResults} results`);
   result.items.forEach((item, index) => {
     console.log(`  ${index + 1}. ${item.snippet.title}`);
   });
 });
 
-// Ejemplo 2: Uso con Promises
-console.log('\nEjemplo 2: Uso con Promises y async/await');
+// Example 2: Usage with Promises
+console.log('\nExample 2: Usage with Promises and async/await');
 
 async function getVideoInfo(videoId) {
   try {
@@ -52,51 +52,51 @@ async function getVideoInfo(videoId) {
 
     if (result.items && result.items.length > 0) {
       const video = result.items[0];
-      console.log('✅ Video encontrado:', video.snippet.title);
-      console.log('   Vistas:', video.statistics.viewCount);
+      console.log('✅ Video found:', video.snippet.title);
+      console.log('   Views:', video.statistics.viewCount);
       console.log('   Likes:', video.statistics.likeCount);
     } else {
-      console.log('⚠️ Video no encontrado');
+      console.log('⚠️ Video not found');
     }
   } catch (error) {
-    // Manejo específico de errores
+    // Specific error handling
     if (error.isNotFoundError && error.isNotFoundError()) {
-      console.error('❌ El video no existe:', videoId);
+      console.error('❌ Video does not exist:', videoId);
     } else {
       console.error('❌ Error:', error.message);
     }
   }
 }
 
-// Ejemplo 3: Actualizar opciones de retry en runtime
-console.log('\nEjemplo 3: Cambiar opciones de retry dinámicamente');
+// Example 3: Update retry options at runtime
+console.log('\nExample 3: Change retry options dynamically');
 youTube.setRetryOptions({
-  retries: 5, // Aumentar a 5 reintentos
-  retryDelay: 2000, // Esperar 2 segundos entre intentos
+  retries: 5, // Increase to 5 retries
+  retryDelay: 2000, // Wait 2 seconds between attempts
 });
 
-// Ejemplo 4: Manejo de errores sin retry
+// Example 4: Error handling without retry
 setTimeout(() => {
-  console.log('\nEjemplo 4: Creando instancia sin retry (solo para errores 5xx)');
+  console.log('\nExample 4: Creating instance without retry (only for 5xx errors)');
   const youTubeNoRetry = new YouTube({
     retryOptions: {
-      retries: 0, // Deshabilitar retry
+      retries: 0, // Disable retry
     },
   });
 
   youTubeNoRetry.setKey('INVALID_KEY');
   youTubeNoRetry.getById('dQw4w9WgXcQ', (err) => {
     if (err) {
-      console.log('Error capturado:', err.name);
-      console.log('Mensaje:', err.message);
-      console.log('Es error de YouTube:', err.isYouTubeError);
+      console.log('Error caught:', err.name);
+      console.log('Message:', err.message);
+      console.log('Is YouTube error:', err.isYouTubeError);
     }
   });
 }, 2000);
 
-// Ejecutar ejemplo 2 si hay API key
+// Run example 2 if API key exists
 if (process.env.YOUTUBE_API_KEY) {
   getVideoInfo('dQw4w9WgXcQ');
 } else {
-  console.log('\n⚠️ Para probar, establece la variable de entorno YOUTUBE_API_KEY');
+  console.log('\n⚠️ To test, set the YOUTUBE_API_KEY environment variable');
 }

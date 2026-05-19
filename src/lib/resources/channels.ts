@@ -7,7 +7,7 @@ import {
 import { YouTubeResource } from './base';
 
 /**
- * Recurso de Channels de YouTube API
+ * Channels Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/channels
  */
 export class ChannelsResource extends YouTubeResource {
@@ -21,7 +21,7 @@ export class ChannelsResource extends YouTubeResource {
     const validate = this.validate();
 
     if (callback) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         callback(validate);
       } else {
@@ -41,7 +41,7 @@ export class ChannelsResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);

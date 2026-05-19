@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult, VideoReport } from '../../types';
 
 /**
- * Recurso de VideoAbuseReportReasons de YouTube API
+ * VideoAbuseReportReasons Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/videoAbuseReportReasons
  */
 export class VideoAbuseReportReasonsResource extends YouTubeResource {

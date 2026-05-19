@@ -1,10 +1,10 @@
 /**
- * Clases de Error personalizadas para YouTube API
+ * Custom Error classes for YouTube API
  * @module lib/errors
  */
 
 /**
- * Error base para todas las excepciones de YouTube API
+ * Base error for all YouTube API exceptions
  */
 export class YouTubeError extends Error {
   public readonly code: string | null;
@@ -18,12 +18,12 @@ export class YouTubeError extends Error {
   public readonly isYouTubeError: boolean;
 
   /**
-   * Crea una instancia de YouTubeError
-   * @param message - Mensaje de error
-   * @param code - Código de error de YouTube
-   * @param status - Código HTTP de estado
-   * @param errors - Array de errores detallados
-   * @param response - Respuesta completa del servidor
+   * Creates a YouTubeError instance
+   * @param message - Error message
+   * @param code - YouTube error code
+   * @param status - HTTP status code
+   * @param errors - Array of detailed errors
+   * @param response - Full server response
    */
   constructor(
     message: string,
@@ -40,14 +40,14 @@ export class YouTubeError extends Error {
     this.response = response;
     this.isYouTubeError = true;
 
-    // Capturar stack trace
+    // Capture stack trace
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, YouTubeError);
     }
   }
 
   /**
-   * Retorna el error en formato JSON
+   * Returns the error in JSON format
    */
   toJSON(): {
     name: string;
@@ -66,7 +66,7 @@ export class YouTubeError extends Error {
   }
 
   /**
-   * Verifica si es un error de cuota excedida
+   * Checks if it is a quota exceeded error
    */
   isQuotaError(): boolean {
     return this.status === 403 && (
@@ -77,7 +77,7 @@ export class YouTubeError extends Error {
   }
 
   /**
-   * Verifica si es un error de rate limit
+   * Checks if it is a rate limit error
    */
   isRateLimitError(): boolean {
     return this.status === 429 || (
@@ -86,14 +86,14 @@ export class YouTubeError extends Error {
   }
 
   /**
-   * Verifica si es un error de recurso no encontrado
+   * Checks if it is a resource not found error
    */
   isNotFoundError(): boolean {
     return this.status === 404 || this.code === 'notFound';
   }
 
   /**
-   * Verifica si es un error de clave inválida
+   * Checks if it is an invalid key error
    */
   isInvalidKeyError(): boolean {
     return this.status === 400 && (
@@ -104,22 +104,22 @@ export class YouTubeError extends Error {
   }
 
   /**
-   * Verifica si el error es recuperable (para retry)
+   * Checks if the error is retriable
    */
   isRetriable(): boolean {
-    // Errores 5xx son recuperables
+    // 5xx errors are retriable
     if (this.status && this.status >= 500 && this.status < 600) {
       return true;
     }
-    // Rate limits son recuperables con backoff
+    // Rate limits are retriable with backoff
     if (this.isRateLimitError()) {
       return true;
     }
-    // Quota excedida no es recuperable con retry
+    // Quota exceeded is not retriable
     if (this.isQuotaError()) {
       return false;
     }
-    // Errores de red son recuperables
+    // Network errors are retriable
     if (!this.status) {
       return true;
     }
@@ -128,7 +128,7 @@ export class YouTubeError extends Error {
 }
 
 /**
- * Error cuando se excede la cuota de la API
+ * Error when API quota is exceeded
  */
 export class QuotaExceededError extends YouTubeError {
   constructor(
@@ -144,7 +144,7 @@ export class QuotaExceededError extends YouTubeError {
 }
 
 /**
- * Error cuando la clave API es inválida
+ * Error when API key is invalid
  */
 export class InvalidKeyError extends YouTubeError {
   constructor(
@@ -160,7 +160,7 @@ export class InvalidKeyError extends YouTubeError {
 }
 
 /**
- * Error cuando no se encuentra un recurso
+ * Error when a resource is not found
  */
 export class ResourceNotFoundError extends YouTubeError {
   constructor(
@@ -176,7 +176,7 @@ export class ResourceNotFoundError extends YouTubeError {
 }
 
 /**
- * Error cuando se excede el rate limit
+ * Error when rate limit is exceeded
  */
 export class RateLimitError extends YouTubeError {
   constructor(
@@ -192,7 +192,7 @@ export class RateLimitError extends YouTubeError {
 }
 
 /**
- * Error de validación de parámetros
+ * Parameter validation error
  */
 export class ValidationError extends YouTubeError {
   constructor(
@@ -205,7 +205,7 @@ export class ValidationError extends YouTubeError {
 }
 
 /**
- * Error de red o conexión
+ * Network or connection error
  */
 export class NetworkError extends YouTubeError {
   public readonly originalError: Error | null;

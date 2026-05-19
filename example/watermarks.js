@@ -1,10 +1,10 @@
 /**
- * Ejemplo: Marcas de Agua (requiere OAuth)
+ * Example: Watermarks (requires OAuth)
  *
- * Este ejemplo muestra cómo gestionar marcas de agua para videos.
+ * This example shows how to manage watermarks for videos.
  *
- * Nota: Para usar estos métodos necesitas un token de OAuth con permisos
- * de escritura en YouTube.
+ * Note: To use these methods you need an OAuth token with write
+ * permissions on YouTube.
  */
 
 const YouTube = require('../dist/index').default;
@@ -13,82 +13,82 @@ const path = require('path');
 
 const youtube = new YouTube();
 
-console.log('=== Ejemplo: Marcas de Agua ===\n');
+console.log('=== Example: Watermarks ===\n');
 
-// Restricciones de las marcas de agua
-console.log('Restricciones:');
-console.log('- Formato: PNG o JPEG');
-console.log('- Tamaño máximo: 1MB');
-console.log('- Dimensiones recomendadas: 150x150 px');
+// Watermark restrictions
+console.log('Restrictions:');
+console.log('- Format: PNG or JPEG');
+console.log('- Maximum size: 1MB');
+console.log('- Recommended dimensions: 150x150 px');
 console.log('');
 
-// Tipos de timing
-console.log('Tipos de timing:');
-console.log('- fromStart: Desde el inicio del video');
-console.log('- fromEnd: Desde el final del video');
-console.log('- custom: Posición personalizada');
+// Timing types
+console.log('Timing types:');
+console.log('- fromStart: From the beginning of the video');
+console.log('- fromEnd: From the end of the video');
+console.log('- custom: Custom position');
 console.log('');
 
-// Ejemplo: Establecer marca de agua
+// Example: Set watermark
 async function setWatermarkExample() {
   try {
     const channelId = 'YOUR_CHANNEL_ID';
-    const imagePath = './watermark.png'; // Ruta a tu imagen
+    const imagePath = './watermark.png'; // Path to your image
 
-    // Configuración del timing
+    // Timing configuration
     const timing = {
       type: 'fromStart',    // 'fromStart' | 'fromEnd' | 'custom'
-      offsetMs: 5000,       // Aparece a los 5 segundos
-      durationMs: 10000,    // Dura 10 segundos
+      offsetMs: 5000,       // Appears at 5 seconds
+      durationMs: 10000,    // Lasts 10 seconds
     };
 
-    console.log('=== Establecer marca de agua ===');
-    console.log('Requiere OAuth con permisos de escritura');
+    console.log('=== Set Watermark ===');
+    console.log('Requires OAuth with write permissions');
     console.log('');
-    console.log('Parámetros:');
+    console.log('Parameters:');
     console.log(`  Channel ID: ${channelId}`);
-    console.log(`  Imagen: ${imagePath}`);
+    console.log(`  Image: ${imagePath}`);
     console.log(`  Timing: ${JSON.stringify(timing, null, 2)}`);
     console.log('');
 
-    // Verificar que el archivo existe
+    // Check if file exists
     if (!fs.existsSync(imagePath)) {
-      console.log('Nota: Crea un archivo watermark.png para probar este ejemplo');
+      console.log('Note: Create a watermark.png file to test this example');
       console.log('');
     }
 
     // const result = await youtube.watermarks.set(channelId, imagePath, timing);
-    // console.log('Marca de agua establecida:', result);
+    // console.log('Watermark set:', result);
 
-    // También puedes usar un Buffer directamente
+    // You can also use a Buffer directly
     // const imageBuffer = fs.readFileSync(imagePath);
     // const result = await youtube.watermarks.set(channelId, imageBuffer, timing);
   } catch (error) {
-    console.error('Error al establecer marca de agua:', error.message);
+    console.error('Error setting watermark:', error.message);
   }
 }
 
-// Ejemplo: Eliminar marca de agua
+// Example: Remove watermark
 async function unsetWatermarkExample() {
   try {
     const channelId = 'YOUR_CHANNEL_ID';
 
-    console.log('=== Eliminar marca de agua ===');
-    console.log('Requiere OAuth con permisos de escritura');
+    console.log('=== Remove Watermark ===');
+    console.log('Requires OAuth with write permissions');
     console.log(`  Channel ID: ${channelId}`);
     console.log('');
 
     // const result = await youtube.watermarks.unset(channelId);
-    // console.log('Marca de agua eliminada:', result);
+    // console.log('Watermark removed:', result);
   } catch (error) {
-    console.error('Error al eliminar marca de agua:', error.message);
+    console.error('Error removing watermark:', error.message);
   }
 }
 
-// Ejemplos de diferentes configuraciones de timing
-console.log('=== Configuraciones de Timing ===\n');
+// Examples of different timing configurations
+console.log('=== Timing Configurations ===\n');
 
-console.log('1. Aparecer al inicio durante 10 segundos:');
+console.log('1. Appear at the beginning for 10 seconds:');
 console.log(JSON.stringify({
   type: 'fromStart',
   offsetMs: 0,
@@ -96,7 +96,7 @@ console.log(JSON.stringify({
 }, null, 2));
 console.log('');
 
-console.log('2. Aparecer 5 segundos antes del final:');
+console.log('2. Appear 5 seconds before the end:');
 console.log(JSON.stringify({
   type: 'fromEnd',
   offsetMs: 5000,
@@ -104,7 +104,7 @@ console.log(JSON.stringify({
 }, null, 2));
 console.log('');
 
-console.log('3. Aparecer en el minuto 2 durante 15 segundos:');
+console.log('3. Appear at minute 2 for 15 seconds:');
 console.log(JSON.stringify({
   type: 'custom',
   offsetMs: 120000,

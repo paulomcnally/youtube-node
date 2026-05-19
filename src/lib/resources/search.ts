@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, SearchParams, YtResult } from '../../types';
 
 /**
- * Recurso de Search de YouTube API
+ * Search Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/search
  */
 export class SearchResource extends YouTubeResource {
@@ -20,7 +20,7 @@ export class SearchResource extends YouTubeResource {
     params?: SearchParams | Callback,
     callback?: Callback,
   ): Promise<YtResult> | void {
-    // Determinar qué argumento es el callback
+    // Determine which argument is the callback
     let cb: Callback | undefined;
     let parameters: SearchParams = {};
 
@@ -36,7 +36,7 @@ export class SearchResource extends YouTubeResource {
     const validate = this.validate();
 
     if (cb) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         cb(validate);
       } else {
@@ -60,7 +60,7 @@ export class SearchResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);
@@ -139,7 +139,7 @@ export class SearchResource extends YouTubeResource {
     const validate = this.validate();
 
     if (callback) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         callback(validate);
       } else {
@@ -159,7 +159,7 @@ export class SearchResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);

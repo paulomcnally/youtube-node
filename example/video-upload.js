@@ -1,7 +1,7 @@
 /**
- * Ejemplo de Videos Upload (Subir videos)
- * Requiere OAuth + Upload scope
- * 
+ * Example: Videos Upload
+ * Requires OAuth + Upload scope
+ *
  * Issue #85
  */
 
@@ -10,22 +10,22 @@ const fs = require('fs');
 
 const youtube = new YouTube();
 
-// NOTA: Para operaciones OAuth, necesitas configurar el token de acceso
+// NOTE: For OAuth operations, you need to configure the access token
 // youtube.setAccessToken('YOUR_OAUTH_ACCESS_TOKEN');
 
-// Subir video desde archivo
+// Upload video from file
 async function uploadVideoExample() {
   try {
-    const videoPath = './mi-video.mp4';
-    
+    const videoPath = './my-video.mp4';
+
     const result = await youtube.videos.upload(
       {
         snippet: {
-          title: 'Mi Video de Prueba',
-          description: 'Este es un video subido usando youtube-node',
-          tags: ['prueba', 'demo', 'youtube'],
+          title: 'My Test Video',
+          description: 'This is a video uploaded using youtube-node',
+          tags: ['test', 'demo', 'youtube'],
           categoryId: '22', // People & Blogs
-          defaultLanguage: 'es',
+          defaultLanguage: 'en',
         },
         status: {
           privacyStatus: 'private', // public | private | unlisted
@@ -39,25 +39,25 @@ async function uploadVideoExample() {
         notifySubscribers: false,
       }
     );
-    
-    console.log('Video subido exitosamente!');
+
+    console.log('Video uploaded successfully!');
     console.log('Video ID:', result.id);
     console.log('URL:', `https://youtube.com/watch?v=${result.id}`);
   } catch (error) {
-    console.error('Error al subir video:', error);
+    console.error('Error uploading video:', error);
   }
 }
 
-// Subir video desde Buffer
+// Upload video from Buffer
 async function uploadFromBufferExample() {
   try {
-    const videoBuffer = fs.readFileSync('./mi-video.mp4');
-    
+    const videoBuffer = fs.readFileSync('./my-video.mp4');
+
     const result = await youtube.videos.upload(
       {
         snippet: {
-          title: 'Video desde Buffer',
-          description: 'Video subido desde un buffer de memoria',
+          title: 'Video from Buffer',
+          description: 'Video uploaded from a memory buffer',
           categoryId: '22',
         },
         status: {
@@ -66,50 +66,50 @@ async function uploadFromBufferExample() {
       },
       videoBuffer
     );
-    
-    console.log('Video subido:', result.id);
+
+    console.log('Video uploaded:', result.id);
   } catch (error) {
     console.error('Error:', error);
   }
 }
 
-// Verificar estado de procesamiento del video
+// Check video processing status
 async function checkUploadStatusExample() {
   const videoId = 'VIDEO_ID_FROM_UPLOAD';
-  
+
   try {
     const result = await youtube.videos.checkUploadStatus(videoId);
-    console.log('Estado del video:', result);
+    console.log('Video status:', result);
   } catch (error) {
     console.error('Error:', error);
   }
 }
 
-// Ejemplo con callbacks (legacy)
+// Example with callbacks (legacy)
 function uploadVideoCallbackExample() {
   youtube.videos.upload(
     {
       snippet: {
-        title: 'Video con Callback',
-        description: 'Descripción del video',
+        title: 'Video with Callback',
+        description: 'Video description',
       },
       status: {
         privacyStatus: 'private',
       },
     },
-    './mi-video.mp4',
+    './my-video.mp4',
     {},
     (err, result) => {
       if (err) {
         console.error('Error:', err);
         return;
       }
-      console.log('Video subido:', result);
+      console.log('Video uploaded:', result);
     }
   );
 }
 
-// Ejecutar ejemplos
+// Run examples
 // uploadVideoExample();
 // uploadFromBufferExample();
 // checkUploadStatusExample();

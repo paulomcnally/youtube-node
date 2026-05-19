@@ -1,7 +1,7 @@
 /**
- * Ejemplo de Channels Update (Actualizar canal y banner)
- * Requiere OAuth
- * 
+ * Example: Channels Update (Update channel and banner)
+ * Requires OAuth
+ *
  * Issue #84
  */
 
@@ -9,54 +9,54 @@ const YouTube = require('../dist/index').default;
 
 const youtube = new YouTube();
 
-// NOTA: Para operaciones OAuth, necesitas configurar el token de acceso
+// NOTE: For OAuth operations, you need to configure the access token
 // youtube.setAccessToken('YOUR_OAUTH_ACCESS_TOKEN');
 
 const CHANNEL_ID = 'YOUR_CHANNEL_ID';
 
-// Actualizar metadatos del canal
+// Update channel metadata
 async function updateChannelExample() {
   try {
     const result = await youtube.channels.update({
       id: CHANNEL_ID,
       brandingSettings: {
         channel: {
-          title: 'Nuevo Título del Canal',
-          description: 'Nueva descripción del canal',
-          keywords: 'tecnología, programación, javascript',
-          defaultLanguage: 'es',
-          country: 'MX',
+          title: 'New Channel Title',
+          description: 'New channel description',
+          keywords: 'technology, programming, javascript',
+          defaultLanguage: 'en',
+          country: 'US',
         },
       },
     });
-    console.log('Canal actualizado:', result);
+    console.log('Channel updated:', result);
   } catch (error) {
-    console.error('Error al actualizar canal:', error);
+    console.error('Error updating channel:', error);
   }
 }
 
-// Subir banner de canal
+// Upload channel banner
 async function uploadBannerExample() {
   try {
-    // Subir la imagen del banner
+    // Upload the banner image
     const bannerResult = await youtube.channels.uploadBanner('./banner.jpg');
-    console.log('Banner subido:', bannerResult);
-    
+    console.log('Banner uploaded:', bannerResult);
+
     if (bannerResult.url) {
-      // Actualizar el canal con la URL del banner
+      // Update channel with banner URL
       await youtube.channels.updateBanner(CHANNEL_ID, bannerResult.url);
-      console.log('Banner actualizado en el canal');
+      console.log('Banner updated in channel');
     }
   } catch (error) {
-    console.error('Error al subir banner:', error);
+    console.error('Error uploading banner:', error);
   }
 }
 
-// Actualizar banner en un solo paso
+// Update banner in one step
 async function updateBannerCompleteExample() {
   try {
     const result = await youtube.channels.uploadBanner('./banner.jpg');
-    
+
     if (result.url) {
       await youtube.channels.update({
         id: CHANNEL_ID,
@@ -66,21 +66,21 @@ async function updateBannerCompleteExample() {
           },
         },
       });
-      console.log('Banner actualizado exitosamente');
+      console.log('Banner updated successfully');
     }
   } catch (error) {
     console.error('Error:', error);
   }
 }
 
-// Ejemplo con callbacks (legacy)
+// Example with callbacks (legacy)
 function updateChannelCallbackExample() {
   youtube.channels.update({
     id: CHANNEL_ID,
     brandingSettings: {
       channel: {
-        title: 'Nuevo Título',
-        description: 'Nueva descripción',
+        title: 'New Title',
+        description: 'New description',
       },
     },
   }, (err, result) => {
@@ -88,11 +88,11 @@ function updateChannelCallbackExample() {
       console.error('Error:', err);
       return;
     }
-    console.log('Canal actualizado:', result);
+    console.log('Channel updated:', result);
   });
 }
 
-// Ejecutar ejemplos
+// Run examples
 // updateChannelExample();
 // uploadBannerExample();
 // updateBannerCompleteExample();

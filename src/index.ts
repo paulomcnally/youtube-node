@@ -9,11 +9,11 @@ import {
   NetworkError,
 } from './lib/errors';
 
-// Exportar clase principal
+// Export main class
 export default YouTube;
 export { YouTube };
 
-// Exportar clases de error
+// Export error classes
 export {
   YouTubeError,
   QuotaExceededError,
@@ -24,7 +24,7 @@ export {
   NetworkError,
 };
 
-// Exportar recursos
+// Export resources
 export {
   YouTubeResource,
   VideosResource,
@@ -46,7 +46,7 @@ export {
   VideoCategoriesResource,
 } from './lib/resources';
 
-// Exportar autenticación OAuth
+// Export OAuth authentication
 export {
   YouTubeAuth,
   OAuthTokens,
@@ -54,5 +54,5 @@ export {
   YouTubeScopes,
 } from './lib/auth';
 
-// Exportar tipos
+// Export types
 export * from './types';

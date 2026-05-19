@@ -5,7 +5,7 @@ import {
 } from '../../types';
 
 /**
- * Recurso de Watermarks de YouTube API
+ * Watermarks Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/watermarks
  */
 export class WatermarksResource extends YouTubeResource {
@@ -25,7 +25,7 @@ export class WatermarksResource extends YouTubeResource {
   ): Promise<YtResult> | void {
     const validate = this.validate();
 
-    // Convertir imageData a base64 si es una ruta de archivo
+    // Convert imageData to base64 if it's a file path
     let imageBase64: string;
     if (typeof imageData === 'string') {
       try {

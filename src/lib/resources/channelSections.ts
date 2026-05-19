@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult, ChannelSectionResource } from '../../types';
 
 /**
- * Recurso de ChannelSections de YouTube API
+ * ChannelSections Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/channelSections
  */
 export class ChannelSectionsResource extends YouTubeResource {

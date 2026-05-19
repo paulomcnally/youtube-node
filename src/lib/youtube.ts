@@ -46,17 +46,17 @@ import {
 } from '../types';
 
 /**
- * Clase principal de YouTube API
+ * Main YouTube API class
  *
- * Proporciona acceso a todos los recursos de la API de YouTube
- * organizados de forma modular.
+ * Provides access to all YouTube API resources
+ * organized in a modular way.
  *
  * @example
  * ```typescript
  * const youtube = new YouTube();
  * youtube.setKey('YOUR_API_KEY');
  *
- * // Usar recursos con async/await
+ * // Use resources with async/await
  * const video = await youtube.videos.getById('VIDEO_ID');
  * const channel = await youtube.channels.getById('CHANNEL_ID');
  * const results = await youtube.search.query('query', 10);
@@ -98,132 +98,132 @@ class YouTube extends YouTubeResource {
   private readonly _videoCategories: VideoCategoriesResource;
 
   /**
-   * Recurso de Videos
+   * Videos resource
    */
   public get videos(): VideosResource {
     return this._videos;
   }
 
   /**
-   * Recurso de Channels
+   * Channels resource
    */
   public get channels(): ChannelsResource {
     return this._channels;
   }
 
   /**
-   * Recurso de Playlists
+   * Playlists resource
    */
   public get playlists(): PlaylistsResource {
     return this._playlists;
   }
 
   /**
-   * Recurso de Search
+   * Search resource
    */
   public get search(): SearchResource {
     return this._search;
   }
 
   /**
-   * Recurso de ChannelSections
+   * ChannelSections resource
    */
   public get channelSections(): ChannelSectionsResource {
     return this._channelSections;
   }
 
   /**
-   * Recurso de Watermarks
+   * Watermarks resource
    */
   public get watermarks(): WatermarksResource {
     return this._watermarks;
   }
 
   /**
-   * Recurso de VideoAbuseReportReasons
+   * VideoAbuseReportReasons resource
    */
   public get videoAbuseReportReasons(): VideoAbuseReportReasonsResource {
     return this._videoAbuseReportReasons;
   }
 
   /**
-   * Recurso de Subscriptions
+   * Subscriptions resource
    */
   public get subscriptions(): SubscriptionsResource {
     return this._subscriptions;
   }
 
   /**
-   * Recurso de Captions
+   * Captions resource
    */
   public get captions(): CaptionsResource {
     return this._captions;
   }
 
   /**
-   * Recurso de Comments
+   * Comments resource
    */
   public get comments(): CommentsResource {
     return this._comments;
   }
 
   /**
-   * Recurso de Thumbnails
+   * Thumbnails resource
    */
   public get thumbnails(): ThumbnailsResource {
     return this._thumbnails;
   }
 
   /**
-   * Recurso de Activities
+   * Activities resource
    */
   public get activities(): ActivitiesResource {
     return this._activities;
   }
 
   /**
-   * Recurso de CommentThreads
+   * CommentThreads resource
    */
   public get commentThreads(): CommentThreadsResource {
     return this._commentThreads;
   }
 
   /**
-   * Recurso de I18nLanguages
+   * I18nLanguages resource
    */
   public get i18nLanguages(): I18nLanguagesResource {
     return this._i18nLanguages;
   }
 
   /**
-   * Recurso de I18nRegions
+   * I18nRegions resource
    */
   public get i18nRegions(): I18nRegionsResource {
     return this._i18nRegions;
   }
 
   /**
-   * Recurso de PlaylistItems
+   * PlaylistItems resource
    */
   public get playlistItems(): PlaylistItemsResource {
     return this._playlistItems;
   }
 
   /**
-   * Recurso de VideoCategories
+   * VideoCategories resource
    */
   public get videoCategories(): VideoCategoriesResource {
     return this._videoCategories;
   }
 
   /**
-   * Crea una instancia de YouTube
-   * @param options - Opciones de configuración
+   * Creates a YouTube instance
+   * @param options - Configuration options
    */
   constructor(options: YouTubeOptions = {}) {
     super(options);
 
-    // Inicializar recursos con las mismas opciones
+    // Initialize resources with the same options
     this._videos = new VideosResource(options);
     this._channels = new ChannelsResource(options);
     this._playlists = new PlaylistsResource(options);
@@ -311,8 +311,8 @@ class YouTube extends YouTubeResource {
   }
 
   /**
-   * Actualiza las opciones de retry en todos los recursos
-   * @param newOptions - Nuevas opciones de retry
+   * Updates retry options on all resources
+   * @param newOptions - New retry options
    */
   setRetryOptions(newOptions: RetryOptions): void {
     super.setRetryOptions(newOptions);
@@ -336,7 +336,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Paginación (Issue #92)
+  // Pagination Methods (Issue #92)
   // ============================================================
 
   /**
@@ -492,7 +492,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Videos (OAuth) - Issue #88
+  // Videos Methods (OAuth) - Issue #88
   // ============================================================
 
   /**
@@ -531,7 +531,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de ChannelSections (OAuth) - Issue #89
+  // ChannelSections Methods (OAuth) - Issue #89
   // ============================================================
 
   /**
@@ -600,7 +600,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Watermarks (OAuth) - Issue #90
+  // Watermarks Methods (OAuth) - Issue #90
   // ============================================================
 
   /**
@@ -641,7 +641,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de VideoAbuseReportReasons - Issue #91
+  // VideoAbuseReportReasons Methods - Issue #91
   // ============================================================
 
   /**
@@ -685,7 +685,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Subscriptions (OAuth) - Issue #83
+  // Subscriptions Methods (OAuth) - Issue #83
   // ============================================================
 
   /**
@@ -734,7 +734,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Channels Update (OAuth) - Issue #84
+  // Channels Update Methods (OAuth) - Issue #84
   // ============================================================
 
   /**
@@ -786,7 +786,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Videos Upload/Delete (OAuth) - Issue #85 & #87
+  // Videos Upload/Delete Methods (OAuth) - Issue #85 & #87
   // ============================================================
 
   /**
@@ -848,7 +848,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Captions (OAuth) - Issue #86
+  // Captions Methods (OAuth) - Issue #86
   // ============================================================
 
   /**
@@ -929,7 +929,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Video Rating (Issue #80)
+  // Video Rating Methods (Issue #80)
   // ============================================================
 
   /**
@@ -971,7 +971,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Thumbnails (Issue #79)
+  // Thumbnails Methods (Issue #79)
   // ============================================================
 
   /**
@@ -995,7 +995,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Captions (Issue #78)
+  // Captions Methods (Issue #78)
   // ============================================================
 
   /**
@@ -1038,7 +1038,7 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Comments (Issue #82)
+  // Comments Methods (Issue #82)
   // ============================================================
 
   /**
@@ -1137,8 +1137,8 @@ class YouTube extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos Legacy para backward compatibility
-  // Todos soportan callbacks (legacy) y Promises (nuevo)
+  // Legacy Methods for backward compatibility
+  // All support callbacks (legacy) and Promises (new)
   // ============================================================
 
   /**
@@ -1229,7 +1229,7 @@ class YouTube extends YouTubeResource {
     maxResults?: number | Callback,
     callback?: Callback,
   ): Promise<YtResult> | void {
-    // Verificar si maxResults es un callback
+    // Check if maxResults is a callback
     if (typeof maxResults === 'function') {
       this.playlists.getItemsById(id, maxResults);
       return undefined;
@@ -1338,7 +1338,7 @@ class YouTube extends YouTubeResource {
   }
 }
 
-// Exportar clases de error también como propiedades estáticas
+// Export error classes also as static properties
 (YouTube as unknown as Record<string, unknown>).YouTubeError = YouTubeError;
 (YouTube as unknown as Record<string, unknown>).QuotaExceededError = QuotaExceededError;
 (YouTube as unknown as Record<string, unknown>).InvalidKeyError = InvalidKeyError;
@@ -1369,7 +1369,7 @@ export {
   VideoCategoriesResource,
 } from './resources';
 
-// Exportar autenticación OAuth
+// Export OAuth authentication
 export {
   YouTubeAuth,
   OAuthTokens,

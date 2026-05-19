@@ -23,7 +23,7 @@ if (!commands.includes(command)) {
   process.exit(1);
 }
 
-// Mapeo de comandos a métodos
+// Command to method mapping
 const commandMap: Record<string, () => void> = {
   id: cli.id,
   search: cli.search,

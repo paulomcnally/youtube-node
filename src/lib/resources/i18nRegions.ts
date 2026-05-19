@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult } from '../../types';
 
 /**
- * Recurso de i18nRegions de YouTube API
+ * i18nRegions Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/i18nRegions
  */
 export class I18nRegionsResource extends YouTubeResource {

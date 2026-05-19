@@ -4,7 +4,7 @@ import {
 } from '../../types';
 
 /**
- * Recurso de Comments/CommentThreads de YouTube API
+ * Comments/CommentThreads Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/comments
  * https://developers.google.com/youtube/v3/docs/commentThreads
  */

@@ -1,85 +1,85 @@
 /**
- * Ejemplo de Videos Delete (Eliminar videos)
- * Requiere OAuth
- * 
+ * Example: Videos Delete
+ * Requires OAuth
+ *
  * Issue #87
- * 
- * ⚠️ ADVERTENCIA: Las operaciones de eliminación son PERMANENTES
- * ⚠️ Solo el dueño del video puede eliminarlo
+ *
+ * ⚠️ WARNING: Delete operations are PERMANENT
+ * ⚠️ Only the video owner can delete it
  */
 
 const YouTube = require('../dist/index').default;
 
 const youtube = new YouTube();
 
-// NOTA: Para operaciones OAuth, necesitas configurar el token de acceso
+// NOTE: For OAuth operations, you need to configure the access token
 // youtube.setAccessToken('YOUR_OAUTH_ACCESS_TOKEN');
 
 const VIDEO_ID_TO_DELETE = 'VIDEO_ID_HERE';
 
-// Eliminar un solo video
+// Delete a single video
 async function deleteVideoExample() {
   try {
-    // ⚠️ ADVERTENCIA: Esta operación es PERMANENTE
-    console.log('Eliminando video...');
-    
+    // ⚠️ WARNING: This operation is PERMANENT
+    console.log('Deleting video...');
+
     await youtube.videos.delete(VIDEO_ID_TO_DELETE);
-    
-    console.log('Video eliminado exitosamente');
+
+    console.log('Video deleted successfully');
   } catch (error) {
-    console.error('Error al eliminar video:', error);
+    console.error('Error deleting video:', error);
   }
 }
 
-// Eliminar múltiples videos
+// Delete multiple videos
 async function deleteMultipleVideosExample() {
   const videoIds = ['VIDEO_ID_1', 'VIDEO_ID_2', 'VIDEO_ID_3'];
-  
+
   try {
-    // ⚠️ ADVERTENCIA: Esta operación es PERMANENTE
-    console.log('Eliminando videos:', videoIds);
-    
+    // ⚠️ WARNING: This operation is PERMANENT
+    console.log('Deleting videos:', videoIds);
+
     const results = await youtube.videos.deleteMany(videoIds);
-    
-    console.log('Videos eliminados:', results.length);
+
+    console.log('Videos deleted:', results.length);
   } catch (error) {
-    console.error('Error al eliminar videos:', error);
+    console.error('Error deleting videos:', error);
   }
 }
 
-// Ejemplo con callbacks (legacy)
+// Example with callbacks (legacy)
 function deleteVideoCallbackExample() {
-  // ⚠️ ADVERTENCIA: Esta operación es PERMANENTE
+  // ⚠️ WARNING: This operation is PERMANENT
   youtube.videos.delete(VIDEO_ID_TO_DELETE, (err) => {
     if (err) {
       console.error('Error:', err);
       return;
     }
-    console.log('Video eliminado exitosamente');
+    console.log('Video deleted successfully');
   });
 }
 
-// Ejemplo de confirmación antes de eliminar
+// Example with confirmation before deleting
 async function deleteWithConfirmationExample() {
   const readline = require('readline');
-  
+
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
-  
+
   const question = (query) => new Promise((resolve) => rl.question(query, resolve));
-  
+
   try {
     const answer = await question(
-      `¿Estás seguro de que deseas eliminar el video ${VIDEO_ID_TO_DELETE}? (si/no): `
+      `Are you sure you want to delete video ${VIDEO_ID_TO_DELETE}? (yes/no): `
     );
-    
-    if (answer.toLowerCase() === 'si' || answer.toLowerCase() === 's') {
+
+    if (answer.toLowerCase() === 'yes' || answer.toLowerCase() === 'y') {
       await youtube.videos.delete(VIDEO_ID_TO_DELETE);
-      console.log('Video eliminado exitosamente');
+      console.log('Video deleted successfully');
     } else {
-      console.log('Operación cancelada');
+      console.log('Operation cancelled');
     }
   } catch (error) {
     console.error('Error:', error);
@@ -88,7 +88,7 @@ async function deleteWithConfirmationExample() {
   }
 }
 
-// Ejecutar ejemplos
+// Run examples
 // deleteVideoExample();
 // deleteMultipleVideosExample();
 // deleteWithConfirmationExample();

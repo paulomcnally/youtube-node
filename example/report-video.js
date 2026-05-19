@@ -1,9 +1,9 @@
 /**
- * Ejemplo: Reportar Videos Abusivos (requiere OAuth)
+ * Example: Report Abusive Videos (requires OAuth)
  *
- * Este ejemplo muestra cómo reportar videos por contenido inapropiado.
+ * This example shows how to report videos for inappropriate content.
  *
- * Nota: Para usar estos métodos necesitas un token de OAuth.
+ * Note: To use these methods you need an OAuth token.
  */
 
 const YouTube = require('../dist/index').default;
@@ -11,25 +11,25 @@ const YouTube = require('../dist/index').default;
 const youtube = new YouTube();
 youtube.setKey('YOUR_API_KEY');
 
-console.log('=== Ejemplo: Reportar Videos Abusivos ===\n');
+console.log('=== Example: Report Abusive Videos ===\n');
 
-// Ejemplo: Listar razones de reporte
+// Example: List report reasons
 async function listAbuseReportReasons() {
   try {
-    console.log('=== Listar razones de reporte ===\n');
+    console.log('=== List report reasons ===\n');
 
     const result = await youtube.videoAbuseReportReasons.list();
 
-    console.log(`Total de razones: ${result.items?.length || 0}`);
+    console.log(`Total reasons: ${result.items?.length || 0}`);
     console.log('');
 
     if (result.items) {
       result.items.forEach((reason, index) => {
-        console.log(`[${index + 1}] ${reason.snippet?.label || 'Sin etiqueta'}`);
+        console.log(`[${index + 1}] ${reason.snippet?.label || 'No label'}`);
         console.log(`  ID: ${reason.id}`);
 
         if (reason.snippet?.secondaryReasons && reason.snippet.secondaryReasons.length > 0) {
-          console.log('  Sub-razones:');
+          console.log('  Sub-reasons:');
           reason.snippet.secondaryReasons.forEach(subReason => {
             console.log(`    - ${subReason.label} (${subReason.id})`);
           });
@@ -40,81 +40,81 @@ async function listAbuseReportReasons() {
 
     return result;
   } catch (error) {
-    console.error('Error al listar razones:', error.message);
+    console.error('Error listing reasons:', error.message);
     return null;
   }
 }
 
-// Ejemplo: Reportar un video (requiere OAuth)
+// Example: Report a video (requires OAuth)
 async function reportVideoExample() {
   try {
     const videoId = 'VIDEO_ID_TO_REPORT';
-    const reasonId = 'REASON_ID'; // Obtener de listAbuseReportReasons
+    const reasonId = 'REASON_ID'; // Get from listAbuseReportReasons
 
     const options = {
-      secondaryReasonId: 'SECONDARY_REASON_ID', // Opcional
-      comments: 'Este video contiene contenido inapropiado porque...',
-      language: 'es',
+      secondaryReasonId: 'SECONDARY_REASON_ID', // Optional
+      comments: 'This video contains inappropriate content because...',
+      language: 'en',
     };
 
-    console.log('=== Reportar video ===');
-    console.log('Requiere OAuth');
+    console.log('=== Report video ===');
+    console.log('Requires OAuth');
     console.log('');
-    console.log('Parámetros:');
+    console.log('Parameters:');
     console.log(`  Video ID: ${videoId}`);
     console.log(`  Reason ID: ${reasonId}`);
     console.log(`  Options: ${JSON.stringify(options, null, 2)}`);
     console.log('');
 
     // const result = await youtube.videoAbuseReportReasons.report(videoId, reasonId, options);
-    // console.log('Video reportado exitosamente:', result);
+    // console.log('Video reported successfully:', result);
   } catch (error) {
-    console.error('Error al reportar video:', error.message);
+    console.error('Error reporting video:', error.message);
   }
 }
 
-// Ejemplo: Flujo completo de reporte
+// Example: Full report flow
 async function fullReportFlowExample() {
-  console.log('=== Flujo completo de reporte ===\n');
-  console.log('1. Obtener la lista de razones:');
+  console.log('=== Full report flow ===\n');
+  console.log('1. Get the list of reasons:');
   console.log('   const reasons = await youtube.videoAbuseReportReasons.list();');
   console.log('');
-  console.log('2. Seleccionar la razón adecuada:');
+  console.log('2. Select the appropriate reason:');
   console.log('   const reasonId = reasons.items[0].id;');
   console.log('');
-  console.log('3. Reportar el video:');
+  console.log('3. Report the video:');
   console.log('   await youtube.videoAbuseReportReasons.report(videoId, reasonId, {');
-  console.log('     comments: "Descripción del problema"');
+  console.log('     comments: "Description of the problem"');
   console.log('   });');
   console.log('');
 }
 
-// Razones comunes de reporte
-console.log('=== Razones comunes de reporte ===\n');
-console.log('Las razones exactas las obtienes de la API, pero típicamente incluyen:');
-console.log('  - Contenido sexual o desnudez');
-console.log('  - Contenido violento o repulsivo');
-console.log('  - Acoso o bullying');
-console.log('  - Actividades peligrosas o dañinas');
-console.log('  - Abuso de menores');
-console.log('  - Promoción del terrorismo');
-console.log('  - Spam o contenido engañoso');
-console.log('  - Infracción de derechos de autor');
+// Common report reasons
+console.log('=== Common report reasons ===\n');
+console.log('The exact reasons you get from the API, but typically include:');
+console.log('  - Sexual or nudity content');
+console.log('  - Violent or repulsive content');
+console.log('  - Harassment or bullying');
+console.log('  - Dangerous or harmful activities');
+console.log('  - Child abuse');
+console.log('  - Terrorism promotion');
+console.log('  - Spam or misleading content');
+console.log('  - Copyright infringement');
 console.log('');
 
-// Ejecutar ejemplos
+// Run examples
 listAbuseReportReasons();
 setTimeout(() => reportVideoExample(), 2000);
 setTimeout(() => fullReportFlowExample(), 4000);
 
-console.log('=== Notas importantes ===');
-console.log('- Usa este poder con responsabilidad');
-console.log('- Solo reporta contenido que realmente viole las políticas');
-console.log('- Los reportes falsos pueden tener consecuencias');
-console.log('- Se requiere OAuth para reportar videos');
+console.log('=== Important notes ===');
+console.log('- Use this power responsibly');
+console.log('- Only report content that actually violates policies');
+console.log('- False reports may have consequences');
+console.log('- OAuth is required to report videos');
 console.log('');
 
-console.log('=== Referencia ===');
-console.log('Documentación:');
+console.log('=== Reference ===');
+console.log('Documentation:');
 console.log('  - https://developers.google.com/youtube/v3/docs/videoAbuseReportReasons');
 console.log('  - https://developers.google.com/youtube/v3/docs/videos/reportAbuse');

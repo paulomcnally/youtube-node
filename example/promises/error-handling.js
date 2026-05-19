@@ -1,7 +1,7 @@
 /**
- * Ejemplo: Manejo de errores con Promises
+ * Example: Error handling with Promises
  *
- * Este ejemplo muestra cómo manejar errores cuando se usan Promises.
+ * This example shows how to handle errors when using Promises.
  */
 
 const YouTube = require('../../dist/index').default;
@@ -9,15 +9,15 @@ const YouTube = require('../../dist/index').default;
 async function errorHandlingExample() {
   const youtube = new YouTube();
 
-  // No establecemos la API key para provocar un error
+  // We don't set the API key to trigger an error
 
   try {
     await youtube.videos.getById('some-video-id');
   } catch (error: any) {
-    console.log('Error capturado correctamente:');
-    console.log('Tipo:', error.name);
-    console.log('Mensaje:', error.message);
-    console.log('Es error de YouTube:', error.isYouTubeError);
+    console.log('Error caught correctly:');
+    console.log('Type:', error.name);
+    console.log('Message:', error.message);
+    console.log('Is YouTube error:', error.isYouTubeError);
     console.log('');
   }
 }
@@ -29,10 +29,10 @@ async function apiErrorExample() {
   try {
     await youtube.videos.getById('some-video-id');
   } catch (error: any) {
-    console.log('Error de API:');
-    console.log('Tipo:', error.name);
-    console.log('Mensaje:', error.message);
-    console.log('Código:', error.code);
+    console.log('API Error:');
+    console.log('Type:', error.name);
+    console.log('Message:', error.message);
+    console.log('Code:', error.code);
     console.log('Status:', error.status);
     console.log('');
   }
@@ -43,17 +43,17 @@ async function validationErrorExample() {
   youtube.setKey('YOUR_API_KEY');
 
   try {
-    // Intentar obtener un video con ID inválido o vacío
+    // Try to get a video with invalid or empty ID
     await youtube.videos.getById('');
   } catch (error: any) {
-    console.log('Error de validación o respuesta:');
-    console.log('Tipo:', error.name);
-    console.log('Mensaje:', error.message);
+    console.log('Validation or response error:');
+    console.log('Type:', error.name);
+    console.log('Message:', error.message);
   }
 }
 
 async function main() {
-  console.log('Ejemplos de manejo de errores\n');
+  console.log('Error handling examples\n');
   console.log('=============================\n');
 
   await errorHandlingExample();

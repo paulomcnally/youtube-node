@@ -6,7 +6,7 @@ import {
 } from './errors';
 
 /**
- * Tokens de autenticación OAuth 2.0
+ * OAuth 2.0 authentication tokens
  */
 export interface OAuthTokens {
   access_token: string;
@@ -17,7 +17,7 @@ export interface OAuthTokens {
 }
 
 /**
- * Opciones para generar URL de autorización
+ * Options for generating authorization URL
  */
 export interface AuthUrlOptions {
   scope: string | string[];
@@ -29,7 +29,7 @@ export interface AuthUrlOptions {
 }
 
 /**
- * Scopes disponibles para YouTube API
+ * Available scopes for YouTube API
  */
 export const YouTubeScopes = {
   READONLY: 'https://www.googleapis.com/auth/youtube.readonly',
@@ -41,7 +41,7 @@ export const YouTubeScopes = {
 } as const;
 
 /**
- * Clase para manejar autenticación OAuth 2.0 con YouTube API
+ * Class to handle OAuth 2.0 authentication with YouTube API
  */
 export class YouTubeAuth {
   private clientId: string;
@@ -57,8 +57,8 @@ export class YouTubeAuth {
   private static readonly REVOKE_URL = 'https://oauth2.googleapis.com/revoke';
 
   /**
-   * Crea una instancia de YouTubeAuth
-   * @param options - Opciones de configuración OAuth
+   * Creates a YouTubeAuth instance
+   * @param options - OAuth configuration options
    */
   constructor(options: {
     clientId: string;
@@ -71,9 +71,9 @@ export class YouTubeAuth {
   }
 
   /**
-   * Genera la URL de autorización para el flujo OAuth
-   * @param options - Opciones para la URL de autorización
-   * @returns URL de autorización
+   * Generates the authorization URL for OAuth flow
+   * @param options - Options for the authorization URL
+   * @returns Authorization URL
    */
   generateAuthUrl(options: AuthUrlOptions): string {
     const scopes = Array.isArray(options.scope)
@@ -108,10 +108,10 @@ export class YouTubeAuth {
   }
 
   /**
-   * Intercambia el código de autorización por tokens de acceso
-   * @param code - Código de autorización recibido del callback
-   * @param callback - Callback opcional (error, tokens)
-   * @returns Promise<OAuthTokens> si no hay callback, void si hay callback
+   * Exchanges the authorization code for access tokens
+   * @param code - Authorization code received from the callback
+   * @param callback - Optional callback (error, tokens)
+   * @returns Promise<OAuthTokens> if no callback, void if callback
    */
   getToken(code: string, callback?: (error: Error | null, tokens?: OAuthTokens) => void): Promise<OAuthTokens> | void {
     const params = {
@@ -139,10 +139,10 @@ export class YouTubeAuth {
   }
 
   /**
-   * Refresca el token de acceso usando el refresh token
-   * @param refreshToken - Token de refresco
-   * @param callback - Callback opcional (error, tokens)
-   * @returns Promise<OAuthTokens> si no hay callback, void si hay callback
+   * Refreshes the access token using the refresh token
+   * @param refreshToken - Refresh token
+   * @param callback - Optional callback (error, tokens)
+   * @returns Promise<OAuthTokens> if no callback, void if callback
    */
   refreshAccessToken(
     refreshToken: string,
@@ -172,10 +172,10 @@ export class YouTubeAuth {
   }
 
   /**
-   * Revoca un token de acceso o refresh
-   * @param token - Token a revocar (access_token o refresh_token)
-   * @param callback - Callback opcional (error)
-   * @returns Promise<void> si no hay callback, void si hay callback
+   * Revokes an access token or refresh token
+   * @param token - Token to revoke (access_token or refresh_token)
+   * @param callback - Optional callback (error)
+   * @returns Promise<void> if no callback, void if callback
    */
   revokeToken(token: string, callback?: (error: Error | null) => void): Promise<void> | void {
     if (callback) {
@@ -199,9 +199,9 @@ export class YouTubeAuth {
   }
 
   /**
-   * Verifica si un token ha expirado
-   * @param tokens - Tokens OAuth
-   * @returns true si el token ha expirado
+   * Checks if a token has expired
+   * @param tokens - OAuth tokens
+   * @returns true if the token has expired
    */
   isTokenExpired(tokens: OAuthTokens): boolean {
     if (!tokens.expiry_date) {
@@ -211,10 +211,10 @@ export class YouTubeAuth {
   }
 
   /**
-   * Obtiene un token válido, refrescando si es necesario
-   * @param tokens - Tokens actuales
-   * @param callback - Callback opcional (error, tokens)
-   * @returns Promise<OAuthTokens> si no hay callback, void si hay callback
+   * Gets a valid token, refreshing if necessary
+   * @param tokens - Current tokens
+   * @param callback - Optional callback (error, tokens)
+   * @returns Promise<OAuthTokens> if no callback, void if callback
    */
   getValidToken(
     tokens: OAuthTokens,
@@ -241,7 +241,7 @@ export class YouTubeAuth {
   }
 
   /**
-   * Método privado para intercambiar tokens
+   * Private method to exchange tokens
    */
   private exchangeToken(
     params: Record<string, string>,
@@ -260,7 +260,7 @@ export class YouTubeAuth {
       .then((response) => {
         const tokens = response.data;
 
-        // Calcular fecha de expiración si hay expires_in
+        // Calculate expiration date if expires_in is present
         if ('expires_in' in response.data && typeof response.data.expires_in === 'number') {
           tokens.expiry_date = Date.now() + (response.data.expires_in as number) * 1000;
         }
@@ -273,7 +273,7 @@ export class YouTubeAuth {
   }
 
   /**
-   * Parsea errores de autenticación
+   * Parses authentication errors
    */
   private parseAuthError(error: AxiosError): Error {
     if (error.response) {
@@ -292,5 +292,5 @@ export class YouTubeAuth {
   }
 }
 
-// Exportar clase y utilidades
+// Export class and utilities
 export default YouTubeAuth;

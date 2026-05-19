@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult, SubscriptionResource } from '../../types';
 
 /**
- * Recurso de Subscriptions de YouTube API
+ * Subscriptions Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/subscriptions
  */
 export class SubscriptionsResource extends YouTubeResource {

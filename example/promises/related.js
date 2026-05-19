@@ -1,8 +1,8 @@
 /**
- * Ejemplo: Videos relacionados con async/await
+ * Example: Related videos with async/await
  *
- * Este ejemplo muestra cómo obtener videos relacionados
- * usando Promises.
+ * This example shows how to get related videos
+ * using Promises.
  */
 
 const YouTube = require('../../dist/index').default;
@@ -10,16 +10,16 @@ const YouTube = require('../../dist/index').default;
 const youtube = new YouTube();
 youtube.setKey('YOUR_API_KEY');
 
-// Video ID de ejemplo (un video popular de programación)
+// Example video ID (a popular programming video)
 const VIDEO_ID = 'IkmHStAWXis';
 
 async function getRelatedVideos() {
   try {
-    console.log('Obteniendo videos relacionados...\n');
+    console.log('Getting related videos...\n');
 
     const related = await youtube.search.related(VIDEO_ID, 5);
 
-    console.log(`Videos relacionados:\n`);
+    console.log(`Related videos:\n`);
 
     related.items?.forEach((item, index) => {
       const videoId = (item.id as { videoId?: string })?.videoId;

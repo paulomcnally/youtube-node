@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult } from '../../types';
 
 /**
- * Recurso de Playlists de YouTube API
+ * Playlists Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/playlists
  */
 export class PlaylistsResource extends YouTubeResource {
@@ -17,7 +17,7 @@ export class PlaylistsResource extends YouTubeResource {
     const validate = this.validate();
 
     if (callback) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         callback(validate);
       } else {
@@ -38,7 +38,7 @@ export class PlaylistsResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);
@@ -88,13 +88,13 @@ export class PlaylistsResource extends YouTubeResource {
   getItemsById(id: string, maxResults?: number | Callback, callback?: Callback): Promise<YtResult> | void {
     const validate = this.validate();
 
-    // Determinar si maxResults es un callback
+    // Determine if maxResults is a callback
     const isCallback = typeof maxResults === 'function';
     const cb = isCallback ? (maxResults as Callback) : callback;
     const maxRes = isCallback ? null : (maxResults as number | undefined);
 
     if (cb) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         cb(validate);
       } else {
@@ -118,7 +118,7 @@ export class PlaylistsResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);

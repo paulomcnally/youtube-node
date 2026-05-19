@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult } from '../../types';
 
 /**
- * Recurso de PlaylistItems de YouTube API
+ * PlaylistItems Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/playlistItems
  */
 export class PlaylistItemsResource extends YouTubeResource {

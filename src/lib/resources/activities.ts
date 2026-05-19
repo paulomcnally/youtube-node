@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult } from '../../types';
 
 /**
- * Recurso de Activities de YouTube API
+ * Activities Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/activities
  */
 export class ActivitiesResource extends YouTubeResource {

@@ -6,7 +6,7 @@ import {
 } from '../../types';
 
 /**
- * Recurso de Thumbnails de YouTube API
+ * Thumbnails Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/thumbnails
  */
 export class ThumbnailsResource extends YouTubeResource {

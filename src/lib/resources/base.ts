@@ -17,7 +17,7 @@ import {
 } from '../../types';
 
 /**
- * Estructura de error de la API de YouTube
+ * YouTube API error structure
  */
 interface YouTubeApiError {
   error?: {
@@ -32,17 +32,17 @@ interface YouTubeApiError {
 }
 
 /**
- * Parsea un error de axios/YouTube API y retorna la clase de error apropiada
- * @param error - Error de axios
- * @returns Clase de error específica
+ * Parses an axios/YouTube API error and returns the appropriate error class
+ * @param error - Axios error
+ * @returns Specific error class
  */
 function parseError(error: AxiosError): YouTubeError {
-  // Error de red (no response)
+  // Network error (no response)
   if (error.request && !error.response) {
     return new NetworkError('No response received from server', error);
   }
 
-  // Error con respuesta del servidor
+  // Error with server response
   if (error.response) {
     const { status } = error.response;
     const data = (error.response.data as YouTubeApiError) || {};
@@ -51,7 +51,7 @@ function parseError(error: AxiosError): YouTubeError {
     const code = errorData.code || errorData.errors?.[0]?.reason || undefined;
     const errors = errorData.errors || [];
 
-    // Determinar tipo de error según status y código
+    // Determine error type based on status and code
     if (status === 403 && (code === 'quotaExceeded' || message.toLowerCase().includes('quota'))) {
       return new QuotaExceededError(message, code, status, errors, error.response);
     }
@@ -68,36 +68,36 @@ function parseError(error: AxiosError): YouTubeError {
       return new RateLimitError(message, code, status, errors, error.response);
     }
 
-    // Error genérico de YouTube
+    // Generic YouTube error
     return new YouTubeError(message, code || null, status, errors, error.response);
   }
 
-  // Error de configuración o setup
+  // Configuration or setup error
   return new YouTubeError(error.message, 'setupError', null, [], null);
 }
 
 /**
- * Calcula el delay para retry con backoff exponencial
- * @param attempt - Número de intento (0-based)
- * @param baseDelay - Delay base en ms
- * @param maxDelay - Delay máximo en ms
- * @returns Delay en ms
+ * Calculates delay for retry with exponential backoff
+ * @param attempt - Attempt number (0-based)
+ * @param baseDelay - Base delay in ms
+ * @param maxDelay - Maximum delay in ms
+ * @returns Delay in ms
  */
 function calculateBackoff(attempt: number, baseDelay: number, maxDelay: number): number {
   const exponentialDelay = baseDelay * 2 ** attempt;
-  const jitter = Math.random() * 100; // Agregar jitter para evitar thundering herd
+  const jitter = Math.random() * 100; // Add jitter to avoid thundering herd
   return Math.min(exponentialDelay + jitter, maxDelay);
 }
 
 /**
- * Opciones por defecto para retry
+ * Default retry options
  */
 const DEFAULT_RETRY_OPTIONS: Required<Omit<RetryOptions, 'onRetry'>> & Pick<RetryOptions, 'onRetry'> = {
   retries: 3,
   retryDelay: 1000,
   maxRetryDelay: 30000,
   retryCondition: (error: Error): boolean => {
-    // Solo reintentar errores recuperables
+    // Only retry retriable errors
     if (error instanceof YouTubeError) {
       return error.isRetriable();
     }
@@ -107,8 +107,8 @@ const DEFAULT_RETRY_OPTIONS: Required<Omit<RetryOptions, 'onRetry'>> & Pick<Retr
 };
 
 /**
- * Clase base para recursos de YouTube API
- * Contiene la lógica compartida de HTTP, retry y manejo de errores
+ * Base class for YouTube API resources
+ * Contains shared HTTP logic, retry, and error handling
  */
 export abstract class YouTubeResource {
   protected url: string;
@@ -122,11 +122,11 @@ export abstract class YouTubeResource {
   protected headers: Record<string, string>;
 
   /**
-   * Crea una instancia del recurso
-   * @param options - Opciones de configuración
+   * Creates a resource instance
+   * @param options - Configuration options
    */
   constructor(options: YouTubeOptions = {}) {
-    // Configuración de retry
+    // Retry configuration
     this.retryOptions = {
       ...DEFAULT_RETRY_OPTIONS,
       ...options.retryOptions,
@@ -253,10 +253,10 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Realiza una petición HTTP con soporte de retry
-   * @param url - URL a solicitar
+   * Makes an HTTP request with retry support
+   * @param url - URL to request
    * @param callback - Callback (error, data)
-   * @param attempt - Número de intento actual (uso interno)
+   * @param attempt - Current attempt number (internal use)
    */
   request(url: string, callback: Callback, attempt = 0): void {
     const config: AxiosRequestConfig = {
@@ -270,7 +270,7 @@ export abstract class YouTubeResource {
       .catch((axiosError: AxiosError) => {
         const error = parseError(axiosError);
 
-        // Verificar si debemos reintentar
+        // Check if we should retry
         const shouldRetry = attempt < this.retryOptions.retries
                            && this.retryOptions.retryCondition(error);
 
@@ -281,26 +281,26 @@ export abstract class YouTubeResource {
             this.retryOptions.maxRetryDelay,
           );
 
-          // Llamar callback de retry si existe
+          // Call retry callback if it exists
           if (typeof this.retryOptions.onRetry === 'function') {
             this.retryOptions.onRetry(error, attempt + 1);
           }
 
-          // Reintentar después del delay
+          // Retry after the delay
           setTimeout(() => {
             this.request(url, callback, attempt + 1);
           }, delay);
         } else {
-          // No hay más reintentos o no es recuperable
+          // No more retries or not retriable
           callback(error);
         }
       });
   }
 
   /**
-   * Realiza una petición HTTP y retorna una Promise
-   * @param url - URL a solicitar
-   * @param attempt - Número de intento actual (uso interno)
+   * Makes an HTTP request and returns a Promise
+   * @param url - URL to request
+   * @param attempt - Current attempt number (internal use)
    * @returns Promise with result
    */
   requestPromise(url: string, attempt = 0): Promise<YtResult> {
@@ -316,7 +316,7 @@ export abstract class YouTubeResource {
         .catch((axiosError: AxiosError) => {
           const error = parseError(axiosError);
 
-          // Verificar si debemos reintentar
+          // Check if we should retry
           const shouldRetry = attempt < this.retryOptions.retries
                              && this.retryOptions.retryCondition(error);
 
@@ -327,19 +327,19 @@ export abstract class YouTubeResource {
               this.retryOptions.maxRetryDelay,
             );
 
-            // Llamar callback de retry si existe
+            // Call retry callback if it exists
             if (typeof this.retryOptions.onRetry === 'function') {
               this.retryOptions.onRetry(error, attempt + 1);
             }
 
-            // Reintentar después del delay
+            // Retry after the delay
             setTimeout(() => {
               this.requestPromise(url, attempt + 1)
                 .then(resolve)
                 .catch(reject);
             }, delay);
           } else {
-            // No hay más reintentos o no es recuperable
+            // No more retries or not retriable
             reject(error);
           }
         });
@@ -347,8 +347,8 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Actualiza las opciones de retry
-   * @param newOptions - Nuevas opciones de retry
+   * Updates retry options
+   * @param newOptions - New retry options
    */
   setRetryOptions(newOptions: RetryOptions): void {
     this.retryOptions = {
@@ -383,11 +383,11 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Realiza una petición POST HTTP con soporte de retry
-   * @param url - URL a solicitar
-   * @param data - Datos a enviar
+   * Makes an HTTP POST request with retry support
+   * @param url - URL to request
+   * @param data - Data to send
    * @param callback - Callback (error, data)
-   * @param attempt - Número de intento actual (uso interno)
+   * @param attempt - Current attempt number (internal use)
    */
   requestPost(
     url: string,
@@ -433,10 +433,10 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Realiza una petición POST HTTP y retorna una Promise
-   * @param url - URL a solicitar
-   * @param data - Datos a enviar
-   * @param attempt - Número de intento actual (uso interno)
+   * Makes an HTTP POST request and returns a Promise
+   * @param url - URL to request
+   * @param data - Data to send
+   * @param attempt - Current attempt number (internal use)
    * @returns Promise with result
    */
   requestPostPromise(url: string, data: unknown, attempt = 0): Promise<YtResult> {
@@ -482,11 +482,11 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Realiza una petición PUT HTTP con soporte de retry
-   * @param url - URL a solicitar
-   * @param data - Datos a enviar
+   * Makes an HTTP PUT request with retry support
+   * @param url - URL to request
+   * @param data - Data to send
    * @param callback - Callback (error, data)
-   * @param attempt - Número de intento actual (uso interno)
+   * @param attempt - Current attempt number (internal use)
    */
   requestPut(
     url: string,
@@ -532,10 +532,10 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Realiza una petición PUT HTTP y retorna una Promise
-   * @param url - URL a solicitar
-   * @param data - Datos a enviar
-   * @param attempt - Número de intento actual (uso interno)
+   * Makes an HTTP PUT request and returns a Promise
+   * @param url - URL to request
+   * @param data - Data to send
+   * @param attempt - Current attempt number (internal use)
    * @returns Promise with result
    */
   requestPutPromise(url: string, data: unknown, attempt = 0): Promise<YtResult> {
@@ -581,10 +581,10 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Realiza una petición DELETE HTTP con soporte de retry
-   * @param url - URL a solicitar
+   * Makes an HTTP DELETE request with retry support
+   * @param url - URL to request
    * @param callback - Callback (error, data)
-   * @param attempt - Número de intento actual (uso interno)
+   * @param attempt - Current attempt number (internal use)
    */
   requestDelete(url: string, callback: Callback, attempt = 0): void {
     axios
@@ -619,9 +619,9 @@ export abstract class YouTubeResource {
   }
 
   /**
-   * Realiza una petición DELETE HTTP y retorna una Promise
-   * @param url - URL a solicitar
-   * @param attempt - Número de intento actual (uso interno)
+   * Makes an HTTP DELETE request and returns a Promise
+   * @param url - URL to request
+   * @param attempt - Current attempt number (internal use)
    * @returns Promise with result
    */
   requestDeletePromise(url: string, attempt = 0): Promise<YtResult> {

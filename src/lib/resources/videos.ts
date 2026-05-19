@@ -7,7 +7,7 @@ import {
 import { YouTubeResource } from './base';
 
 /**
- * Recurso de Videos de YouTube API
+ * Videos Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/videos
  */
 export class VideosResource extends YouTubeResource {
@@ -21,7 +21,7 @@ export class VideosResource extends YouTubeResource {
     const validate = this.validate();
 
     if (callback) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         callback(validate);
       } else {
@@ -41,7 +41,7 @@ export class VideosResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);
@@ -89,7 +89,7 @@ export class VideosResource extends YouTubeResource {
     const validate = this.validate();
 
     if (callback) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         callback(validate);
       } else {
@@ -107,7 +107,7 @@ export class VideosResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);
@@ -158,7 +158,7 @@ export class VideosResource extends YouTubeResource {
     const validate = this.validate();
 
     if (callback) {
-      // Modo callback (backward compatible)
+      // Callback mode (backward compatible)
       if (validate !== null) {
         callback(validate);
       } else {
@@ -177,7 +177,7 @@ export class VideosResource extends YouTubeResource {
       return undefined;
     }
 
-    // Modo Promise
+    // Promise mode
     return new Promise((resolve, reject) => {
       if (validate !== null) {
         reject(validate);
@@ -649,7 +649,7 @@ export class VideosResource extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Rating (Issue #80)
+  // Rating Methods (Issue #80)
   // ============================================================
 
   /**
@@ -787,7 +787,7 @@ export class VideosResource extends YouTubeResource {
   }
 
   // ============================================================
-  // Métodos de Videos List (Issue #67)
+  // Videos List Methods (Issue #67)
   // ============================================================
 
   /**

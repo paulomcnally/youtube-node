@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult } from '../../types';
 
 /**
- * Recurso de VideoCategories de YouTube API
+ * VideoCategories Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/videoCategories
  */
 export class VideoCategoriesResource extends YouTubeResource {

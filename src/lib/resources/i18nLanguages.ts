@@ -2,7 +2,7 @@ import { YouTubeResource } from './base';
 import { Callback, YtResult } from '../../types';
 
 /**
- * Recurso de i18nLanguages de YouTube API
+ * i18nLanguages Resource for YouTube API
  * https://developers.google.com/youtube/v3/docs/i18nLanguages
  */
 export class I18nLanguagesResource extends YouTubeResource {

@@ -1,10 +1,10 @@
 /**
- * Ejemplo: Secciones de Canal (requiere OAuth)
+ * Example: Channel Sections (requires OAuth)
  *
- * Este ejemplo muestra cómo gestionar las secciones de un canal de YouTube.
+ * This example shows how to manage sections of a YouTube channel.
  *
- * Nota: Para usar estos métodos necesitas un token de OAuth con permisos
- * de escritura en YouTube.
+ * Note: To use these methods you need an OAuth token with write
+ * permissions on YouTube.
  */
 
 const YouTube = require('../dist/index').default;
@@ -12,70 +12,70 @@ const YouTube = require('../dist/index').default;
 const youtube = new YouTube();
 youtube.setKey('YOUR_API_KEY');
 
-console.log('=== Ejemplo: Secciones de Canal ===\n');
+console.log('=== Example: Channel Sections ===\n');
 
-// Tipos de sección disponibles
+// Available section types
 const sectionTypes = [
-  'allPlaylists',      // Todas las playlists
-  'completedEvents',   // Eventos completados
-  'likedPlaylists',    // Playlists marcadas como me gusta
-  'likes',             // Videos marcados como me gusta
-  'liveEvents',        // Eventos en vivo
-  'multipleChannels',  // Canales múltiples
-  'multiplePlaylists', // Playlists múltiples
-  'popularUploads',    // Subidas populares
-  'postedPlaylists',   // Playlists publicadas
-  'postedVideos',      // Videos publicados
-  'recentActivity',    // Actividad reciente
-  'recentPosts',       // Posts recientes
-  'recentUploads',     // Subidas recientes
-  'singlePlaylist',    // Playlist única
-  'subscriptions',     // Suscripciones
-  'upcomingEvents',    // Eventos próximos
+  'allPlaylists',      // All playlists
+  'completedEvents',   // Completed events
+  'likedPlaylists',    // Liked playlists
+  'likes',             // Liked videos
+  'liveEvents',        // Live events
+  'multipleChannels',  // Multiple channels
+  'multiplePlaylists', // Multiple playlists
+  'popularUploads',    // Popular uploads
+  'postedPlaylists',   // Posted playlists
+  'postedVideos',      // Posted videos
+  'recentActivity',    // Recent activity
+  'recentPosts',       // Recent posts
+  'recentUploads',     // Recent uploads
+  'singlePlaylist',    // Single playlist
+  'subscriptions',     // Subscriptions
+  'upcomingEvents',    // Upcoming events
 ];
 
-console.log('Tipos de sección disponibles:');
+console.log('Available section types:');
 sectionTypes.forEach(type => console.log(`  - ${type}`));
 
-// Ejemplo: Listar secciones de un canal
+// Example: List sections of a channel
 async function listChannelSections() {
   try {
     const channelId = 'UC_x5XG1OV2P6uZZ5FSM9Ttw'; // Google Developers
 
-    console.log(`\nObteniendo secciones del canal: ${channelId}`);
+    console.log(`\nGetting sections of channel: ${channelId}`);
 
     const result = await youtube.channelSections.list(channelId);
 
-    console.log(`Total de secciones: ${result.items?.length || 0}`);
+    console.log(`Total sections: ${result.items?.length || 0}`);
 
     if (result.items) {
       result.items.forEach((section, index) => {
-        console.log(`\n[${index + 1}] Sección:`);
+        console.log(`\n[${index + 1}] Section:`);
         console.log(`  ID: ${section.id}`);
-        console.log(`  Tipo: ${section.snippet?.type}`);
-        console.log(`  Título: ${section.snippet?.title || 'Sin título'}`);
-        console.log(`  Posición: ${section.snippet?.position}`);
+        console.log(`  Type: ${section.snippet?.type}`);
+        console.log(`  Title: ${section.snippet?.title || 'No title'}`);
+        console.log(`  Position: ${section.snippet?.position}`);
 
         if (section.contentDetails?.playlists) {
           console.log(`  Playlists: ${section.contentDetails.playlists.join(', ')}`);
         }
         if (section.contentDetails?.channels) {
-          console.log(`  Canales: ${section.contentDetails.channels.join(', ')}`);
+          console.log(`  Channels: ${section.contentDetails.channels.join(', ')}`);
         }
       });
     }
   } catch (error) {
-    console.error('Error al obtener secciones:', error.message);
+    console.error('Error getting sections:', error.message);
   }
 }
 
-// Ejemplo: Crear una nueva sección (requiere OAuth)
+// Example: Create a new section (requires OAuth)
 async function createChannelSectionExample() {
   try {
     const sectionResource = {
       snippet: {
         type: 'singlePlaylist',
-        title: 'Mi Playlist Destacada',
+        title: 'My Featured Playlist',
         position: 0,
       },
       contentDetails: {
@@ -83,68 +83,68 @@ async function createChannelSectionExample() {
       },
     };
 
-    console.log('\n=== Crear sección ===');
-    console.log('Requiere OAuth con permisos de escritura');
-    console.log('Ejemplo de sectionResource:');
+    console.log('\n=== Create section ===');
+    console.log('Requires OAuth with write permissions');
+    console.log('Example sectionResource:');
     console.log(JSON.stringify(sectionResource, null, 2));
 
     // const result = await youtube.channelSections.create(sectionResource);
-    // console.log('Sección creada:', result);
+    // console.log('Section created:', result);
   } catch (error) {
-    console.error('Error al crear sección:', error.message);
+    console.error('Error creating section:', error.message);
   }
 }
 
-// Ejemplo: Actualizar una sección (requiere OAuth)
+// Example: Update a section (requires OAuth)
 async function updateChannelSectionExample() {
   try {
     const sectionId = 'SECTION_ID_HERE';
     const sectionResource = {
       snippet: {
         type: 'singlePlaylist',
-        title: 'Título Actualizado',
+        title: 'Updated Title',
         position: 1,
       },
     };
 
-    console.log('\n=== Actualizar sección ===');
-    console.log('Requiere OAuth con permisos de escritura');
-    console.log('Ejemplo:');
+    console.log('\n=== Update section ===');
+    console.log('Requires OAuth with write permissions');
+    console.log('Example:');
     console.log(`ID: ${sectionId}`);
     console.log(JSON.stringify(sectionResource, null, 2));
 
     // const result = await youtube.channelSections.update(sectionId, sectionResource);
-    // console.log('Sección actualizada:', result);
+    // console.log('Section updated:', result);
   } catch (error) {
-    console.error('Error al actualizar sección:', error.message);
+    console.error('Error updating section:', error.message);
   }
 }
 
-// Ejemplo: Eliminar una sección (requiere OAuth)
+// Example: Delete a section (requires OAuth)
 async function deleteChannelSectionExample() {
   try {
     const sectionId = 'SECTION_ID_HERE';
 
-    console.log('\n=== Eliminar sección ===');
-    console.log('Requiere OAuth con permisos de escritura');
-    console.log(`ID a eliminar: ${sectionId}`);
+    console.log('\n=== Delete section ===');
+    console.log('Requires OAuth with write permissions');
+    console.log(`ID to delete: ${sectionId}`);
 
     // const result = await youtube.channelSections.delete(sectionId);
-    // console.log('Sección eliminada:', result);
+    // console.log('Section deleted:', result);
   } catch (error) {
-    console.error('Error al eliminar sección:', error.message);
+    console.error('Error deleting section:', error.message);
   }
 }
 
-// Ejecutar ejemplos
+// Run examples
 listChannelSections();
 setTimeout(() => createChannelSectionExample(), 2000);
 setTimeout(() => updateChannelSectionExample(), 4000);
 setTimeout(() => deleteChannelSectionExample(), 6000);
 
-console.log('\n=== Límites ===');
-console.log('- Máximo 10 secciones por canal');
-console.log('- Se requiere OAuth para crear, actualizar o eliminar');
+console.log('\n=== Limits ===');
+console.log('- Maximum 10 sections per channel');
+console.log('- OAuth required to create, update or delete');
 
-console.log('\n=== Referencia ===');
-console.log('Documentación: https://developers.google.com/youtube/v3/docs/channelSections');
+console.log('\n=== Reference ===');
+console.log('Documentation: https://developers.google.com/youtube/v3/docs/channelSections');
