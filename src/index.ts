@@ -24,5 +24,14 @@ export {
   NetworkError,
 };
 
+// Exportar recursos
+export {
+  YouTubeResource,
+  VideosResource,
+  ChannelsResource,
+  PlaylistsResource,
+  SearchResource,
+} from './lib/resources';
+
 // Exportar tipos
 export * from './types';

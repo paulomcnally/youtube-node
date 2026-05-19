@@ -33,7 +33,7 @@ describe('Youtube', function (this: Mocha.Suite) {
 
   it('Require key', (done) => {
     const youTube = new YouTube();
-    youTube.search(config.query, 1, (err, response) => {
+    youTube.search.query(config.query, 1, (err: Error | null | undefined, response: unknown) => {
       should.exist(err);
       // Ahora los errores son instancias de ValidationError
       err!.should.be.an.instanceOf(Error);
@@ -79,13 +79,13 @@ describe('Youtube', function (this: Mocha.Suite) {
   it('search returns valid response structure', (done) => {
     const youTube = new YouTube();
     youTube.setKey(config.key);
-    youTube.search(config.query, 1, (err, response) => {
+    youTube.search.query(config.query, 1, (err: Error | null | undefined, response: unknown) => {
       if (err) {
         should.exist(err);
         done();
       } else {
         should.exist(response);
-        response!.should.have.property('kind', 'youtube#searchListResponse');
+        (response as { kind: string }).should.have.property('kind', 'youtube#searchListResponse');
         done();
       }
     });
