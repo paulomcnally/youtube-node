@@ -1,19 +1,35 @@
 {
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "mocha": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "airbnb-typescript/base"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
+        "ecmaVersion": 2020,
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "rules": {
+        "max-classes-per-file": ["error", 10],
+        "no-console": "off",
+        "import/no-import-module-exports": "off",
+        "import/no-named-as-default": "off",
+        "import/prefer-default-export": "off",
+        "max-len": ["error", { "code": 120, "ignoreUrls": true, "ignoreStrings": true }],
+        "no-underscore-dangle": ["error", { "allow": ["_videos", "_channels", "_playlists", "_search", "_channelSections", "_watermarks", "_videoAbuseReportReasons", "_subscriptions", "_captions", "_comments", "_thumbnails", "_activities", "_commentThreads", "_i18nLanguages", "_i18nRegions", "_playlistItems", "_videoCategories"] }],
+        "class-methods-use-this": "off",
+        "no-await-in-loop": "off"
     }
 }
