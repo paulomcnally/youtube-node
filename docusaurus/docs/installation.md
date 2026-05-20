@@ -2,62 +2,62 @@
 sidebar_position: 2
 ---
 
-# Instalación
+# Installation
 
-Esta guía te ayudará a instalar y configurar `youtube-node` en tu proyecto.
+This guide will help you install and configure `youtube-node` in your project.
 
-## Instalación con npm
+## Install with npm
 
 ```bash
 npm install youtube-node
 ```
 
-## Instalación con yarn
+## Install with yarn
 
 ```bash
 yarn add youtube-node
 ```
 
-## Instalación con pnpm
+## Install with pnpm
 
 ```bash
 pnpm add youtube-node
 ```
 
-## Instalación Global (para CLI)
+## Global Installation (for CLI)
 
-Si deseas usar la interfaz de línea de comandos (CLI):
+If you want to use the command line interface (CLI):
 
 ```bash
 npm install -g youtube-node
 ```
 
-## Verificar Instalación
+## Verify Installation
 
 ```typescript
 import YouTube from 'youtube-node';
 
 const youtube = new YouTube();
-console.log('youtube-node instalado correctamente ✅');
+console.log('youtube-node installed correctly ✅');
 ```
 
-## Dependencias
+## Dependencies
 
-La librería incluye automáticamente estas dependencias:
+The library automatically includes these dependencies:
 
-- `axios` - Cliente HTTP
-- `@colors/colors` - Colores para la CLI
-- `prompt` - Interacción en la CLI
+- `axios` - HTTP client
+- `@colors/colors` - Colors for CLI
+- `prompt` - CLI interaction
 
 ## TypeScript
 
-Si usas TypeScript, los tipos están incluidos automáticamente. No necesitas instalar `@types/youtube-node`.
+If you use TypeScript, types are automatically included. You don't need to install `@types/youtube-node`.
 
 ```typescript
-import YouTube from 'youtube-node';  // Tipado completo incluido ✅
+import YouTube from 'youtube-node';  // Complete typing included ✅
 ```
 
-## Próximos Pasos
+## Next Steps
 
-- [Configurar tu API Key](./authentication.md)
-- [Guía Rápida](./quickstart.md)
+- [Configure your API Key](./authentication.md)
+- [Quick Start Guide](./quickstart.md)

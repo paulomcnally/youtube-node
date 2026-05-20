@@ -7,6 +7,8 @@
 * **Written in TypeScript with full type support**
 * **Native Promise/async-await support** (NEW!)
 
+📖 **[Documentación Completa](https://paulomcnally.github.io/youtube-node/)** | 🚀 [Guía Rápida](https://paulomcnally.github.io/youtube-node/docs/quickstart)
+
 ## Installation
 
 ```bash

@@ -3,64 +3,64 @@ sidebar_position: 1
 slug: /
 ---
 
-# Introducción
+# Introduction
 
-`youtube-node` es un cliente de **YouTube API v3** para **Node.js** escrito en TypeScript con soporte completo de tipos.
+`youtube-node` is a **YouTube API v3** client for **Node.js** written in TypeScript with full type support.
 
-## Características Principales
+## Key Features
 
-✨ **Soporte Nativo de Promesas** - Usa async/await o .then()/.catch()  
-📝 **TypeScript Completo** - Tipado completo incluido  
-🔧 **CLI Incluido** - Interfaz de línea de comandos incluida  
-🔄 **Retrocompatible** - Soporte de callbacks todavía disponible  
-⚡ **Recursos Modulares** - API organizada por recursos (videos, canales, etc.)  
-🛡️ **Manejo de Errores** - Clases de error específicas  
-📄 **Paginación** - Soporte completo para paginación  
-🔍 **Filtros Avanzados** - Búsqueda con múltiples filtros  
+✨ **Native Promise Support** - Use async/await or .then()/.catch()  
+📝 **Full TypeScript** - Complete typing included  
+🔧 **CLI Included** - Command line interface included  
+🔄 **Backward Compatible** - Callback support still available  
+⚡ **Modular Resources** - API organized by resources (videos, channels, etc.)  
+🛡️ **Error Handling** - Specific error classes  
+📄 **Pagination** - Full support for pagination  
+🔍 **Advanced Filters** - Search with multiple filters  
 
-## ¿Qué puedes hacer?
+## What Can You Do?
 
-Con esta librería puedes:
+With this library you can:
 
-- 🔍 **Buscar videos, canales y playlists** en YouTube
-- 📹 **Obtener información detallada** de videos, canales y playlists
-- 💬 **Gestionar comentarios** (listar, añadir, responder, eliminar)
-- 📋 **Trabajar con playlists** (crear, actualizar, eliminar)
-- ⭐ **Gestionar suscripciones** (suscribirse, cancelar suscripción)
-- 📝 **Subir videos** a tu canal
-- 🎬 **Gestionar subtítulos/captions**
-- 🖼️ **Establecer miniaturas personalizadas**
-- ⬆️ **Dar like/dislike** a videos
-- 🌍 **Obtener videos populares** por categoría o región
+- 🔍 **Search videos, channels and playlists** on YouTube
+- 📹 **Get detailed information** about videos, channels and playlists
+- 💬 **Manage comments** (list, add, reply, delete)
+- 📋 **Work with playlists** (create, update, delete)
+- ⭐ **Manage subscriptions** (subscribe, unsubscribe)
+- 📝 **Upload videos** to your channel
+- 🎬 **Manage captions/subtitles**
+- 🖼️ **Set custom thumbnails**
+- ⬆️ **Like/dislike** videos
+- 🌍 **Get popular videos** by category or region
 
-## Instalación Rápida
+## Quick Install
 
 ```bash
 npm install youtube-node
 ```
 
-## Ejemplo Rápido
+## Quick Example
 
 ```typescript
 import YouTube from 'youtube-node';
 
 const youTube = new YouTube();
-youTube.setKey('TU_API_KEY');
+youTube.setKey('YOUR_API_KEY');
 
-// Buscar videos
+// Search videos
 async function searchVideos() {
   const result = await youTube.search.query('nodejs tutorial', 10);
-  console.log(`Encontrados ${result.pageInfo?.totalResults} videos`);
+  console.log(`Found ${result.pageInfo?.totalResults} videos`);
 }
 
 searchVideos();
 ```
 
-## Requisitos
+## Requirements
 
-- **Node.js** 18 o superior
-- Una **API Key** de YouTube Data API v3 ([Obtener API Key](https://developers.google.com/youtube/v3/getting-started))
+- **Node.js** 18 or higher
+- A **YouTube Data API v3 API Key** ([Get API Key](https://developers.google.com/youtube/v3/getting-started))
 
-## Licencia
+## License
 
-MIT License - ver [LICENSE](https://github.com/paulomcnally/youtube-node/blob/main/LICENSE) para más detalles.
+MIT License - see [LICENSE](https://github.com/paulomcnally/youtube-node/blob/main/LICENSE) for more details.

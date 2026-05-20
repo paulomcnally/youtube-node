@@ -2,67 +2,67 @@
 sidebar_position: 4
 ---
 
-# Autenticación
+# Authentication
 
-Aprende a autenticar tus solicitudes a la API de YouTube.
+Learn how to authenticate your requests to the YouTube API.
 
-## Tipos de Autenticación
+## Authentication Types
 
-YouTube Data API soporta dos tipos de autenticación:
+YouTube Data API supports two types of authentication:
 
-1. **API Key** - Para lectura de datos públicos (búsquedas, videos, canales)
-2. **OAuth 2.0** - Para acciones que requieren permisos (subir videos, comentar, etc.)
+1. **API Key** - For reading public data (searches, videos, channels)
+2. **OAuth 2.0** - For actions that require permissions (uploading videos, commenting, etc.)
 
-## Obtener una API Key
+## Get an API Key
 
-1. Ve a [Google Cloud Console](https://console.cloud.google.com/)
-2. Crea un nuevo proyecto o selecciona uno existente
-3. Habilita la **YouTube Data API v3**
-4. Ve a "Credenciales" y crea una **API Key**
-5. Copia la clave generada
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable **YouTube Data API v3**
+4. Go to "Credentials" and create an **API Key**
+5. Copy the generated key
 
 ### Video Tutorial
 
-Para una guía visual, puedes ver [este video](https://www.youtube.com/watch?v=Im69kzhpR3I) sobre cómo obtener tu API Key.
+For a visual guide, you can watch [this video](https://www.youtube.com/watch?v=Im69kzhpR3I) on how to get your API Key.
 
-## Usar la API Key
+## Use the API Key
 
 ```typescript
 import YouTube from 'youtube-node';
 
 const youTube = new YouTube();
 
-// Configurar tu API Key
-youTube.setKey('TU_API_KEY_AQUI');
+// Configure your API Key
+youTube.setKey('YOUR_API_KEY_HERE');
 
-// ¡Listo para usar!
+// Ready to use!
 const videos = await youTube.search.query('nodejs', 10);
 ```
 
-## Autenticación OAuth 2.0
+## OAuth 2.0 Authentication
 
-Para acciones que modifican datos (subir videos, comentar, suscribirse), necesitas OAuth 2.0.
+For actions that modify data (uploading videos, commenting, subscribing), you need OAuth 2.0.
 
-### Configurar OAuth en Google Cloud
+### Configure OAuth in Google Cloud
 
-1. Ve a [Google Cloud Console](https://console.cloud.google.com/)
-2. Ve a "Credenciales" → "Crear credenciales" → "ID de cliente de OAuth"
-3. Selecciona "Aplicación web"
-4. Agrega URLs de redirección autorizadas
-5. Copia el **Client ID** y **Client Secret**
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Go to "Credentials" → "Create credentials" → "OAuth client ID"
+3. Select "Web application"
+4. Add authorized redirect URLs
+5. Copy the **Client ID** and **Client Secret**
 
-### Usar OAuth en tu Código
+### Use OAuth in Your Code
 
 ```typescript
 import { YouTubeAuth, YouTubeScopes } from 'youtube-node';
 
 const auth = new YouTubeAuth({
-  clientId: 'TU_CLIENT_ID',
-  clientSecret: 'TU_CLIENT_SECRET',
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
   redirectUri: 'http://localhost:3000/callback',
 });
 
-// Generar URL de autorización
+// Generate authorization URL
 const authUrl = auth.generateAuthUrl({
   scope: [
     YouTubeScopes.READ_ONLY,
@@ -71,45 +71,45 @@ const authUrl = auth.generateAuthUrl({
   ],
 });
 
-console.log('Visita esta URL:', authUrl);
+console.log('Visit this URL:', authUrl);
 
-// Después de obtener el código de autorización
-const tokens = await auth.getTokens('CODIGO_DE_AUTORIZACION');
+// After obtaining the authorization code
+const tokens = await auth.getTokens('AUTHORIZATION_CODE');
 
-// Usar los tokens
+// Use the tokens
 const youTube = new YouTube();
-youTube.setKey('TU_API_KEY');
-// Configurar el token de acceso para requests OAuth
+youTube.setKey('YOUR_API_KEY');
+// Configure access token for OAuth requests
 ```
 
-## Scopes de OAuth
+## OAuth Scopes
 
-Los scopes definen qué permisos solicitas:
+Scopes define what permissions you request:
 
-| Scope | Descripción |
+| Scope | Description |
 |-------|-------------|
-| `YouTubeScopes.READ_ONLY` | Solo lectura de datos |
-| `YouTubeScopes.UPLOAD` | Subir videos |
-| `YouTubeScopes.MANAGE` | Gestionar videos/canal |
-| `YouTubeScopes.FORCE_SSL` | Requiere conexión segura |
+| `YouTubeScopes.READ_ONLY` | Read-only data access |
+| `YouTubeScopes.UPLOAD` | Upload videos |
+| `YouTubeScopes.MANAGE` | Manage videos/channel |
+| `YouTubeScopes.FORCE_SSL` | Requires secure connection |
 
-## Configurar Headers Personalizados
+## Configure Custom Headers
 
-Si tu API Key tiene restricciones de referer:
+If your API Key has referer restrictions:
 
 ```typescript
 const youTube = new YouTube();
-youTube.setKey('TU_API_KEY');
+youTube.setKey('YOUR_API_KEY');
 
-// Configurar referer
+// Configure referer
 youTube.setReferer('https://example.com');
 
-// O configurar cualquier header
+// Or configure any header
 youTube.setHeader('Referer', 'https://example.com');
-youTube.setHeader('X-Custom-Header', 'valor');
+youTube.setHeader('X-Custom-Header', 'value');
 ```
 
-## Manejo de Errores de Autenticación
+## Authentication Error Handling
 
 ```typescript
 import { InvalidKeyError, QuotaExceededError } from 'youtube-node';
@@ -120,9 +120,9 @@ async function makeRequest() {
     return result;
   } catch (error) {
     if (error instanceof InvalidKeyError) {
-      console.error('API Key inválida');
+      console.error('Invalid API Key');
     } else if (error instanceof QuotaExceededError) {
-      console.error('Cuota excedida. Intenta más tarde.');
+      console.error('Quota exceeded. Try again later.');
     } else {
       console.error('Error:', error.message);
     }
@@ -130,32 +130,32 @@ async function makeRequest() {
 }
 ```
 
-## Mejores Prácticas
+## Best Practices
 
-### 🔐 Seguridad
+### 🔐 Security
 
-- **Nunca** expongas tu API Key en el código del cliente
-- Usa variables de entorno para almacenar claves
-- Restringe tu API Key por IP o referer en Google Cloud Console
+- **Never** expose your API Key in client-side code
+- Use environment variables to store keys
+- Restrict your API Key by IP or referer in Google Cloud Console
 
-### ⚡ Optimización de Cuota
+### ⚡ Quota Optimization
 
-- La API de YouTube tiene límites de cuota
-- Cachea resultados cuando sea posible
-- Usa paginación para grandes conjuntos de datos
+- The YouTube API has quota limits
+- Cache results when possible
+- Use pagination for large datasets
 
 ```typescript
-// Usar variables de entorno
+// Use environment variables
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const youTube = new YouTube();
 youTube.setKey(API_KEY);
 ```
 
-## Errores Comunes
+## Common Errors
 
 ### "The request did not specify any referer"
 
-Tu API Key tiene restricciones de referer pero no se envió el header:
+Your API Key has referer restrictions but no header was sent:
 
 ```typescript
 youTube.setReferer('https://yourdomain.com');
@@ -163,13 +163,13 @@ youTube.setReferer('https://yourdomain.com');
 
 ### "API key not valid"
 
-- Verifica que la clave esté correcta
-- Asegúrate de que la YouTube Data API v3 esté habilitada
-- Verifica las restricciones de la clave
+- Verify the key is correct
+- Make sure YouTube Data API v3 is enabled
+- Check key restrictions
 
 ### "Daily Limit Exceeded"
 
-Has excedido tu cuota diaria. Opciones:
-- Espera hasta mañana
-- Solicita más cuota en Google Cloud Console
-- Optimiza tus requests
+You have exceeded your daily quota. Options:
+- Wait until tomorrow
+- Request more quota in Google Cloud Console
+- Optimize your requests

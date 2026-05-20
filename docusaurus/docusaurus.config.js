@@ -9,7 +9,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'youtube-node',
-  tagline: 'Cliente de YouTube API v3 para Node.js con soporte completo de TypeScript',
+  tagline: 'YouTube API v3 client for Node.js with full TypeScript support',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -26,12 +26,20 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
+  // Internationalization settings
   i18n: {
-    defaultLocale: 'es',
-    locales: ['es'],
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+    localeConfigs: {
+      en: {
+        label: 'English',
+        direction: 'ltr',
+      },
+      es: {
+        label: 'Español',
+        direction: 'ltr',
+      },
+    },
   },
 
   presets: [
@@ -77,7 +85,11 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Documentación',
+            label: 'Documentation',
+          },
+          {
+            type: 'localeDropdown',
+            position: 'right',
           },
           {
             href: 'https://github.com/paulomcnally/youtube-node',
@@ -90,41 +102,41 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Documentación',
+            title: 'Documentation',
             items: [
               {
-                label: 'Introducción',
+                label: 'Introduction',
                 to: '/docs/intro',
               },
               {
-                label: 'Instalación',
+                label: 'Installation',
                 to: '/docs/installation',
               },
               {
-                label: 'Guía Rápida',
+                label: 'Quick Start',
                 to: '/docs/quickstart',
               },
             ],
           },
           {
-            title: 'Recursos API',
+            title: 'API Resources',
             items: [
               {
                 label: 'Videos',
                 to: '/docs/api/videos',
               },
               {
-                label: 'Canales',
+                label: 'Channels',
                 to: '/docs/api/channels',
               },
               {
-                label: 'Búsqueda',
+                label: 'Search',
                 to: '/docs/api/search',
               },
             ],
           },
           {
-            title: 'Comunidad',
+            title: 'Community',
             items: [
               {
                 label: 'GitHub',
@@ -141,7 +153,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} youtube-node. Hecho con Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} youtube-node. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
